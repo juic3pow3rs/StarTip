@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="Uni" uploadOnCheckin="f981b142-9ae4-4886-8ca5-231df8b0c46d">
+    <serverData>
+      <paths name="Uni">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/srv/www/zend" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myUploadOnCheckinName" value="Uni" />
+  </component>
+</project>
