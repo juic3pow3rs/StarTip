@@ -53,7 +53,7 @@ class RegisterFilter extends ProvidesEventsInputFilter
                 array(
                     'name' => 'EmailAddress',
                 ),
-                /** Regex für check ob uni mail
+                /** Regex für check ob uni mail **/
                 array(
                     'name' => 'Regex',
                     'options' => array(
@@ -62,7 +62,7 @@ class RegisterFilter extends ProvidesEventsInputFilter
                             \Zend\Validator\Regex::NOT_MATCH => 'Invalid input, only "@uni-passau.de" adresses allowed',
                         ),
                     ),
-                ),**/
+                ),
                 $this->emailValidator
             ),
         ));
