@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: Andi
- * Date: 14.11.2015
- * Time: 15:40
+ * Date: 18.11.2015
+ * Time: 16:23
  */
 
 namespace Album2\Controller;
@@ -12,8 +12,8 @@ use Album2\Service\AlbumServiceInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
-class ListController extends  AbstractActionController {
-
+class DeleteController extends AbstractActionController
+{
     /**
      * @var \Album2\Service\AlbumServiceInterface
      */
@@ -24,24 +24,23 @@ class ListController extends  AbstractActionController {
         $this->albumService = $albumService;
     }
 
-    public function indexAction()
+    public function deleteAction()
     {
-        if ($this->zfcUserAuthentication()->getIdentity()->getG_id() != 2) {
-            print "Forbidden!";
-        } else {
-            return new ViewModel(array(
-                'albums' => $this->albumService->findAllAlbums()
-            ));
-        }
-    }
-
-    public function detailAction()
-    {
-        $id = $this->params()->fromRoute('id');
-
         try {
-            $album = $this->albumService->findAlbum($id);
-        } catch (\InvalidArgumentException $ex) {
+            $album = $this->albumService->findAlbum($this->params('id'));
+        } catch (\InvalidArgumentException $e) {
+            return $this->redirect()->toRoute('album2');
+        }
+
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+            $del = $request->getPost('delete_confirmation', 'no');
+
+            if ($del === 'yes') {
+                $this->albumService->deleteAlbum($album);
+            }
+
             return $this->redirect()->toRoute('album2');
         }
 

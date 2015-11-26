@@ -1,0 +1,14 @@
+<h1>Edit Album</h1>
+<?php
+$form = $this->form;
+$form->setAttribute('method', 'POST');
+$form->setAttribute('action', $this->url('album2/edit', array(), true));
+$form->prepare();
+
+$form->get('submit')->setValue('Update Album');
+
+echo $this->form()->openTag($form);
+
+echo $this->formCollection($form);
+
+echo $this->form()->closeTag();

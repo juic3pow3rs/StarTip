@@ -19,7 +19,75 @@ class Module
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
+
+        $em           = $eventManager->getSharedManager();
+
+        $zfcServiceEvents = $e->getApplication()->getServiceManager()->get('zfcuser_user_service')->getEventManager();
+
+        // To validate new field
+        $em->attach(
+            'ZfcUser\Form\RegisterFilter',
+            'init',
+            function($e) {
+                $filter = $e->getTarget();
+                $filter->add(array(
+                    'name'       => 'website',
+                    'required'   => true,
+                    'allowEmpty' => false,
+                    'filters'    => array(array('name' => 'StringTrim')),
+                    'validators' => array(
+                        array(
+                            'name' => 'NotEmpty',
+                        )
+                    ),
+                ));
+            }
+        );
+
+        $em->attach(
+            'ZfcUser\Form\Register',
+            'init',
+            function($e)
+            {
+                /* @var $form \ZfcUser\Form\Register */
+                $form = $e->getTarget();
+                $form->add(
+                    array(
+                        'name' => 'username',
+                        'options' => array(
+                            'label' => 'Username',
+                        ),
+                        'attributes' => array(
+                            'type'  => 'text',
+                        ),
+                    )
+                );
+
+                $form->add(
+                    array(
+                        'name' => 'website',
+                        'options' => array(
+                            'label' => 'Website',
+                        ),
+                        'attributes' => array(
+                            'type'  => 'text',
+                        ),
+                    )
+                );
+            }
+        );
+
+        // Store the field
+        $zfcServiceEvents->attach('register', function($e) {
+            $form = $e->getParam('form');
+            $user = $e->getParam('user');
+
+            /* @var $user \FooUser\Entity\User */
+            $user->setUsername( $form->get('username')->getValue() );
+            $user->setWebsite( $form->get('website')->getValue() );
+        });
     }
+
 
     public function getConfig()
     {

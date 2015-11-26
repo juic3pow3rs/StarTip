@@ -39,6 +39,7 @@ class WriteController extends AbstractActionController {
 
                     return $this->redirect()->toRoute('album2');
                 } catch (\Exception $e) {
+                    die($e->getMessage());
                     //Some DB Error happened, log it and let the user know
                 }
             }
@@ -48,6 +49,33 @@ class WriteController extends AbstractActionController {
 
         return array(
             'form' => $form
+        );
+    }
+
+    public function editAction()
+    {
+        $request = $this->getRequest();
+        $album   = $this->albumService->findAlbum($this->params('id'));
+
+        $this->albumForm->bind($album);
+
+        if ($request->isPost()) {
+            $this->albumForm->setData($request->getPost());
+
+            if ($this->albumForm->isValid()) {
+                try {
+                    $this->albumService->saveAlbum($album);
+
+                    return $this->redirect()->toRoute('album2');
+                } catch (\Exception $e) {
+                    die($e->getMessage());
+                    // Some DB Error happened, log it and let the user know
+                }
+            }
+        }
+
+        return array(
+            'form' => $this->albumForm
         );
     }
 }

@@ -12,6 +12,7 @@ use Album2\Model\AlbumInterface;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\Adapter\Driver\ResultInterface;
 use Zend\Db\ResultSet\HydratingResultSet;
+use Zend\Db\Sql\Delete;
 use Zend\Db\Sql\Insert;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Update;
@@ -123,5 +124,18 @@ class ZendDbSqlMapper implements AlbumMapperInterface {
         throw new \Exception("Database error");
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function delete(AlbumInterface $albumObject)
+    {
+        $action = new Delete('album');
+        $action->where(array('id = ?' => $albumObject->getId()));
 
+        $sql    = new Sql($this->dbAdapter);
+        $stmt   = $sql->prepareStatementForSqlObject($action);
+        $result = $stmt->execute();
+
+        return (bool)$result->getAffectedRows();
+    }
 }

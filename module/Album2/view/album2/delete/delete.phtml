@@ -1,0 +1,10 @@
+<h1>Delete Album</h1>
+<p>
+    Are you sure that you want to delete
+    '<?php echo $this->escapeHtml($this->album->getTitle()); ?>' by
+    '<?php echo $this->escapeHtml($this->album->getArtist()); ?>'?
+</p>
+<form action="<?php echo $this->url('album2/delete', array(), true) ?>" method="post">
+    <input type="submit" name="delete_confirmation" value="yes" />
+    <input type="submit" name="delete_confirmation" value="no" />
+</form>

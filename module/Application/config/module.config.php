@@ -61,7 +61,42 @@ return array(
         ),
         'factories' => array(
             'translator' => 'Zend\Mvc\Service\TranslatorServiceFactory',
+            'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
         ),
+    ),
+    'navigation' => array(
+        'default' => array(
+            array(
+                'label' => 'Home',
+                'route' => 'home',
+            ),
+            array(
+                'label' => 'Album2',
+                'route' => 'album2',
+                'pages' => array(
+                    array(
+                        'label' => 'Detail',
+                        'route' => 'album2',
+                        'action' => 'detail',
+                    ),
+                    array(
+                        'label' => 'Add',
+                        'route' => 'album2/add',
+                        'action' => 'add',
+                    ),
+                    array(
+                        'label' => 'Edit',
+                        'route' => 'album2',
+                        'action' => 'edit',
+                    ),
+                    array(
+                        'label' => 'Delete',
+                        'route' => 'album2',
+                        'action' => 'delete',
+                    ),
+                )
+            )
+        )
     ),
     'translator' => array(
         'locale' => 'en_US',
