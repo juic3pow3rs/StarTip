@@ -1,0 +1,5 @@
+{
+    "require": {
+        "bjyoungblood/bjy-profiler": "^1.1"
+    }
+}

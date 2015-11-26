@@ -27,7 +27,7 @@ class ListController extends  AbstractActionController {
     public function indexAction()
     {
         if ($this->zfcUserAuthentication()->getIdentity()->getG_id() != 2) {
-            print "Forbidden!";
+            throw new \InvalidArgumentException("Not allowed!");
         } else {
             return new ViewModel(array(
                 'albums' => $this->albumService->findAllAlbums()
