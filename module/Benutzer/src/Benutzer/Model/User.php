@@ -2,11 +2,11 @@
 /**
  * Created by PhpStorm.
  * User: Andi
- * Date: 24.11.2015
- * Time: 16:50
+ * Date: 01.12.2015
+ * Time: 11:02
  */
 
-namespace Application\Entity;
+namespace Benutzer\Model;
 
 use ZfcUser\Entity\UserInterface;
 
