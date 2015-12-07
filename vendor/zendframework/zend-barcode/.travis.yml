@@ -2,6 +2,11 @@ sudo: false
 
 language: php
 
+branches:
+  except:
+    - /^release-.*$/
+    - /^ghgfk-.*$/
+
 env:
   global:
     - TESTS_ZEND_BARCODE_PDF_SUPPORT=true

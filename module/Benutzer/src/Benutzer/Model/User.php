@@ -44,8 +44,6 @@ class User implements UserInterface
 
     protected $website;
 
-    protected $g_id;
-
     /**
      * Get id.
      *
@@ -178,25 +176,26 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getWebsite() {
-
+    /**
+     * Get state.
+     *
+     * @return int
+     */
+    public function getWebsite()
+    {
         return $this->website;
     }
 
-    public function setWebsite($website) {
-
-        $this->website = $website;
+    /**
+     * Set state.
+     *
+     * @param int $state
+     * @return UserInterface
+     */
+    public function setWebsite($website)
+    {
+        $this->state = $website;
         return $this;
     }
 
-    public function getG_id () {
-
-        return $this->g_id;
-    }
-
-    public function setG_id ($g_id) {
-
-        $this->g_id = $g_id;
-        return $this;
-    }
 }

@@ -17,8 +17,10 @@ class Module implements
     AutoloaderProviderInterface,
     ConfigProviderInterface
 {
+
     public function onBootstrap(MvcEvent $e)
     {
+        /**
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
@@ -52,7 +54,7 @@ class Module implements
             'init',
             function($e)
             {
-                /* @var $form \ZfcUser\Form\Register */
+                // @var $form \ZfcUser\Form\Register
                 $form = $e->getTarget();
                 $form->add(
                     array(
@@ -80,17 +82,16 @@ class Module implements
             }
         );
 
-        // Store the field
+        // Store the field.
         $zfcServiceEvents->attach('register', function($e) {
             $form = $e->getParam('form');
             $user = $e->getParam('user');
 
-            /* @var $user \FooUser\Entity\User */
+            // @var $user \Benutzer\Model\User
             $user->setUsername( $form->get('username')->getValue() );
             $user->setWebsite( $form->get('website')->getValue() );
-        });
+        });**/
     }
-
     /**
      * Return an array for passing to Zend\Loader\AutoloaderFactory.
      *

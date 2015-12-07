@@ -51,9 +51,9 @@ class RegisterFilter extends ProvidesEventsInputFilter
             'required'   => true,
             'validators' => array(
                 array(
-                    'name' => 'EmailAddress',
+                    'name' => 'EmailAddress'
                 ),
-                /** Regex für check ob uni mail **/
+                // Regex für check ob uni mail.
                 array(
                     'name' => 'Regex',
                     'options' => array(

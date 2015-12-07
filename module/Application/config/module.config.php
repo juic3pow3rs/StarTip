@@ -70,7 +70,7 @@ return array(
                 'label' => 'Home',
                 'route' => 'home',
             ),
-            array(
+            /**array(
                 'label' => 'Album2',
                 'route' => 'album2',
                 'pages' => array(
@@ -95,7 +95,7 @@ return array(
                         'action' => 'delete',
                     ),
                 )
-            )
+            )**/
         )
     ),
     'translator' => array(

@@ -16,6 +16,10 @@ return array(
         'ZfcUser',
         'Application',
         'Benutzer',
+        'Spiel',
+        'ZfcAdmin',
+    	'Mannschaft',
+        'LdcUserProfile',
     ),
 
     // These are various options for the listeners attached to the ModuleManager
