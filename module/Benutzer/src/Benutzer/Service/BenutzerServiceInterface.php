@@ -25,4 +25,13 @@ interface BenutzerServiceInterface {
      */
     public function findBenutzer($id);
 
+    /**
+     * @param $g_id
+     * @param $id
+     * @return mixed
+     */
+    public function inviteBenutzer($g_id, $id);
+    
+    
+    public function suchBenutzer($benutzername);
 }

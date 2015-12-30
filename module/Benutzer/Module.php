@@ -91,6 +91,36 @@ class Module implements
             $user->setUsername( $form->get('username')->getValue() );
             $user->setWebsite( $form->get('website')->getValue() );
         });**/
+
+        $eventManager        = $e->getApplication()->getEventManager();
+        $moduleRouteListener = new ModuleRouteListener();
+        $moduleRouteListener->attach($eventManager);
+
+        //You need a copy of the service manager and it has to be set as a member for the lambda function to call it
+        $this->sm = $e->getApplication()->getServiceManager();
+
+        $zfcServiceEvents = $e->getApplication()->getServiceManager()->get('zfcuser_user_service')->getEventManager();
+
+        $zfcServiceEvents->attach('register.post', function($e) {
+
+            /** @var \Benutzer\Model\User $user */
+            $user = $e->getParam('user');
+
+            //bjyAuthorize uses a magic constant for the table name
+            $action = new \Zend\Db\Sql\Insert('user_role_linker');
+            $action->columns(array('user_id', 'role_id'));
+            $action->values(array('user_id' => $user->getId(), 'role_id' => 2), $action::VALUES_MERGE);
+
+            //This is the adapter that both bjyAuthorize and zfcuser use
+            $adapter = $this->sm->get('zfcuser_zend_db_adapter');
+            //Build the insert statement
+            $sql = new \Zend\Db\Sql\Sql($adapter);
+            //Prepare Statement
+            $stmt = $sql->prepareStatementForSqlObject($action);
+
+            //Execute the insert statement
+            $stmt->execute();
+        });
     }
     /**
      * Return an array for passing to Zend\Loader\AutoloaderFactory.

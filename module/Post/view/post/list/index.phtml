@@ -1,0 +1,32 @@
+
+<h1>Pinwannd</h1>
+ <?php foreach($this->posts as $p) : ?>
+
+<table class="table">
+    <thead>
+    <tr>
+       <th> Nr:<?php echo $p->getP_id(); ?></th>
+       </tr>
+       <tr>      
+        <th><?php echo $p->getDatum_zeit();?></th>
+       </td>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+         
+           <th>Betreff: <?php echo $p->getBetreff();?></th>
+           </tr>
+           <tr>
+            <th>Text:<?php echo $p->getText();?></th>
+        
+       
+         
+        </tr>
+        </table>
+    <?php endforeach; ?>
+
+       
+    
+
+
