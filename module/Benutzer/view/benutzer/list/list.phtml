@@ -1,1 +1,18 @@
-<h1>Benutzer\ListController::listAction()</h1>
+<h1>Globale Rangliste</h1>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Username</th>
+        <th>Punkte</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach($this->benutzer as $b) : ?>
+        <tr>
+            <td><?php echo $b['name'];?></td>
+            <td><?php echo $b['gesamt'];?></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>

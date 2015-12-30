@@ -70,32 +70,42 @@ return array(
                 'label' => 'Home',
                 'route' => 'home',
             ),
-            /**array(
-                'label' => 'Album2',
-                'route' => 'album2',
+            array(
+                'label' => 'Login/Register',
+                'route' => 'user',
                 'pages' => array(
                     array(
-                        'label' => 'Detail',
-                        'route' => 'album2',
-                        'action' => 'detail',
+                        'label' => 'Login',
+                        'route' => 'zfcuser/login',
                     ),
                     array(
-                        'label' => 'Add',
-                        'route' => 'album2/add',
-                        'action' => 'add',
-                    ),
-                    array(
-                        'label' => 'Edit',
-                        'route' => 'album2',
-                        'action' => 'edit',
-                    ),
-                    array(
-                        'label' => 'Delete',
-                        'route' => 'album2',
-                        'action' => 'delete',
+                        'label' => 'Register',
+                        'route' => 'zfcuser/register',
                     ),
                 )
-            )**/
+            ),
+            array(
+                'label' => 'Rangliste',
+                'route' => 'user/list'
+            ),
+            array(
+                'label' => 'Tippgemeinschaften',
+                'route' => 'gruppe',
+                'pages' => array(
+                    array(
+                        'label' => 'Erstellen',
+                        'route' => 'gruppe/add',
+                    ),
+                    array(
+                        'label' => 'Meine TG',
+                        'route' => 'gruppe',
+                    ),
+                    array(
+                        'label' => 'Einladungen',
+                        'route' => 'gruppe/show'
+                    ),
+                )
+            ),
         )
     ),
     'translator' => array(
@@ -136,4 +146,16 @@ return array(
             ),
         ),
     ),
+    'htimg' => [
+        'filters' => [
+            'my_thumbnail' => [ // this is  filter service
+                'type' => 'thumbnail', // this is a filter loader
+                'options' => [  // filter loader passes these options to a Filter which manipulates the image
+                    'width' => 100,
+                    'height' => 100,
+                    //'format' => 'jpeg' // format is optional and defaults to the format of given image
+                ]
+            ]
+        ]
+    ],
 );

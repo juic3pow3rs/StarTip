@@ -1,0 +1,21 @@
+<h1>Tipps</h1>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>b_id</th>
+        
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach($this->tipps as $t) : ?>
+        <tr>
+            <td><?php echo $t->getT_id();?></td>
+            <td><?php echo $t->getB_id();?></td>
+           
+           
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
