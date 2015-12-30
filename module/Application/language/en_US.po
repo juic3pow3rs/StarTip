@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: ZendSkeletonApplication\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-05 22:17-0700\n"
-"PO-Revision-Date: 2015-11-06 17:04+0100\n"
+"PO-Revision-Date: 2015-12-08 16:36+0100\n"
 "Last-Translator: Evan Coury <me@evancoury.com>\n"
 "Language-Team: ZF Contibutors <zf-devteam@zend.com>\n"
 "Language: en_US\n"
@@ -17,7 +17,7 @@ msgstr ""
 
 #: ../view/layout/layout.phtml:6 ../view/layout/layout.phtml:33
 msgid "Skeleton Application"
-msgstr "Tutorial"
+msgstr "StarTip"
 
 #: ../view/layout/layout.phtml:36
 msgid "Home"

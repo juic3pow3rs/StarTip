@@ -20,6 +20,14 @@ return array(
         'ZfcAdmin',
     	'Mannschaft',
         'LdcUserProfile',
+        //'BjyAuthorize',
+        'Gruppe',
+        'Post',
+        'MtMail',
+        'HtUserRegistration',
+        'Tipp',
+        //'HtImgModule',
+        //'HtProfileImage',
     ),
 
     // These are various options for the listeners attached to the ModuleManager

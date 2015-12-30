@@ -17,4 +17,10 @@ interface BenutzerMapperInterface {
      */
     public function findAll();
 
+    public function find($name);
+
+    public function invite($g_id, $id);
+    
+    public function such($benutzername);
+
 }

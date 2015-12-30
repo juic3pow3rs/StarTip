@@ -42,7 +42,7 @@ return array(
    
     /**
      * Default BjyAuthorize configuration for ACL
-     */ 
+
     'bjyauthorize' => array(
         'guards' => array(
             'BjyAuthorize\Guard\Route' => array(
@@ -50,10 +50,10 @@ return array(
             ),
         ),
     ),
-
+    **/
     /**
      * Default ZfcRbac configuration for RBAC
-     */
+
     'zfcrbac' => array(
         'firewall_route' => true,
         'firewalls' => array(
@@ -62,4 +62,5 @@ return array(
             )
         ),
     ),
+     * **/
 );

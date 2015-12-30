@@ -1,0 +1,25 @@
+<h1>Tipp abgaben</h1>
+<?php
+$form = $this->form;
+$form->setAttribute('method', 'POST');
+$form->setAttribute('action', $this->url('tipp/add', array(), true));
+$form->prepare();
+
+$form->get('submit')->setValue('Tipp abgeben');
+
+echo $this->form()->openTag($form);
+
+#Die paar Zeilen:
+echo $this->formHidden($form->get('tipp-fieldset')->get('t_id'));
+#setValue setzt das was in dem Feld schon von vornherein drinstehen soll. Hier nur beispielhaft mit der Mail.
+#die UserId sollte natürlich ein hidden field sein (wie die erste Zeile) und das wird dann halt befüllt.
+echo $this->formHidden($form->get('tipp-fieldset')->get('b_id')->setValue($this->zfcUserIdentity()->getId()));
+echo $this->formRow($form->get('tipp-fieldset')->get('s_id'));
+echo $this->formRow($form->get('tipp-fieldset')->get('tipp1'));
+echo $this->formRow($form->get('tipp-fieldset')->get('tipp2'));
+echo $this->formSubmit($form->get('submit'));
+
+#Statt der Zeile:
+#echo $this->formCollection($form);
+
+echo $this->form()->closeTag();

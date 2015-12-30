@@ -1,0 +1,46 @@
+<fieldset><form action="/spiel/edit/2" method="post" >
+<h1>Spiele</h1>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Mannschaft 1</th>
+        <th>Mannschaft 2</th>
+        <th>Modus</th>
+        <th>Anpfiff</th>
+        <th>Tore1</th>
+        <th>Tore2</th>
+        <th>Punkte1</th>
+        <th>Punkte2</th>
+        <th>Gelb1</th>
+        <th>Gelb2</th>
+        <th>Rot1</th>
+        <th>Rot2</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach($this->spiele as $s) : ?>
+        <tr>
+            <td><?php echo $s['s_id'];?></td>
+          <td><?php echo $s['mannschaft1'];?></td>
+            <td><?php echo $s['mannschaft2'];?></td>
+           <td><?php echo $s['modus'];?></td>
+           <td><?php echo $s['anpfiff'];?></td>
+           <td><?php echo $s['tore1'];?></td>
+           <td><?php echo $s['tore2'];?></td>
+           <td><?php echo $s['punkte1'];?></td>
+           <td><?php echo $s['punkte2'];?></td>
+           <td><?php echo $s['gelb1'];?></td>
+           <td><?php echo $s['gelb2'];?></td>
+           <td><?php echo $s['rot1'];?></td>
+           <td><?php echo $s['rot2'];?></td>
+            <td><a href="<?php echo $this->url('spiel/edit', array('id' => $s['s_id'])); ?>">Bearbeiten</a>  </td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+
+</form>
+</fieldset>

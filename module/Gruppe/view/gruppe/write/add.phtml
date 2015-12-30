@@ -1,0 +1,25 @@
+<h1>Neue Tippgemeinschaft erstellen</h1>
+<?php
+$form = $this->form;
+$form->setAttribute('method', 'POST');
+$form->setAttribute('action', $this->url('gruppe/add', array(), true));
+$form->prepare();
+
+$form->get('submit')->setValue('Tippgemeinschaft anlegen');
+
+echo $this->form()->openTag($form);
+
+#Die paar Zeilen:
+echo $this->formHidden($form->get('gruppe-fieldset')->get('g_id'));
+#setValue setzt das was in dem Feld schon von vornherein drinstehen soll. Hier nur beispielhaft mit der Mail.
+#die UserId sollte natürlich ein hidden field sein (wie die erste Zeile) und das wird dann halt befüllt.
+echo $this->formHidden($form->get('gruppe-fieldset')->get('user_id')->setValue($this->zfcUserIdentity()->getId()));
+echo $this->formRow($form->get('gruppe-fieldset')->get('name'));
+echo $this->formRow($form->get('gruppe-fieldset')->get('beschreibung'));
+
+echo $this->formSubmit($form->get('submit'));
+
+#Statt der Zeile:
+#echo $this->formCollection($form);
+
+echo $this->form()->closeTag();
