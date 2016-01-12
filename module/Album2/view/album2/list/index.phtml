@@ -14,6 +14,10 @@
             <td><?php echo $a->getId();?></td>
             <td><?php echo $a->getArtist();?></td>
             <td><?php echo $a->getTitle();?></td>
+            <td>
+                <a href="<?php echo $this->url('album2/edit', array('id' => $a->getId())); ?>">Edit</a>
+                <a href="<?php echo $this->url('album2/delete', array('id' => $a->getId())); ?>">Delete</a>
+            </td>
         </tr>
     <?php endforeach; ?>
     </tbody>

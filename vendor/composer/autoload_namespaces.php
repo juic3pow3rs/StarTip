@@ -13,6 +13,11 @@ return array(
     'ZendXml\\' => array($vendorDir . '/zendframework/zendxml/library'),
     'ZendDeveloperTools' => array($vendorDir . '/zendframework/zend-developer-tools/src'),
     'Prophecy\\' => array($vendorDir . '/phpspec/prophecy/src'),
+    'Negotiation' => array($vendorDir . '/willdurand/negotiation/src'),
+    'MtMailTest' => array($vendorDir . '/mtymek/mt-mail/test'),
+    'LdcUserProfile\\' => array($vendorDir . '/adamlundrigan/ldc-user-profile/src'),
+    'Imagine' => array($vendorDir . '/imagine/imagine/lib'),
+    'Eye4web\\ZfcUser\\ProfilePicture\\' => array($vendorDir . '/eye4web/zfc-user-profile-picture/src'),
     'BjyProfiler' => array($vendorDir . '/bjyoungblood/bjy-profiler/src'),
     'BjyAuthorize\\' => array($vendorDir . '/bjyoungblood/bjy-authorize/src'),
 );

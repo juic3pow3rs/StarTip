@@ -1,0 +1,9 @@
+<h1>Neues Spiel hinzufuegen</h1>
+<?php
+$form->setAttribute('method', 'POST');
+$form->setAttribute('action', $this->url());
+$form->prepare();
+
+echo $this->form()->openTag($form);
+echo $this->formCollection($form);
+echo $this->form()->closeTag();
