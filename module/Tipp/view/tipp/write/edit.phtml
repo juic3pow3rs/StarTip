@@ -1,0 +1,31 @@
+<h1>Tipp Bearbeiten</h1>
+
+<table class="table">
+    <tr>
+        <th>Erste Mannschaft</th>
+        <th>Zweite Mannschaft</th>
+    </tr>
+    <tr>
+        <td>
+       <?php echo $mannschaft1['name']?> 
+     
+        </td>
+        <td>
+        <?php echo $mannschaft2['name']?> 
+        </td>
+    </tr>
+    </table>
+
+<?php
+$form = $this->form;
+$form->setAttribute('method', 'POST');
+$form->setAttribute('action', $this->url('tipp/edit', array(), true));
+$form->prepare();
+
+$form->get('submit')->setValue('Tipp bearbeiten');
+
+echo $this->form()->openTag($form);
+
+echo $this->formCollection($form);
+
+echo $this->form()->closeTag();

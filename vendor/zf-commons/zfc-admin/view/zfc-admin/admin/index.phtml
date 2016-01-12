@@ -1,0 +1,57 @@
+<h1>Admin Dashboard</h1>
+
+<p>Das ist die Turnier-Uebersicht und Verwaltung</p>
+
+<h2>Turnier</h2>
+<table class="table">
+    <tr>
+        <td>Status: <?php (($status == 0) ? print 'Inaktiv' : print 'Aktiv'); ?></td>
+        <td><?php if ($status == 0) { ?><a href="#">Link zum aktivieren/deaktivieren</a><?php } ?></td>
+    </tr>
+    <tr>
+        <td>Modus:
+            <?php
+                switch($modus) {
+                    case 0: print 'Vor Turnier'; break;
+                    case 1: print 'Vorrunde'; break;
+                    case 2: print 'Viertelfinale'; break;
+                    case 3: print 'Halbfinale'; break;
+                    case 4: print 'Finale'; break;
+                }
+            ?></td>
+        <td><?php if ($status == 0 && $modus == 0) { ?><a href="#">Mannschaften hinzufuegen</a> / <a href="">Zusatztipps updaten</a><?php } ?></td>
+    </tr>
+</table>
+<h3>Vorrunde</h3>
+<table class="table">
+    <tr>
+        <td>Modus: <?php (($modus == 1) ? print 'Aktiv' : print 'Inaktiv'); ?></td>
+        <td><?php if ($status == 1 && $modus == 0) { ?><a href="">Link zum aktivieren</a><?php } ?></td>
+    </tr>
+</table>
+<p>Hier eine Liste der Spiele zur Vorrunde quasi getSpiele($modus), Ausgabe als Tabelle
+    und pro Spiel die Moeglichkeit zu editieren. Zusaetzlich anzeige des Status des Spiels (Aktiv/Beendet)</p>
+<h3>Viertelfinale</h3>
+<table class="table">
+    <tr>
+        <th>Status</th>
+        <th>Links zum aktivieren</th>
+    </tr>
+</table>
+<p>Hier eine Liste der Spiele zur Vorrunde quasi getSpiele($modus), Ausgabe als Tabelle und pro Spiel die Moeglichkeit zu editieren und Punkte zu berechnen</p>
+<h3>Halbfinale</h3>
+<table class="table">
+    <tr>
+        <th>Status</th>
+        <th>Links zum aktivieren</th>
+    </tr>
+</table>
+<p>Hier eine Liste der Spiele zur Vorrunde quasi getSpiele($modus), Ausgabe als Tabelle und pro Spiel die Moeglichkeit zu editieren und Punkte zu berechnen</p>
+<h3>Finale</h3>
+<table class="table">
+    <tr>
+        <th>Status</th>
+        <th>Links zum aktivieren</th>
+    </tr>
+</table>
+<p>Hier eine Liste der Spiele zur Vorrunde quasi getSpiele($modus), Ausgabe als Tabelle und pro Spiel die Moeglichkeit zu editieren und Punkte zu berechnen</p>

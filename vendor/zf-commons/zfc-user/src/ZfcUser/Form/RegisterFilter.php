@@ -54,15 +54,15 @@ class RegisterFilter extends ProvidesEventsInputFilter
                     'name' => 'EmailAddress'
                 ),
                 // Regex für check ob uni mail.
-                array(
+                /**array(
                     'name' => 'Regex',
                     'options' => array(
-                        'pattern' => '/\b[A-Z0-9._%+-]+@uni-passau.de\b/i',
+                        'pattern' => '/\b[A-Z0-9._%+-]+@(stud.)?uni-passau.de\b/i',
                         'messages' => array(
                             \Zend\Validator\Regex::NOT_MATCH => 'Invalid input, only "@uni-passau.de" adresses allowed',
                         ),
                     ),
-                ),
+                ),**/
                 $this->emailValidator
             ),
         ));

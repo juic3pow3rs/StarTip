@@ -1,0 +1,45 @@
+<h1>&Uumlbersicht &uumlber Ihre Tippgemeinschaften</h1>
+
+<table class="table table-hover">
+
+    <thead>
+    <tr >
+        
+        <th>Name der Tippgemeinschaft</th>
+        <th>Beschreibung der Tippgemeinschaft</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr >
+    </thead>
+    <tbody>
+    <?php foreach($this->gruppen as $g) : ?>
+        <tr >
+           
+            <td ><?php echo $g->getName();?></td>
+            <td><?php echo $g->getBeschreibung();?></td>
+            <td>
+              <input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('post/detail', array('g_id' => $g->getG_id())); ?>';" value="Pinnwand" />
+ 
+            </td>
+            <td><?php if ($g->getUser_id() == $this->zfcUserIdentity()->getId()){ ?>
+             <input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('gruppe/invite', array('id' => $g->getG_id())); ?>';" value="Einladung verschicken" />
+             	
+                <?php } ?>
+            </td>
+             <td><?php if ($g->getUser_id() == $this->zfcUserIdentity()->getId()){ ?>
+             	     <input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('gruppe/edit', array('g_id' => $g->getG_id())); ?>?>';" value="Bearbeiten" />
+          
+              
+                <?php } ?>
+            </td>
+           
+             	 <td>    <input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('gruppe/compare', array('g_id' => $g->getG_id())); ?>?>';" value="Rangliste" /> </td>
+          
+            </td>
+
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>

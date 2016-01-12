@@ -1,0 +1,14 @@
+<h1>Tippgemeinschaft bearbeiten </h1>
+<?php
+$form = $this->form;
+$form->setAttribute('method', 'POST');
+$form->setAttribute('action', $this->url('gruppe/edit', array(), true));
+$form->prepare();
+
+$form->get('submit')->setValue('Bearbeiten');
+
+echo $this->form()->openTag($form);
+
+echo $this->formCollection($form);
+
+echo $this->form()->closeTag();

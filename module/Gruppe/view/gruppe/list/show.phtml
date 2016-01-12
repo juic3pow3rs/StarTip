@@ -1,0 +1,23 @@
+<h1>Einladungen</h1>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Name der Tippgemeinschaft</th>
+        <th>Beschreibung der Tippgemeinschaft</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach($this->einladungen as $e) : ?>
+        <tr>
+          	<td><?php echo $e->getName()?></td>
+            <td><?php echo $e->getBeschreibung();?></td>
+            <td> <input type="button" onclick="location.href='<?php echo $this->url('gruppe/annehmen', array('g_id' => $e->getG_id())); ?>';" value="Annehmen" /></td>
+  		    <td> <input type="button" onclick="location.href='<?php echo $this->url('gruppe/ablehnen', array('g_id' => $e->getG_id()));  ?>';" value="Ablehnen" /></td>
+ 
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>

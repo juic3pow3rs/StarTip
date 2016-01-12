@@ -1,0 +1,32 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Andi
+ * Date: 28.12.2015
+ * Time: 21:30
+ */
+
+namespace Tipp\Factory;
+
+use Tipp\Form\ZusatztippForm;
+use Tipp\Service\TippServiceInterface;
+use Mannschaft\Service\MannschaftServiceInterface;
+use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
+class ZusatztippFormFactory implements FactoryInterface
+{
+    /**
+     * Create service
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     *
+     * @return mixed
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        $mannschaftServiceInterface = $serviceLocator->get('Mannschaft\Service\MannschaftServiceInterface');
+        $tippServiceInterface = $serviceLocator->get('Tipp\Service\TippServiceInterface');
+
+        return new ZusatztippForm(null, null, $mannschaftServiceInterface, $tippServiceInterface);
+    }
+}

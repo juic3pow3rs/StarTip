@@ -1,0 +1,17 @@
+<h1>Suchergebnis: <?php echo $this->anzahl?> Benutzer gefunden</h1>
+<?php if ($this->anzahl != 0){?>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Username</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach($this->benutzer as $b) : ?>
+        <tr>
+            <td><?php echo $b['username'];?></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+<?php }?>

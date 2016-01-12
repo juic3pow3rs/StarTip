@@ -1,0 +1,34 @@
+
+<h1>Pinnwand</h1>
+<?php $i=1; ?>
+ <?php foreach($this->liste as $p) : ?>
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+       <th class='success'> Nr: <?php echo $i; ?></th>
+    </tr>
+    <tr>
+        <th class='success'><?php echo $p->getDatum_zeit();?></th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+           <th class='success'>Betreff: <?php echo $p->getBetreff();?></th>
+        </tr>
+        <tr>
+            <td class='success' ><?php echo $p->getText();?></td>
+        </tr>
+    </tbody>
+</table>
+<?php $i++;?>
+     <?php endforeach; ?>
+     
+    <input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('post/add', array('g_id' => $this->gruppe)) ?>';" value="Beitrag verfassen" />
+
+     
+
+       
+    
+
+

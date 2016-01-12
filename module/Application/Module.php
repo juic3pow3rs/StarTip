@@ -9,6 +9,8 @@
 
 namespace Application;
 
+use Zend\View\Helper\Navigation;
+
 class Module
 {
     public function getConfig()
@@ -25,5 +27,26 @@ class Module
                 ),
             ),
         );
+    }
+
+    public function onBootstrap($e)
+    {
+        /**$sm = $e->getApplication()->getServiceManager();
+
+        // Add ACL information to the Navigation view helper
+        $authorize = $sm->get('BjyAuthorizeServiceAuthorize');
+        $acl = $authorize->getAcl();
+        $role = $authorize->getIdentity();
+        Navigation::setDefaultAcl($acl);
+        Navigation::setDefaultRole($role);
+        **/
+
+        $sm   = $e->getApplication()->getServiceManager();
+        $auth = $sm->get('BjyAuthorize\Service\Authorize');
+
+        $acl  = $auth->getAcl();
+        $role = $auth->getIdentity();
+        \Zend\View\Helper\Navigation::setDefaultAcl($acl);
+        \Zend\View\Helper\Navigation::setDefaultRole($role);
     }
 }

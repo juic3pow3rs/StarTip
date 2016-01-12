@@ -42,8 +42,6 @@ class User implements UserInterface
      */
     protected $state;
 
-    protected $website;
-
     /**
      * Get id.
      *
@@ -173,28 +171,6 @@ class User implements UserInterface
     public function setState($state)
     {
         $this->state = (int) $state;
-        return $this;
-    }
-
-    /**
-     * Get state.
-     *
-     * @return int
-     */
-    public function getWebsite()
-    {
-        return $this->website;
-    }
-
-    /**
-     * Set state.
-     *
-     * @param int $state
-     * @return UserInterface
-     */
-    public function setWebsite($website)
-    {
-        $this->state = $website;
         return $this;
     }
 

@@ -26,8 +26,27 @@ class ListController extends  AbstractActionController {
 
     public function listAction()
     {
+        $globalRang = $this->benutzerService->findAllBenutzer();
+        //print_r($globalRang);
+
         return new ViewModel(array(
-            'benutzer' => $this->benutzerService->findAllBenutzer()
+            'benutzer' => $globalRang
         ));
+    }
+    
+    public function detailAction()
+    {
+    	$id = $this->params()->fromRoute('id');
+    
+    	try {
+    		$benutzer = $this->benutzerService->findUser($id);
+    		
+    	} catch (\InvalidArgumentException $ex) {
+    		return $this->redirect()->toRoute('user');
+    	}
+  
+    	return new ViewModel(array(
+    			'benutzer' => $benutzer
+    	));
     }
 }
