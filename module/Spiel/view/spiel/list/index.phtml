@@ -1,4 +1,4 @@
-<fieldset><form action="/spiel/edit/2" method="post" >
+<!--<fieldset><form action="/spiel/edit/2" method="post" >-->
 <h1>Spiele</h1>
 
 <table class="table">
@@ -17,30 +17,53 @@
         <th>Gelb2</th>
         <th>Rot1</th>
         <th>Rot2</th>
+        <th>Status</th>
         <th></th>
+        <th></th>
+      
     </tr>
     </thead>
     <tbody>
     <?php foreach($this->spiele as $s) : ?>
         <tr>
             <td><?php echo $s['s_id'];?></td>
-          <td><?php echo $s['mannschaft1'];?></td>
+            <td><?php echo $s['mannschaft1'];?></td>
             <td><?php echo $s['mannschaft2'];?></td>
-           <td><?php echo $s['modus'];?></td>
-           <td><?php echo $s['anpfiff'];?></td>
-           <td><?php echo $s['tore1'];?></td>
-           <td><?php echo $s['tore2'];?></td>
-           <td><?php echo $s['punkte1'];?></td>
-           <td><?php echo $s['punkte2'];?></td>
-           <td><?php echo $s['gelb1'];?></td>
-           <td><?php echo $s['gelb2'];?></td>
-           <td><?php echo $s['rot1'];?></td>
-           <td><?php echo $s['rot2'];?></td>
-            <td><a href="<?php echo $this->url('spiel/edit', array('id' => $s['s_id'])); ?>">Bearbeiten</a>  </td>
+            <td><?php echo $s['modus'];?></td>
+            <td><?php echo $s['anpfiff'];?></td>
+            <td><?php echo $s['tore1'];?></td>
+            <td><?php echo $s['tore2'];?></td>
+            <td><?php echo $s['punkte1'];?></td>
+            <td><?php echo $s['punkte2'];?></td>
+            <td><?php echo $s['gelb1'];?></td>
+            <td><?php echo $s['gelb2'];?></td>
+            <td><?php echo $s['rot1'];?></td>
+            <td><?php echo $s['rot2'];?></td>
+            <td><?php echo $s['status']; ?></td>
+            
+             <td><input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('spiel/edit', array('id' => $s['s_id'])); ?>'"  value="Bearbeiten" /></td>
+ 			<?php $count=0;?>
+ 			<?php foreach($this->getippt as $t) :
+ 				if($s['s_id']==$t['s_id']){
+ 				$t_id=$t['t_id'];
+ 				$count=1;
+ 			}
+ 			 endforeach;?>
+ 		     <td><?php if($count == 0 && $s['status'] == 0){ ?>
+ 		     <input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('tipp/add', array('s_id' => $s['s_id'])); ?>'"  value="Tipp abgeben" />
+ 		     <?php }?>
+ 		     
+ 		     <?php if($count == 1){?>
+ 		 
+ 		      <input type="button" class="btn btn-danger" onclick="location.href='<?php echo $this->url('tipp/detail', array('t_id' => $t_id)); ?>'"  value="Tipp ansehen" />
+ 		     <?php }?>
+ 		     </td>
+ 			
+            
         </tr>
     <?php endforeach; ?>
     </tbody>
 </table>
 
-</form>
-</fieldset>
+<!--</form>
+</fieldset>-->

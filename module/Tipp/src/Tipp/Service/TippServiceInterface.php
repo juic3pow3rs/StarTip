@@ -17,7 +17,7 @@ interface TippServiceInterface {
      *
      * @return array|\Traversable
      */
-    public function findAllTipps();
+    public function findAllTipps($user_id);
 
     /**
      * Should return a single album
@@ -34,11 +34,23 @@ interface TippServiceInterface {
      * @param  AlbumInterface $album
      * @return AlbumInterface
      */
-    public function saveTipp(TippInterface $tipp);
+    public function saveTipp(TippInterface $tipp, $s_id);
 
     public function updateZusatztipp($id, $status);
 
     public function addZusatztipp($id, $user_id, $m_id);
 
+    public function setZusatztipp($id, $m_id);
+
+    public function zusatzPunkteBerechnen($id);
+
     public function isActive();
+
+    public function punkteBerechnen($s_id);
+    
+    public function tippAbgegeben($s_id, $user_id);
+    
+   
+    	
+    
 }

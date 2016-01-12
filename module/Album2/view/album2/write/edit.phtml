@@ -9,6 +9,15 @@ $form->get('submit')->setValue('Update Album');
 
 echo $this->form()->openTag($form);
 
-echo $this->formCollection($form);
+#Die paar Zeilen:
+echo $this->formHidden($form->get('album-fieldset')->get('id'));
+#setValue setzt das was in dem Feld schon von vornherein drinstehen soll. Hier nur beispielhaft mit der Mail.
+#die UserId sollte natürlich ein hidden field sein (wie die erste Zeile) und das wird dann halt befüllt.
+echo $this->formRow($form->get('album-fieldset')->get('title')->setValue($this->zfcUserIdentity()->getEmail()));
+echo $this->formRow($form->get('album-fieldset')->get('artist'));
+echo $this->formSubmit($form->get('submit'));
+
+#Statt der Zeile:
+#echo $this->formCollection($form);
 
 echo $this->form()->closeTag();

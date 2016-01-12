@@ -3,19 +3,31 @@
 <table class="table">
     <thead>
     <tr>
-        <th>ID</th>
-        <th>b_id</th>
+        <th>s_id</th>
+        <th>Erste Mannschaft</th>
+        <th>Tipp Anzahl der Tore</th>
+        <th>Zweite Mannschaft </th>
+         <th>Tipp Anzahl der Tore</th>
+         <th>Punkte</th>
         
     </tr>
     </thead>
     <tbody>
-    <?php foreach($this->tipps as $t) : ?>
+        <?php foreach($this->tipps as $t) : ?>
         <tr>
-            <td><?php echo $t->getT_id();?></td>
-            <td><?php echo $t->getB_id();?></td>
+            <td><?php echo $t['s_id']; ?></td>
+            <td><?php echo $t['mannschaft1'];?></td>
+            <td><?php echo $t['tipp1'];?></td>
+            <td><?php echo $t['mannschaft2'];?></td>
+            <td><?php echo $t['tipp2'];?></td>
+            <td><?php echo $t['punkte'];?></td>
+            
+             
            
            
         </tr>
     <?php endforeach; ?>
+    
+
     </tbody>
 </table>

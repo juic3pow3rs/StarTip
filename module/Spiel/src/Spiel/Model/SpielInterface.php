@@ -99,4 +99,6 @@ interface SpielInterface {
      * @return int
      */
     public function getRot2();
+
+    public function getStatus();
 }

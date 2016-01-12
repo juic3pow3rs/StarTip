@@ -21,7 +21,8 @@ return array(
     ),
     'controllers' => array(
         'factories' => array(
-            'Benutzer\Controller\List' => 'Benutzer\Factory\ListControllerFactory'
+            'Benutzer\Controller\List' => 'Benutzer\Factory\ListControllerFactory',
+        	'Benutzer\Controller\Write' => 'Benutzer\Factory\WriteControllerFactory'
         )
     ),
 
@@ -50,6 +51,30 @@ return array(
                             )
                         )
                     ),
+                	 
+                    'detail' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route'    => '/detail/:id',
+                            'defaults' => array(
+                                'controller' => 'Benutzer\Controller\List',
+                                'action'     => 'detail'
+                            ),
+                            'constraints' => array(
+                                'id' => '\d+'
+                            )
+                        )
+                    		),
+                    'suche' => array(
+                		'type' => 'literal',
+                		'options' => array(
+                			'route' => '/suche',
+                			'defaults' => array(
+                				'controller' => 'Benutzer\Controller\Write',
+                				'action'     => 'suche'
+                						)
+                				)
+                		),
                 )
             )
         )

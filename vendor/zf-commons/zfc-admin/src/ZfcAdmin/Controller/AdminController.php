@@ -42,40 +42,57 @@
 
 namespace ZfcAdmin\Controller;
 
+use Spiel\Service\SpielServiceInterface;
+use Tipp\Service\TippServiceInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 
-/**
- * Placeholder controller
- *
- * This controller is just here in case you have not defined a controller
- * behind the 'admin' route yourself. If you haven't, you would otherwise
- * get a 404: Page not found error.
- *
- * If you want to override this controller (and action), create a module and
- * put this in the module configuration:
- *
- * <code>
- * <?php
- * return array(
- *     'router' => array(
- *         'routes' => array(
- *             'zfcadmin' => array(
- *                 'options' => array(
- *                     'defaults' => array(
- *                         'controller' => 'MyFoo\Controller\OtherController',
- *                         'action'     => 'custom',
- *                     ),
- *                 ),
- *             ),
- *         ),
- *     ),
- * );
- * </code>
- *
- * @package    ZfcAdmin
- * @subpackage Controller
- */
 class AdminController extends AbstractActionController
 {
+    protected $spielService;
+    protected $tippService;
+
+    public function __construct(
+        SpielServiceInterface $spielService,
+        TippServiceInterface $tippService
+    ) {
+        $this->spielService = $spielService;
+        $this->tippService = $tippService;
+    }
+
+    public function indexAction() {
+
+        $status = $this->spielService->turnierStatus();
+        $modus = $this->spielService->getModus();
+
+        return array(
+            'status' => $status[0]['status'],
+            'modus' => $modus[0]['modus']
+        );
+
+    }
+
+    public function activateAction()
+    {
+        $request = $this->getRequest();
+
+        $status = $this->spielService->turnierStatus();
+        //print_r($status[0]['status']);
+
+        if ($request->isPost()) {
+            $act = $request->getPost('activate_confirmation', 'no');
+
+            if ($act === 'yes') {
+                $this->spielService->activateTurnier();
+            }
+
+            return $this->redirect()->toRoute('zfcadmin');
+        }
+
+        return array(
+            'status' => $status[0]['status'],
+        );
+
+
+    }
 
 }

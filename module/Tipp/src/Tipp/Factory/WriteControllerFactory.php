@@ -25,12 +25,16 @@ class WriteControllerFactory implements FactoryInterface {
         $tippInsertForm = $realServiceLocator->get('FormElementManager')->get('Tipp\Form\InsertTippForm');
         $updateZusatztippForm = $realServiceLocator->get('FormElementManager')->get('Tipp\Form\UpdateZusatztippForm');
         $zusatztippForm = $realServiceLocator->get('FormElementManager')->get('Tipp\Form\ZusatztippForm');
+        $spielService = $realServiceLocator->get('Spiel\Service\SpielServiceInterface');
+        $mannschaftService = $realServiceLocator->get('Mannschaft\Service\MannschaftServiceInterface');
 
         return new WriteController(
             $tippService,
             $tippInsertForm,
             $updateZusatztippForm,
-            $zusatztippForm
+            $zusatztippForm,
+        	$spielService,
+        	$mannschaftService
         );
     }
 }

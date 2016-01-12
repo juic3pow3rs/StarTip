@@ -41,10 +41,16 @@ class BenutzerService implements BenutzerServiceInterface {
     {
         return $this->benutzerMapper->find($name);
     }
+    
+    public function findUser($id)
+    {
+    	return $this->benutzerMapper->findUser($id);
+    }
+    
 
-    public function inviteBenutzer($g_id, $id) {
+    public function inviteBenutzer($g_id, $id, $leiter) {
 
-        return $this->benutzerMapper->invite($g_id, $id);
+        return $this->benutzerMapper->invite($g_id, $id, $leiter);
     }
     
     public function suchBenutzer($benutzername) {

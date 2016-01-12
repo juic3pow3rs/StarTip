@@ -23,15 +23,18 @@ interface BenutzerServiceInterface {
      * @param  int $id Identifier of the Album that should be returned
      * @return \Benutzer\Model\User
      */
-    public function findBenutzer($id);
+    public function findBenutzer($name);
+    
+    public function findUser($id);
 
     /**
      * @param $g_id
      * @param $id
      * @return mixed
      */
-    public function inviteBenutzer($g_id, $id);
+    public function inviteBenutzer($g_id, $id, $leiter);
     
     
     public function suchBenutzer($benutzername);
+    
 }

@@ -22,7 +22,7 @@ interface TippMapperInterface {
     /**
      * @return array|AlbumInterface[]
      */
-    public function findAll();
+    public function findAllTipps($user_id);
 
     /**
      * @param AlbumInterface $albumObject
@@ -31,11 +31,21 @@ interface TippMapperInterface {
      * @return AlbumInterface
      * @throws \Exception
      */
-    public function save(TippInterface $tippObject);
+    public function save(TippInterface $tippObject, $s_id);
 
     public function updateZusatztipp($id, $status);
 
     public function addZusatztipp($id, $user_id, $m_id);
 
+    public function setZusatztipp($id, $m_id);
+
+    public function zusatzPunkteBerechnen($id);
+
     public function isActive();
+
+    public function punkteBerechnen($s_id);
+    
+    public function tippAbgegeben($s_id, $user_id);
+    
+   
 }

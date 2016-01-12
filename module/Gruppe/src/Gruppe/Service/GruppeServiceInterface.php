@@ -53,5 +53,7 @@ interface GruppeServiceInterface {
     public function isMitglied($user_id, $g_id);
 
     public function compare($g_id);
+    
+    public function bereitsEingeladen($user_id, $g_id);
 
 }

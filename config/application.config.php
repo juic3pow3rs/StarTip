@@ -20,7 +20,7 @@ return array(
         'ZfcAdmin',
     	'Mannschaft',
         'LdcUserProfile',
-        //'BjyAuthorize',
+        'BjyAuthorize',
         'Gruppe',
         'Post',
         'MtMail',

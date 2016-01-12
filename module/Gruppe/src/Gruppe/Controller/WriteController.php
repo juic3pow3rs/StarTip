@@ -43,10 +43,11 @@ class WriteController extends AbstractActionController {
 
             if ($this->gruppeForm->isValid()) {
                 try {
-                	
+
                     $this->gruppeService->saveGruppe($this->gruppeForm->getData());
 
                     return $this->redirect()->toRoute('gruppe');
+
                 } catch (\Exception $e) {
                     die($e->getMessage());
                     //Some DB Error happened, log it and let the user know
@@ -103,6 +104,10 @@ class WriteController extends AbstractActionController {
         $g_id = $this->params()->fromRoute('id');
         $request = $this->getRequest();
 
+        //Id des Users holen
+        $user  = $this->zfcUserAuthentication()->getIdentity();
+        $leiter = $user->getId();
+        
         if ($request->isPost()) {
             $this->inviteGruppeForm->setData($request->getPost());
 
@@ -110,6 +115,12 @@ class WriteController extends AbstractActionController {
                 try {
 
                     $benutzer  = $this->benutzerService->findBenutzer($this->inviteGruppeForm->get('username')->getValue());
+                   	$fehler=0;
+                    if(($this->gruppeService->bereitsEingeladen($benutzer['user_id'], $g_id)) ==true)
+                    {
+                  		  $fehler=1;
+                  		  print 'Dieser Benutzer ist bereits Mitglied oder hat schon eine Einladung bekommen';
+                    }else{
                     //return print_r($benutzer['user_id']);
                     /**
                     if ($benutzer instanceof UserInterface) {
@@ -117,13 +128,14 @@ class WriteController extends AbstractActionController {
                         return $this->redirect()->toRoute('gruppe');
                     }**/
 
-                    if ($this->benutzerService->inviteBenutzer($g_id, $benutzer['user_id'])) {
+                    if ($fehler==0 && $this->benutzerService->inviteBenutzer($g_id, $benutzer['user_id'], $leiter)) {
                         return $this->redirect()->toRoute('gruppe');
+                    }
                     }
 
                     //return print('Fehler!');
-                } catch (\InvalidArgumentException $e) {
-                    die($e->getMessage());
+                } catch (\Exception $e) {
+                    print ($e->getMessage());
                     //Some DB Error happened, log it and let the user know
                 }
             }

@@ -74,7 +74,7 @@ class Spiel implements SpielInterface {
      */
     protected $rot2;
         
-    
+    protected $status;
 
     /**
      * @inheritDoc
@@ -283,5 +283,20 @@ class Spiel implements SpielInterface {
     {
     	$this->rot2 = $rot2;
     }
-    
+
+    /**
+     * @inheritDoc
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
 }

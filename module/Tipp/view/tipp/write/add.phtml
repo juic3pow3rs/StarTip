@@ -1,4 +1,21 @@
-<h1>Tipp abgaben</h1>
+<h1>Tipp zu folgendem Spiel abgeben:</h1>
+
+<table class="table">
+    <tr>
+        <th>Erste Mannschaft</th>
+        <th>Zweite Mannschaft</th>
+    </tr>
+    <tr>
+        <td>
+       <?php echo $mannschaft1['name']?> 
+     
+        </td>
+        <td>
+        <?php echo $mannschaft2['name']?> 
+        </td>
+    </tr>
+</table>
+
 <?php
 $form = $this->form;
 $form->setAttribute('method', 'POST');
@@ -8,13 +25,9 @@ $form->prepare();
 $form->get('submit')->setValue('Tipp abgeben');
 
 echo $this->form()->openTag($form);
-
-#Die paar Zeilen:
 echo $this->formHidden($form->get('tipp-fieldset')->get('t_id'));
-#setValue setzt das was in dem Feld schon von vornherein drinstehen soll. Hier nur beispielhaft mit der Mail.
-#die UserId sollte natürlich ein hidden field sein (wie die erste Zeile) und das wird dann halt befüllt.
 echo $this->formHidden($form->get('tipp-fieldset')->get('b_id')->setValue($this->zfcUserIdentity()->getId()));
-echo $this->formRow($form->get('tipp-fieldset')->get('s_id'));
+
 echo $this->formRow($form->get('tipp-fieldset')->get('tipp1'));
 echo $this->formRow($form->get('tipp-fieldset')->get('tipp2'));
 echo $this->formSubmit($form->get('submit'));

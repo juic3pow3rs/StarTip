@@ -18,6 +18,8 @@ interface SpielMapperInterface {
      * @throws \InvalidArgumentException
      */
     public function find($s_id);
+    
+    public function spielStatus($s_id);
 
     /**
      * @return array|SpielInterface[]
@@ -40,4 +42,13 @@ interface SpielMapperInterface {
      * @throws \Exception
      */
     
+    public function findTippSpiele($user_id);
+
+    public function activateTurnier();
+
+    public function turnierStatus();
+
+    public function setModus($m);
+
+    public function getModus();
 }

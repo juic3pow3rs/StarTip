@@ -17,7 +17,7 @@ class TippService implements TippServiceInterface {
     protected $tippMapper;
 
     /**
-     * @param AlbumMapperInterface $albumMapper
+     * @param TippMapperInterface $tippMapper
      */
     public function __construct(TippMapperInterface $tippMapper)
     {
@@ -27,9 +27,9 @@ class TippService implements TippServiceInterface {
     /**
      * @inheritDoc
      */
-    public function findAllTipps()
+    public function findAllTipps($user_id)
     {
-        return $this->tippMapper->findAll();
+        return $this->tippMapper->findAllTipps($user_id);
     }
 
     /**
@@ -43,9 +43,9 @@ class TippService implements TippServiceInterface {
     /**
      * @inheritDoc
      */
-    public function saveTipp(TippInterface $tipp)
+    public function saveTipp(TippInterface $tipp, $s_id)
     {
-        return $this->tippMapper->save($tipp);
+        return $this->tippMapper->save($tipp, $s_id);
     }
 
     public function updateZusatztipp($id, $status) {
@@ -58,8 +58,30 @@ class TippService implements TippServiceInterface {
         return $this->tippMapper->addZusatztipp($id, $user_id, $m_id);
     }
 
+    public function setZusatztipp($id, $m_id) {
+
+        return $this->tippMapper->setZusatztipp($id, $m_id);
+    }
+
+    public function zusatzPunkteBerechnen($id){
+
+        return $this->tippMapper->zusatzPunkteBerechnen($id);
+    }
+
     public function isActive() {
 
         return $this->tippMapper->isActive();
     }
+
+    public function punkteBerechnen($s_id) {
+
+        return $this->tippMapper->punkteBerechnen($s_id);
+    }
+    
+    public function tippAbgegeben($s_id, $user_id) {
+    
+    	return $this->tippMapper->tippAbgegeben($s_id, $user_id);
+    }
+    
+   
 }

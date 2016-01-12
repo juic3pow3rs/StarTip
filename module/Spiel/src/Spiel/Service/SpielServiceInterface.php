@@ -23,9 +23,11 @@ interface SpielServiceInterface {
      * Should return a single Spiel
      *
      * @param  int $s_id Identifier of the Spiel that should be returned
-     * @return \Spiel\Model\Album
+     * @return \Spiel\Model\Spiel
      */
     public function findSpiel($s_id);
+    
+    public function spielStatus($s_id);
 
     /**
      * Should save a given implementation of the SpielInterface and return it. If it is an existing Spiel the Spiel
@@ -36,5 +38,15 @@ interface SpielServiceInterface {
      */
     public function saveSpiel(SpielInterface $spiel);
 
+    
+    public function findTippSpiele($user_id);
+
+    public function activateTurnier();
+
+    public function turnierStatus();
+
+    public function setModus($m);
+
+    public function getModus();
   
 }

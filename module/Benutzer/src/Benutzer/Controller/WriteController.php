@@ -42,9 +42,11 @@ class WriteController extends AbstractActionController {
 					$benutzer =array();
                     $benutzer  = $this->benutzerService->suchBenutzer($this->suchBenutzerForm->get('username')->getValue());
 
-
+					$anzahl=count($benutzer);
+					
          		    $viewM =  new ViewM(array(
-                        'benutzer' => $benutzer
+                        'benutzer' => $benutzer,
+         		    	'anzahl' => $anzahl
                     ));
                     $viewM->setTemplate('benutzer/write/ergebnis.phtml');
                     return $viewM;

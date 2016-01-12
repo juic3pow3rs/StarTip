@@ -71,26 +71,50 @@ return array(
                 'route' => 'home',
             ),
             array(
-                'label' => 'Login/Register',
+                'label' => 'User',
                 'route' => 'user',
                 'pages' => array(
                     array(
+                        'label' => 'Profil',
+                        'route' => 'zfcuser',
+                        'resource' => 'controller/zfcuser:index'
+                    ),
+                    array(
                         'label' => 'Login',
                         'route' => 'zfcuser/login',
+                        'resource' => 'controller/zfcuser:login'
                     ),
                     array(
                         'label' => 'Register',
                         'route' => 'zfcuser/register',
+                        'resource' => 'controller/zfcuser:register'
+                    ),
+                    array(
+                        'label' => 'Logout',
+                        'route' => 'zfcuser/logout',
+                        'resource' => 'controller/zfcuser:logout'
                     ),
                 )
             ),
             array(
+                'label' => 'Spiele',
+                'route' => 'spiel',
+                'resource' => 'controller/Spiel\Controller\List',
+            ),
+            array(
+                'label' => 'Mannschaften',
+                'route' => 'mannschaft',
+                'resource' => 'controller/Mannschaft\Controller\List'
+            ),
+            array(
                 'label' => 'Rangliste',
-                'route' => 'user/list'
+                'route' => 'user/list',
+                'resource' => 'controller/Benutzer\Controller\List'
             ),
             array(
                 'label' => 'Tippgemeinschaften',
                 'route' => 'gruppe',
+                'resource' => 'controller/Gruppe\Controller\List',
                 'pages' => array(
                     array(
                         'label' => 'Erstellen',
@@ -105,6 +129,11 @@ return array(
                         'route' => 'gruppe/show'
                     ),
                 )
+            ),
+            array(
+                'label' => 'Zusatztipp',
+                'route' => 'tipp/addzusatz',
+                'resource' => 'controller/Tipp\Controller\Write:add'
             ),
         )
     ),
