@@ -23,6 +23,7 @@ return array(
         'factories' => array(
             'Gruppe\Controller\List'  => 'Gruppe\Factory\ListControllerFactory',
             'Gruppe\Controller\Write' => 'Gruppe\Factory\WriteControllerFactory',
+        	'Gruppe\Controller\Delete' => 'Gruppe\Factory\DeleteControllerFactory'
          
         )
     ),
@@ -150,11 +151,32 @@ return array(
                 	    )
                 	),
                 		
-                
-                		
-                		
-                		
-                   
+                	'delete' => array(
+                        'type' => 'segment',
+                		'options' => array(
+                		    'route'    => '/delete/:g_id',
+                			'defaults' => array(
+                			    'controller' => 'Gruppe\Controller\Delete',
+                				'action'     => 'delete'
+                			),
+                			'constraints' => array(
+                			    'g_id' => '\d+'
+                			)
+                		)
+                	),
+                    'picture' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route'    => '/picture/:g_id',
+                            'defaults' => array(
+                                'controller' => 'Gruppe\Controller\Write',
+                                'action'     => 'profilePicture'
+                            ),
+                            'constraints' => array(
+                                'g_id' => '\d+'
+                            )
+                        )
+                    ),
                 )
             )
         )

@@ -8,6 +8,10 @@
 
 namespace Spiel\Model;
 
+/**
+ * Class Spiel
+ * @package Spiel\Model
+ */
 class Spiel implements SpielInterface {
     /**
      * @var int

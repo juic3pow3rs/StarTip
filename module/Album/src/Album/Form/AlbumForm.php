@@ -10,8 +10,15 @@ namespace Album\Form;
 
 use Zend\Form\Form;
 
+/**
+ * Class AlbumForm
+ * @package Album\Form
+ */
 class AlbumForm extends Form {
 
+    /**
+     * @param null $name
+     */
     public function __construct ($name = null) {
 
         //we want to ignore the name passed

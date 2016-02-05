@@ -10,8 +10,16 @@ namespace Tipp\Form;
 
 use Zend\Form\Form;
 
+/**
+ * Class InsertTippForm
+ * @package Tipp\Form
+ */
 class InsertTippForm extends Form {
 
+    /**
+     * @param null $name
+     * @param array $options
+     */
     public function __construct($name = null, $options = array()) {
 
         parent::__construct($name, $options);

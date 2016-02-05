@@ -10,8 +10,16 @@ namespace Album2\Form;
 
 use Zend\Form\Form;
 
+/**
+ * Class InsertAlbumForm
+ * @package Album2\Form
+ */
 class InsertAlbumForm extends Form {
 
+    /**
+     * @param null $name
+     * @param array $options
+     */
     public function __construct($name = null, $options = array()) {
 
         parent::__construct($name, $options);

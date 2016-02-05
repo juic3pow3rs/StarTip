@@ -1,33 +1,54 @@
-<h1>Tipps</h1>
+<!--<?php foreach ($message as $m) : ?>
+    <div class="alert alert-success alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <strong>Success!</strong> <?php echo $m?>
+    </div>
+<?php endforeach; ?>-->
 
-<table class="table">
+<?php
+$flash = $this->flashMessenger();
+$flash->setMessageOpenFormat('<div%s>
+     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+         &times;
+     </button>')
+    ->setMessageCloseString('</div>');
+
+echo $flash->render('success', array('alert', 'alert-dismissible', 'alert-success'));
+echo $flash->render('error',   array('alert', 'alert-dismissible', 'alert-danger'));
+
+?>
+
+<div class="page-header">
+    <h1>Abgegebene Tipps</h1>
+</div>
+<?php if (!empty($tipps)) { ?>
+<table class="table table-hover table-bordered ">
     <thead>
-    <tr>
-        <th>s_id</th>
-        <th>Erste Mannschaft</th>
-        <th>Tipp Anzahl der Tore</th>
-        <th>Zweite Mannschaft </th>
-         <th>Tipp Anzahl der Tore</th>
-         <th>Punkte</th>
-        
+    <tr class="success">
+        <th>Erste Mannschaft</>
+        <th>Zweite Manschaft</th>
+        <th>Tipp</th>
+        <th>Ergebnis</th>
+       	<th>Punkte</th>
+        <th></th>
     </tr>
     </thead>
     <tbody>
         <?php foreach($this->tipps as $t) : ?>
-        <tr>
-            <td><?php echo $t['s_id']; ?></td>
-            <td><?php echo $t['mannschaft1'];?></td>
-            <td><?php echo $t['tipp1'];?></td>
-            <td><?php echo $t['mannschaft2'];?></td>
-            <td><?php echo $t['tipp2'];?></td>
-            <td><?php echo $t['punkte'];?></td>
-            
-             
-           
-           
-        </tr>
+       <tr>
+           <td><?php echo $t['mannschaft1'];?></td>
+           <td> <?php echo $t['mannschaft2'];?></td>
+           <td><?php echo $t['tipp1'];?> : <?php echo $t['tipp2'];?></td>
+           <td><?php echo (!$t['status'] ? '-- : --' : $t['tore1'].' : '.$t['tore2']) ?></td>
+           <td><?php echo (!$t['status'] ? '-' : $t['punkte'])?></td>
+           <?php if (!$t['status'] && $today < $t['anpfiff']) { ?>
+           <td><input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('tipp/edit', array('t_id' => $t['t_id'])); ?>'"  value="Bearbeiten" /></td>
+           <?php } ?>
+       </tr>
     <?php endforeach; ?>
-    
-
     </tbody>
 </table>
+<?php } else {
+    echo 'Noch keine Tipps abgegeben.';
+}
+?>

@@ -1,0 +1,7 @@
+<h1>Turnier Zuruecksetzen</h1>
+<p>Wenn das Turnier zurueckgesetzt wird, werden alle Mannschaften, Spiele und Tipps geloescht.</p>
+<p>Turnier zuruecksetzen?</p>
+    <form action="<?php echo $this->url('zfcadmin/reset', array(), true) ?>" method="post">
+        <input type="submit" class="btn btn-success" name="reset_confirmation" value="ja" />
+        <input type="submit" class="btn btn-danger" name="reset_confirmation" value="nein" />
+    </form>

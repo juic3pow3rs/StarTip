@@ -10,8 +10,16 @@ namespace Mannschaft\Form;
 
 use Zend\Form\Form;
 
+/**
+ * Class InsertMannschaftForm
+ * @package Mannschaft\Form
+ */
 class InsertMannschaftForm extends Form {
 
+    /**
+     * @param null $name
+     * @param array $options
+     */
     public function __construct($name = null, $options = array()) {
 
         parent::__construct($name, $options);

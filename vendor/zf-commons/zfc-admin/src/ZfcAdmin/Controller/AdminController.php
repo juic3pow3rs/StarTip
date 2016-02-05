@@ -44,44 +44,90 @@ namespace ZfcAdmin\Controller;
 
 use Spiel\Service\SpielServiceInterface;
 use Tipp\Service\TippServiceInterface;
+use Mannschaft\Service\MannschaftServiceInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 
 class AdminController extends AbstractActionController
 {
     protected $spielService;
     protected $tippService;
+    protected $mannschaftService;
 
     public function __construct(
         SpielServiceInterface $spielService,
-        TippServiceInterface $tippService
+        TippServiceInterface $tippService,
+        MannschaftServiceInterface $mannschaftService
     ) {
         $this->spielService = $spielService;
         $this->tippService = $tippService;
+        $this->mannschaftService = $mannschaftService;
     }
 
+    /**
+     * @return array
+     */
     public function indexAction() {
 
         $status = $this->spielService->turnierStatus();
         $modus = $this->spielService->getModus();
+        $mannschaften = $this->mannschaftService->findAllMannschaften();
+
+        for ($i = 1; $i < 6; $i++){
+
+            $spiele = $this->spielService->findModusSpiele($i);
+
+            $j = 0;
+
+            $buffer = array();
+
+            //Anstatt id die Namen der Mannschaften speichern
+            foreach($spiele as $s){
+
+                $name = $this->mannschaftService->findName($s['mannschaft1']);
+                $s['mannschaft1'] = $name['name'];
+
+                $name = $this->mannschaftService->findName($s['mannschaft2']);
+                $s['mannschaft2'] = $name['name'];
+
+                $buffer[$j] = $s;
+
+                $j++;
+            }
+            $spieleliste[$i] = $buffer;
+        }
 
         return array(
             'status' => $status[0]['status'],
-            'modus' => $modus[0]['modus']
+            'modus' => $modus[0]['modus'],
+            'spiele' => $spieleliste,
+            'mannschaften' => $mannschaften
         );
 
     }
 
+    /**
+     * @return array|\Zend\Http\Response
+     */
     public function activateAction()
     {
         $request = $this->getRequest();
 
+        $count = $this->mannschaftService->count();
+
+        if ($count[0]['num'] != 24) {
+
+
+            $this->flashMessenger()->addErrorMessage('Mannschaften noch nicht vollstaendig (24), erst '.$count[0]['num'].' Mannschaft eingetragen!');
+
+            return $this->redirect()->toRoute('zfcadmin');
+        }
+
         $status = $this->spielService->turnierStatus();
-        //print_r($status[0]['status']);
 
         if ($request->isPost()) {
-            $act = $request->getPost('activate_confirmation', 'no');
+            $act = $request->getPost('activate_confirmation', 'nein');
 
-            if ($act === 'yes') {
+            if ($act === 'ja') {
                 $this->spielService->activateTurnier();
             }
 
@@ -92,7 +138,139 @@ class AdminController extends AbstractActionController
             'status' => $status[0]['status'],
         );
 
+    }
 
+    /**
+
+     * @return array|\Zend\Http\Response
+     */
+    public function resetAction()
+    {
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+            $act = $request->getPost('reset_confirmation', 'nein');
+
+            if ($act === 'ja') {
+                $a = $this->spielService->reset();
+                $b = $this->mannschaftService->delete();
+                $c = $this->tippService->resetZusatztipp();
+            }
+
+            return $this->redirect()->toRoute('zfcadmin');
+        }
+
+        return array(
+        );
+
+    }
+
+    public function modusAction() {
+
+        $request = $this->getRequest();
+        $modus = $this->spielService->getModus();
+
+        switch ($modus[0]['modus']) {
+            case 0: $m = 'Vorrunde';
+                break;
+            case 1: $m = 'Achtelfinale';
+                break;
+            case 2: $m = 'Viertelfinale';
+                break;
+            case 3: $m = 'Halbfinale';
+                break;
+            case 4: $m = 'Finale';
+                break;
+        }
+
+        $anzahl = $this->spielService->count($modus[0]['modus']+1);
+
+        switch ($modus[0]['modus']) {
+            case 0;
+                if ($anzahl[0]['num'] != 36) {
+                    $this->flashMessenger()->addErrorMessage('Noch nicht alle Spiele fuer die Vorrunde eingetragen!');
+
+                    return $this->redirect()->toRoute('zfcadmin');
+                }
+                break;
+            case 1:
+                if ($anzahl[0]['num'] != 8) {
+                    $this->flashMessenger()->addErrorMessage('Noch nicht alle Spiele fuer das Achtelfinale eingetragen!');
+
+                    return $this->redirect()->toRoute('zfcadmin');
+                }
+                $spiele = $this->spielService->findModusSpiele(1);
+                foreach ($spiele as $s) {
+                    if ($s['status'] == 0) {
+                        $this->flashMessenger()->addErrorMessage('Mindestens ein Spiel in der Vorrunde nicht abgeschlossen!');
+
+                        return $this->redirect()->toRoute('zfcadmin');
+                    }
+                }
+                break;
+            case 2:
+                if ($anzahl[0]['num'] != 4) {
+                    $this->flashMessenger()->addErrorMessage('Noch nicht alle Spiele fuer das Viertelfinale eingetragen!');
+
+                    return $this->redirect()->toRoute('zfcadmin');
+                }
+                $spiele = $this->spielService->findModusSpiele(2);
+                foreach ($spiele as $s) {
+                    if ($s['status'] == 0) {
+                        $this->flashMessenger()->addErrorMessage('Mindestens ein Spiel im Achtelfinale nicht abgeschlossen!');
+
+                        return $this->redirect()->toRoute('zfcadmin');
+                    }
+                }
+                break;
+            case 3:
+                if ($anzahl[0]['num'] != 2) {
+                    $this->flashMessenger()->addErrorMessage('Noch nicht alle Spiele fuer das Halbfinale eingetragen!');
+
+                    return $this->redirect()->toRoute('zfcadmin');
+                }
+                $spiele = $this->spielService->findModusSpiele(3);
+                foreach ($spiele as $s) {
+                    if ($s['status'] == 0) {
+                        $this->flashMessenger()->addErrorMessage('Mindestens ein Spiel im Viertelfinale nicht abgeschlossen!');
+
+                        return $this->redirect()->toRoute('zfcadmin');
+                    }
+                }
+                break;
+            case 4:
+                if ($anzahl[0]['num'] != 1) {
+                    $this->flashMessenger()->addErrorMessage('Noch nicht alle Spiele fuer das Finale eingetragen!');
+
+                    return $this->redirect()->toRoute('zfcadmin');
+                }
+                $spiele = $this->spielService->findModusSpiele(4);
+                foreach ($spiele as $s) {
+                    if ($s['status'] == 0) {
+                        $this->flashMessenger()->addErrorMessage('Mindestens ein Spiel im Halbfinale nicht abgeschlossen!');
+
+                        return $this->redirect()->toRoute('zfcadmin');
+                    }
+                }
+                break;
+        }
+
+        $this->spielService->findModusSpiele($modus[0]['modus']);
+
+        if ($request->isPost()) {
+            $act = $request->getPost('modus_confirmation', 'nein');
+
+            if ($act === 'ja') {
+
+                $this->spielService->setModus($modus[0]['modus']+1);
+            }
+
+            return $this->redirect()->toRoute('zfcadmin');
+        }
+
+        return array(
+            'modus' => $m
+        );
     }
 
 }

@@ -11,6 +11,10 @@ namespace Spiel\Form;
 use Zend\Form\Form;
 use Mannschaft\Service\MannschaftServiceInterface;
 
+/**
+ * Class InsertSpielForm
+ * @package Spiel\Form
+ */
 class InsertSpielForm extends Form {
 
     //protected $mannschaftServiceInterface;

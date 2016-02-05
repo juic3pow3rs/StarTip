@@ -13,6 +13,11 @@ use Post\Model\Post;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Stdlib\Hydrator\ClassMethods;
+
+/**
+ * Class ZendDbSqlMapperFactory
+ * @package Post\Factory
+ */
 class ZendDbSqlMapperFactory implements FactoryInterface
 {
     /**

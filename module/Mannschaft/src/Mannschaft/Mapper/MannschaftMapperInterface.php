@@ -10,12 +10,16 @@ namespace Mannschaft\Mapper;
 
 use Mannschaft\Model\MannschaftInterface;
 
+/**
+ * Interface MannschaftMapperInterface
+ * @package Mannschaft\Mapper
+ */
 interface MannschaftMapperInterface {
 
     /**
-     * @param int|string $id
+     * @param $m_id
      * @return MannschaftInterface
-     * @throws \InvalidArgumentException
+     * @internal param int|string $id
      */
     public function find($m_id);
 
@@ -26,14 +30,26 @@ interface MannschaftMapperInterface {
 
     /**
      * @param MannschaftInterface $mannschaftObject
-     *
-     * @param MannschaftInterface $mannschaftobject
      * @return MannschaftInterface
-     * @throws \Exception
+     * @internal param MannschaftInterface $mannschaftobject
      */
     public function save(MannschaftInterface $mannschaftObject);
-    
+
+    /**
+     * @param $m_id
+     * @return mixed
+     */
     public function findName($m_id);
 
- 
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public function findId($name);
+
+    public function crawl();
+
+    public function delete();
+
+    public function count();
 }

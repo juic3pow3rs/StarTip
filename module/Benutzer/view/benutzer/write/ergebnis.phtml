@@ -1,15 +1,18 @@
 <h1>Suchergebnis: <?php echo $this->anzahl?> Benutzer gefunden</h1>
 <?php if ($this->anzahl != 0){?>
-<table class="table">
+<table class="table table-hover">
     <thead>
-    <tr>
+   <tr class="success">
         <th>Username</th>
+        <th></th>
     </tr>
     </thead>
     <tbody>
     <?php foreach($this->benutzer as $b) : ?>
         <tr>
             <td><?php echo $b['username'];?></td>
+            <td> <input type="button" class="btn btn-success"onclick="location.href='<?php echo $this->url('user/detail', array('id' => $b['user_id'])); ?>';" value="Profil anzeigen" /></td>
+  		  
         </tr>
     <?php endforeach; ?>
     </tbody>

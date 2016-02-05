@@ -14,13 +14,21 @@ use Mannschaft\Service\MannschaftServiceInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
+/**
+ * Class ListController
+ * @package Tipp\Controller
+ */
 class ListController extends  AbstractActionController {
 
-    /**
-     * @var \Album2\Service\AlbumServiceInterface
-     */
+   
     protected $tippService;
-
+    
+/**
+ * 
+ * @param TippServiceInterface $tippService
+ * @param SpielServiceInterface $spielService
+ * @param MannschaftServiceInterface $mannschaftService
+ */
     public function __construct(TippServiceInterface $tippService, 
     		SpielServiceInterface $spielService,
     		MannschaftServiceInterface $mannschaftService)
@@ -30,6 +38,9 @@ class ListController extends  AbstractActionController {
         $this->mannschaftService = $mannschaftService;
     }
 
+    /**
+     * Erstellt eine Übersicht über alle Tipps die der Benutzer abgegeben hat
+     */
     public function indexAction()
     {
     	//Id des Users 
@@ -39,6 +50,11 @@ class ListController extends  AbstractActionController {
     	//Alle Tipps des Users mit der user_id
     	$tipps=array();
     	$tipps=$this->tippService->findAllTipps($user_id);
+    	
+    	$flashMessenger = $this->flashMessenger();
+    	if ($flashMessenger->hasMessages()) {
+    		$return['messages'] = $flashMessenger->getMessages();
+    	}
     	
     	//Anstelle der Mannschafts_id den Namen der Mannschaft für alle Tipps speichern
     	$i=0;
@@ -57,19 +73,26 @@ class ListController extends  AbstractActionController {
     		
     		$test[$i]=$t;
     		$i++;
-    		
-    	 
+
     	}
-    	
+
+		$today = date("Y-m-d H:i:s");
+
     	//Infos aller Spiele auf die der User getippt hat holen
     	$spiele=$this->spielService->findTippSpiele($user_id);
     	
             return new ViewModel(array(
                 'tipps' => $test,
-            	'spiele' => $spiele
+            	'spiele' => $spiele,
+            	'message' => $this->flashMessenger()->getMessages(),
+				'today' => $today
             ));
     }
 
+    /**
+     * Erstellt die Detailansicht für einen Tipp
+     * @return \Zend\View\Model\ViewModel
+     */
     public function detailAction()
     {
     	//Id des Tipps aus der Route
@@ -79,15 +102,14 @@ class ListController extends  AbstractActionController {
         try {
             $tipp= $this->tippService->findTipp($t_id);
         } catch (\InvalidArgumentException $ex) {
-            return $this->redirect()->toRoute('tipp');
+        	   return $this->redirect()->toRoute('tipp');
         }
 
         //Spiel zur t_id laden
         $spiel=$this->spielService->findSpiel($tipp->getS_id());
    
         $mannschaft1=$this->mannschaftService->findName($spiel->getMannschaft1());
-     
-     	
+
      	$mannschaft2=$this->mannschaftService->findName($spiel->getMannschaft2());
    
         

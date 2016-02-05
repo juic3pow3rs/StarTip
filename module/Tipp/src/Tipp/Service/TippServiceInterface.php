@@ -10,47 +10,82 @@ namespace Tipp\Service;
 
 use Tipp\Model\TippInterface;
 
+/**
+ * Interface TippServiceInterface
+ * @package Tipp\Service
+ */
 interface TippServiceInterface {
+
+
     /**
-     * Should return a set of all albums that we can iterate over. Single entries of the array or \Traversable object
-     * should be of type \Album\Model\Album
-     *
-     * @return array|\Traversable
+     * @param $user_id
+     * @return mixed
      */
     public function findAllTipps($user_id);
 
     /**
-     * Should return a single album
-     *
-     * @param  int $id Identifier of the Album that should be returned
-     * @return \Album\Model\Album
+     * @param $t_id
+     * @return mixed
      */
     public function findTipp($t_id);
 
     /**
-     * Should save a given implementation of the AlbumInterface and return it. If it is an existing Album the Album
-     * should be updated, if it's a new Album it should be created.
-     *
-     * @param  AlbumInterface $album
-     * @return AlbumInterface
+     * @param TippInterface $tipp
+     * @param $s_id
+     * @return mixed
      */
     public function saveTipp(TippInterface $tipp, $s_id);
 
+    /**
+     * @param $id
+     * @param $status
+     * @return mixed
+     */
     public function updateZusatztipp($id, $status);
 
+    /**
+     * @param $id
+     * @param $user_id
+     * @param $m_id
+     * @return mixed
+     */
     public function addZusatztipp($id, $user_id, $m_id);
 
+    /**
+     * @param $id
+     * @param $m_id
+     * @return mixed
+     */
     public function setZusatztipp($id, $m_id);
 
+    /**
+     * @param $user_id
+     * @return mixed
+     */
+    public function getZusatztipp($user_id);
+
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function zusatzPunkteBerechnen($id);
 
     public function isActive();
 
+    /**
+     * @param $s_id
+     * @return mixed
+     */
     public function punkteBerechnen($s_id);
-    
+
+    /**
+     * @param $s_id
+     * @param $user_id
+     * @return mixed
+     */
     public function tippAbgegeben($s_id, $user_id);
-    
-   
+
+    public function resetZusatztipp();
     	
     
 }

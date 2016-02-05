@@ -8,6 +8,10 @@
 
 namespace Album2\Model;
 
+/**
+ * Class Album
+ * @package Album2\Model
+ */
 class Album implements AlbumInterface {
     /**
      * @var int

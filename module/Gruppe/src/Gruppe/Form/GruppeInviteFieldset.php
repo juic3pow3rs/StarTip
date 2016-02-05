@@ -10,8 +10,16 @@ namespace Gruppe\Form;
 
 use Zend\Form\Fieldset;
 
+/**
+ * Class GruppeInviteFieldset
+ * @package Gruppe\Form
+ */
 class GruppeInviteFieldset extends Fieldset {
 
+    /**
+     * @param null $name
+     * @param array $options
+     */
     public function __construct($name = null, $options = array()) {
 
         parent::__construct($name, $options);

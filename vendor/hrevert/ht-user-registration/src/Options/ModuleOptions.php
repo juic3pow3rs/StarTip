@@ -58,7 +58,7 @@ class ModuleOptions extends AbstractOptions implements
     /**
      * @var string
      */
-    protected $verificationEmailSubject = 'Email Address Verification';
+    protected $verificationEmailSubject = 'StarTip E-Mail Verifikation';
 
     /**
      * @var string

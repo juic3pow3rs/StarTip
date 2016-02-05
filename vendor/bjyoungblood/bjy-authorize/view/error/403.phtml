@@ -1,16 +1,16 @@
 <h1>403 Forbidden</h1>
 <p>
     <?php if (\BjyAuthorize\Guard\Controller::ERROR === $error) : ?>
-        You are not authorized to access <?php echo($controller);?>
+        Sie sind nicht berechtigt auf <?php echo($controller);?> zuzugreifen
         <?php if ($action) : ?>
         ::<?php echo($action);?>Action()
         <?php endif;?>
         .
     <?php elseif (\BjyAuthorize\Guard\Route::ERROR === $error)  : ?>
-        You are not authorized to access <?php echo $route;?>.
+        Sie haben keine Berechtigung, um auf <?php echo $route;?> zuzugreifen.
     <?php elseif ($error == 'error-unauthorized') : ?>
-        You are not authorized <?php echo $reason; ?>.
+        Sie sind nicht berechtigt <?php echo $reason; ?>.
     <?php else : ?>
-    An unknown error occurred.
+    Irgendwas dummes ist passiert.
     <?php endif;?>
 </p>

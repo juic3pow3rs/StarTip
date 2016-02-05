@@ -44,6 +44,7 @@ return array(
     'controllers' => array(
         'factories' => array(
             'ZfcAdmin\Controller\AdminController' => 'ZfcAdmin\Factory\AdminControllerFactory',
+            'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
         ),
     ),
     'zfcadmin' => array(
@@ -51,8 +52,61 @@ return array(
         'admin_layout_template' => 'layout/admin',
     ),
 
+    'service_manager' => array(
+        'abstract_factories' => array(
+            'Zend\Navigation\Service\NavigationAbstractServiceFactory'
+        ),
+    ),
+
     'navigation' => array(
-        'admin' => array(),
+        'admin' => array(
+            array(
+                'label' => 'Home',
+                'route' => 'home',
+            ),
+            array(
+                'label' => 'Dashboard',
+                'route' => 'zfcadmin',
+            ),
+            array(
+                'label' => 'Mannschaft',
+                'route' => 'mannschaft',
+                'pages' => array(
+                    array(
+                        'label' => 'Hinzufuegen',
+                        'route' => 'mannschaft/add',
+                        'resource' => 'controller/Mannschaft\Controller\Write'
+                    ),
+                )
+            ),
+            array(
+                'label' => 'Spiel',
+                'route' => 'mannschaft',
+                'pages' => array(
+                    array(
+                        'label' => 'Hinzufuegen',
+                        'route' => 'spiel/add',
+                        'resource' => 'controller/Spiel\Controller\Write'
+                    ),
+                )
+            ),
+            array(
+                'label' => 'Zusatztipp',
+                'route' => 'tipp',
+                'pages' => array(
+                    array(
+                        'label' => 'Aktualisieren',
+                        'route' => 'tipp/update',
+                        'resource' => 'controller/Mannschaft\Controller\Write'
+                    ),
+                    array(
+                        'label' => 'Ergebnis eintragen',
+                        'route' => 'tipp/setzusatz',
+                        'resource' => 'controller/Mannschaft\Controller\Write'
+                    ),
+                )
+            ),
+        ),
     ),
 
     'router' => array(
@@ -75,6 +129,26 @@ return array(
                             'defaults' => array(
                                 'controller' => 'ZfcAdmin\Controller\AdminController',
                                 'action' => 'activate'
+                            )
+                        ),
+                    ),
+                    'reset' => array(
+                        'type' => 'literal',
+                        'options' => array(
+                            'route'    => '/reset',
+                            'defaults' => array(
+                                'controller' => 'ZfcAdmin\Controller\AdminController',
+                                'action' => 'reset'
+                            )
+                        ),
+                    ),
+                    'modus' => array(
+                        'type' => 'literal',
+                        'options' => array(
+                            'route'    => '/modus',
+                            'defaults' => array(
+                                'controller' => 'ZfcAdmin\Controller\AdminController',
+                                'action' => 'modus'
                             )
                         ),
                     ),

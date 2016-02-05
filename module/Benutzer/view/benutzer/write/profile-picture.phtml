@@ -1,0 +1,33 @@
+<h1>Profilbild hochladen</h1>
+<?php
+$form->setAttribute('method', 'POST');
+$form->setAttribute('action', $this->url());
+$form->prepare();
+
+$form->get('submit')->setValue('Absenden');
+$form->get('submit')->setAttribute('class', 'btn btn-success');
+?>
+
+Bitte Bild auf <a href="http://imgur.com">Imgur</a> hochladen und den "Direct Link" hier reinkopieren:
+
+<?php echo $this->form()->openTag($form);?>
+
+<div style="width: 800px;" class="form-group">
+
+    <?php
+        #echo $this->formCollection($form);
+
+        #echo $this->formRow($form->get('image-url'));
+    $form->get('image-url')->setAttribute('class', 'form-control')
+        ->setAttribute('placeholder', $form->get('image-url')->getLabel());
+
+    #echo $this->formRow($form->get('gruppe-fieldset')->get('name'));
+    echo $this->formElement($form->get('image-url'));
+    ?>
+</div>
+
+<?php
+echo $this->formSubmit($form->get('submit'));
+
+echo $this->form()->closeTag();
+?>

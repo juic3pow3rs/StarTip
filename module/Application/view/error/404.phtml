@@ -7,19 +7,19 @@
 $reasonMessage= '';
 switch ($this->reason) {
     case 'error-controller-cannot-dispatch':
-        $reasonMessage = $this->translate('The requested controller was unable to dispatch the request.');
+        $reasonMessage = $this->translate('Der Controller konnte die Anfrage nicht verarbeiten.');
         break;
     case 'error-controller-not-found':
-        $reasonMessage = $this->translate('The requested controller could not be mapped to an existing controller class.');
+        $reasonMessage = $this->translate('Controller existiert nicht.');
         break;
     case 'error-controller-invalid':
-        $reasonMessage = $this->translate('The requested controller was not dispatchable.');
+        $reasonMessage = $this->translate('Der Controller ist ungueltig.');
         break;
     case 'error-router-no-match':
-        $reasonMessage = $this->translate('The requested URL could not be matched by routing.');
+        $reasonMessage = $this->translate('URL nicht gueltig.');
         break;
     default:
-        $reasonMessage = $this->translate('We cannot determine at this time why a 404 was generated.');
+        $reasonMessage = $this->translate('Ups. Irgendwas Dummes ist passiert. Was genau bleibt wohl ein Raetsel...');
         break;
 }
 ?>

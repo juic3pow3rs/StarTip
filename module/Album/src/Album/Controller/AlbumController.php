@@ -13,9 +13,16 @@ use Zend\View\Model\ViewModel;
 use Album\Model\Album;
 use Album\Form\AlbumForm;
 
+/**
+ * Class AlbumController
+ * @package Album\Controller
+ */
 class AlbumController extends AbstractActionController {
     protected $albumTable;
 
+    /**
+     * @return ViewModel
+     */
     public function indexAction() {
         return new ViewModel(array(
             'albums' => $this->getAlbumTable()->fetchAll(),
@@ -23,6 +30,9 @@ class AlbumController extends AbstractActionController {
         );
     }
 
+    /**
+     * @return array|\Zend\Http\Response
+     */
     public function addAction() {
         $form = new AlbumForm();
         $form->get('submit')->setValue('Add');
@@ -44,6 +54,9 @@ class AlbumController extends AbstractActionController {
         return array('form' => $form);
     }
 
+    /**
+     * @return array|\Zend\Http\Response
+     */
     public function editAction() {
         // Get the id from the route
         // If the id is 0 redirect to addAction
@@ -84,6 +97,9 @@ class AlbumController extends AbstractActionController {
         );
     }
 
+    /**
+     * @return array|\Zend\Http\Response
+     */
     public function deleteAction() {
         $id = (int) $this->params()->fromRoute('id', 0);
         if (!$id) {
@@ -108,6 +124,9 @@ class AlbumController extends AbstractActionController {
         );
     }
 
+    /**
+     * @return array|object
+     */
     public function getAlbumTable() {
         if (!$this->albumTable) {
             $sm = $this->getServiceLocator();

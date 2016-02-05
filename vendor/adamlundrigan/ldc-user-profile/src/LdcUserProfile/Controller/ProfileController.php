@@ -32,6 +32,9 @@ class ProfileController extends AbstractActionController
 
         $form = $this->getService()->constructFormForUser($this->zfcUserAuthentication()->getIdentity());
 
+        $form->get('zfcuser')->get('username')->setAttributes(array('readonly' => 'readonly'));
+        $form->get('zfcuser')->get('email')->setAttributes(array('readonly' => 'readonly'));
+
         $vm = new ViewModel(array(
             'profileForm' => $form,
             'options'     => $this->getModuleOptions(),

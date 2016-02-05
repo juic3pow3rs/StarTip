@@ -12,6 +12,10 @@ use Album2\Controller\DeleteController;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class DeleteControllerFactory
+ * @package Album2\Factory
+ */
 class DeleteControllerFactory implements FactoryInterface
 {
     /**

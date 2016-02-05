@@ -14,16 +14,23 @@ use Mannschaft\Service\MannschaftServiceInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
+/**
+ * Class ListController
+ * @package Spiel\Controller
+ */
 class ListController extends  AbstractActionController {
 
-    /**
-     * @var \Spiel\Service\SpielServiceInterface
-     */
+    
     protected $spielService;
     protected $mannschaftService;
     protected $tippService;
     
-
+/**
+ * 
+ * @param SpielServiceInterface $spielService
+ * @param MannschaftServiceInterface $mannschaftService
+ * @param TippServiceInterface $tippService
+ */
     public function __construct(SpielServiceInterface $spielService, MannschaftServiceInterface $mannschaftService,
     		TippServiceInterface $tippService)
     {
@@ -36,7 +43,7 @@ class ListController extends  AbstractActionController {
 
     /**
      * @return ViewModel
-     * @todo: findAllSpiele() so umschreiben, dass auch die Namen der Mannschaften mit ausgegeben werden!
+     
      * @todo: Nur Spiele vom aktuellen + vergangenen Modus anzeigen!
      * Idee: zusätzlich zum Spiele Array ein Array mit allen Mannschaften (ID => Name) an das ViewModel übergeben,
      * das MannschaftServiceInterface muss halt wie das SpielServiceInterface noch Injected werden (einmal hier im Controller
@@ -44,54 +51,56 @@ class ListController extends  AbstractActionController {
      */
     public function indexAction()
     {
-    	
+        $turnierstatus = $this->spielService->turnierStatus();
 
-        /**
-         * Array mit Index Name und Wert ID erstellen:
-         *
-         * $mannschaften = $this->mannschaftService;
-         * $liste = array();
-         * foreach ($mannschaften as $m)
-         * $liste[$m->getName()] => $m->getM_id();
-         *
-         *Diese Liste dann im ViewModel noch mit übergeben und im Template dann an der Stelle "echo $s->getMannschaft1()",
-         * "echo $liste[$s->getMannschaft1()];" schreiben, dann müsste der Name ausgegeben werden
-         */
+        $modus = $this->spielService->getModus();
+
+        for ($i = 1; $i < 6; $i++){
+
+            $spiele = $this->spielService->findModusSpiele($i);
+
+            $j = 0;
+
+            $buffer = array();
+
+            //Anstatt id die Namen der Mannschaften speichern
+            foreach($spiele as $s){
+
+                $name = $this->mannschaftService->findName($s['mannschaft1']);
+                $s['mannschaft1'] = $name['name'];
+
+                $name = $this->mannschaftService->findName($s['mannschaft2']);
+                $s['mannschaft2'] = $name['name'];
+
+                $buffer[$j] = $s;
+
+                $j++;
+            }
+            $spieleliste[$i] = $buffer;
+        }
     	
-    	
-    	$spiele=$this->spielService->findAllSpiele();
-    	
-    	$i=0;
-    	$test=array();
-    	foreach($spiele as $s){
-    	
-    		$name=array();
-    		$name=$this->mannschaftService->findName($s['mannschaft1']);
-    		$s['mannschaft1']=$name['name'];
-    		
-    		$name=array();
-    		$name=$this->mannschaftService->findName($s['mannschaft2']);
-    		$s['mannschaft2']=$name['name'];
-    		
-    		$test[$i]=$s;
-    		$i++;
-    	}
-    	
+    	//id des eingologten Users
     	$user  = $this->zfcUserAuthentication()->getIdentity();
     	$user_id = $user->getId();
-    	$getippt=array();
-    	$getippt=$this->tippService->findAllTipps($user_id);
+    	
+    	//Tipps des Users
+    	$getippt = array();
+    	$getippt = $this->tippService->findAllTipps($user_id);
 
-		
-    
-    	  return new ViewModel(array(
-                'spiele' =>$test,
-    	  		'getippt' =>$getippt,
+    	return new ViewModel(array(
+    	  	'getippt' => $getippt,
+            'turnierstatus' => $turnierstatus,
+            'modus' => $modus[0]['modus'],
+            'spiele' => $spieleliste
             ));
     }
 
+    /**
+     * Detailansicht für Spiel
+     */
     public function detailAction()
     {
+    	//Spiel id aus der Route holen
         $s_id = $this->params()->fromRoute('id');
 
         try {

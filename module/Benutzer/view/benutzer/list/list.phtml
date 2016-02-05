@@ -1,18 +1,35 @@
 <h1>Globale Rangliste</h1>
+<?php $i=0;
+$j=1;
+$pruef=0;?>
 
-<table class="table">
+<table class="table table-hover table-bordered ">
     <thead>
-    <tr>
+     <tr class="success">
+   		<th>Rang</th>
         <th>Username</th>
-        <th>Punkte</th>
+        <th>Tipp-Punkte</th>
+        <th>Zusatztipp-Punkte</th>
+        <th>Gesamt</th>
     </tr>
     </thead>
     <tbody>
     <?php foreach($this->benutzer as $b) : ?>
         <tr>
+        <?php if ($pruef == $b['gesamt']){?>
+     	   <?php $j++;
+				}else{
+     	   			if($j==0) {$i++; }
+     	   		else {$i+=$j;
+     	   				$j=1;}}?>
+        	<td><?php echo $i;?></td>
             <td><?php echo $b['name'];?></td>
+            <td><?php echo $b['tipp'];?></td>
+            <td><?php echo $b['zusatz'];?></td>
             <td><?php echo $b['gesamt'];?></td>
+            <?php $pruef=$b['gesamt'];?>
         </tr>
+        
     <?php endforeach; ?>
     </tbody>
 </table>

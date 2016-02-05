@@ -1,16 +1,13 @@
-<h1>Activate Tournament</h1>
+<h1>Turnier aktivieren</h1>
+<p>Wenn das Turnier aktiviert ist, besteht keine Moeglichkeit mehr Mannschaften hinzuzufuegen und die Zusatztipps zu aktivieren/deaktivieren!</p>
+<p>Turnier aktivieren?</p>
 <?php if($status == 0) {?>
-<p>
-    Are you sure that you want to activate the Tournament
-    Once you activate it, you won't be able to deactivate it again.
-    If activated you won't be able to add more teams!
-</p>
 <form action="<?php echo $this->url('zfcadmin/activate', array(), true) ?>" method="post">
-    <input type="submit" name="activate_confirmation" value="yes" />
-    <input type="submit" name="activate_confirmation" value="no" />
+    <input type="submit" class="btn btn-success" name="activate_confirmation" value="ja" />
+    <input type="submit" class="btn btn-danger" name="activate_confirmation" value="nein" />
 </form>
 <?php } else { ?>
 <p>
-    You already activated the tournament!
+    Das Turnier ist bereits aktiviert!
 </p>
 <?php } ?>

@@ -13,6 +13,11 @@ use Spiel\Model\Spiel;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Stdlib\Hydrator\ClassMethods;
+
+/**
+ * Class ZendDbSqlMapperFactory
+ * @package Spiel\Factory
+ */
 class ZendDbSqlMapperFactory implements FactoryInterface
 {
     /**

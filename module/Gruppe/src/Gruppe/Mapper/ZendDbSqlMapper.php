@@ -15,11 +15,16 @@ use Zend\Db\Adapter\Driver\ResultInterface;
 use Zend\Db\ResultSet\HydratingResultSet;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\Sql\Insert;
+use Zend\Db\Sql\Predicate\PredicateSet;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Update;
 use Zend\Db\Sql\Delete;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
+/**
+ * Class ZendDbSqlMapper
+ * @package Gruppe\Mapper
+ */
 class ZendDbSqlMapper implements GruppeMapperInterface {
 
     /**
@@ -47,11 +52,9 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
     }
 
     /**
-     * @param int|string $id
-     *
+     * @param int|string $g_id
      * @return GruppeInterface
-     * @throws \InvalidArgumentException
-     * @todo: Nur Gruppen anzeigen, deren Status in der Mitglieder Tabelle 1 ist.
+     * @internal param int|string $id
      */
     public function find($g_id)
     {
@@ -64,11 +67,37 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
 
         if ($result instanceof ResultInterface && $result->isQueryResult() && $result->getAffectedRows()) {
             return $this->hydrator->hydrate($result->current(), $this->gruppePrototype);
+        }else {
+        	return 0;
         }
 
-        throw new \InvalidArgumentException("Gruppe with given ID:{$g_id} not found.");
+     
     }
+
+    /**
+     * @param $name
+     * @return int
+     */
+    public function pruefGruppe($name)
+    {
+    	$sql    = new Sql($this->dbAdapter);
+    	$select = $sql->select('gruppe');
+    	$select->where(array('name = ?' => $name));
     
+    	$stmt   = $sql->prepareStatementForSqlObject($select);
+    	$result = $stmt->execute();
+    
+    	if ($result instanceof ResultInterface && $result->isQueryResult() && $result->getAffectedRows()) {
+    		return 1;
+    	}else return 0;
+    
+    	
+    }
+
+    /**
+     * @param $username
+     * @param $g_id
+     */
     public function findName($username, $g_id)
     {
     	$sql    = new Sql($this->dbAdapter);
@@ -93,15 +122,16 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
     }
 
     /**
-     * @return array|GruppeInterface[]
-     * @todo: Abfrage von $user_id von Mitglied Tabelle abfragen, nicht von Gruppe Tabelle
+     * @param $user_id
+     * @return array|\Gruppe\Model\GruppeInterface[]
      */
     public function findAll($user_id)
     {    	
         $sql    = new Sql($this->dbAdapter);
         $select = $sql->select('gruppe');
         $select->join(array("m" => "mitglied"), "m.g_id = gruppe.g_id")
-        ->where(array('m.b_id = ?' => $user_id, 'm.status =?' => 1));
+        ->where(array('m.b_id = ?' => $user_id, 'm.status =?' => 1))
+        ->order(array("gruppe.name"));
       
         
         $stmt   = $sql->prepareStatementForSqlObject($select);
@@ -121,8 +151,6 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
      *
      * @return GruppeInterface
      * @throws \Exception
-     * @todo: Abfrage, ob User berechtigt ist die Gruppe zu editieren
-     * @todo: Bei Erstellen, User in die mitglied Tabelle eintragen
      */
     public function save(GruppeInterface $gruppeObject)
     {
@@ -153,9 +181,9 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
             }
 
             //Leiter als Mitglied der Gruppe setzen
-            if($leiter==0)
+            if($leiter == 0)
             {
-            $this->addLeiter($gruppeObject->getUser_id(),$gruppeObject->getG_id());
+                $this->addLeiter($gruppeObject->getUser_id(),$gruppeObject->getG_id());
             }
 
             return $gruppeObject;
@@ -164,15 +192,21 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
         throw new \Exception("Database error");
     }
 
+    /**
+     * @param $g_id
+     * @return array
+     */
     public function compare($g_id){
 
         $sql    = new Sql($this->dbAdapter);
-        $select = $sql->select('rang_global');
+        $select = $sql->select('rang_overall');
 
-        $select->join(array("m" => "mitglied"), "m.b_id = rang_global.b_id")
+        $select->join(array("m" => "mitglied"), "m.b_id = rang_overall.b_id")
             ->where(array('m.g_id = ?' => $g_id))
-            ->group('rang_global.b_id')
-            ->order('rang_global.gesamt DESC');
+            ->where(array('m.status = ?' => 1), PredicateSet::OP_AND)
+            ->group('rang_overall.b_id')
+            ->order('rang_overall.gesamt DESC');
+
 
         $stmt   = $sql->prepareStatementForSqlObject($select);
         $result = $stmt->execute();
@@ -193,14 +227,11 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
      */
     public function findAllEinladungen($user_id)
     {
-    	    	
-    	
     	$sql    = new Sql($this->dbAdapter);
     	$select = $sql->select('gruppe');
 		$select->join(array("m" => "mitglied"), "m.g_id = gruppe.g_id")
     	->where(array('m.b_id = ?' => $user_id, 'm.status =?' => 0));
-    
-    	
+
     	$stmt   = $sql->prepareStatementForSqlObject($select);
     	$result = $stmt->execute();
     
@@ -245,7 +276,12 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
     
     	throw new \Exception("Database error");**/
     }
-  
+
+    /**
+     * @param $user_id
+     * @param $g_id
+     * @return bool
+     */
     public function ablehnen($user_id, $g_id)
     {
         $action = new Delete('mitglied');
@@ -258,6 +294,11 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
         return (bool)$result->getAffectedRows();
     }
 
+    /**
+     * @param $user_id
+     * @param $g_id
+     * @return bool|int
+     */
     public function isAdmin($user_id, $g_id) {
 
         $sql    = new Sql($this->dbAdapter);
@@ -274,6 +315,11 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
         return 0;
     }
 
+    /**
+     * @param $user_id
+     * @param $g_id
+     * @return bool|int
+     */
     public function isMitglied($user_id, $g_id) {
 
         $sql    = new Sql($this->dbAdapter);
@@ -290,6 +336,11 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
         return 0;
     }
 
+    /**
+     * @param $user_id
+     * @param $g_id
+     * @return bool|int
+     */
     public function addLeiter($user_id, $g_id) {
 
         $action = new Insert('mitglied');
@@ -310,7 +361,12 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
         return 0;
 
     }
-    
+
+    /**
+     * @param $user_id
+     * @param $g_id
+     * @return bool|int
+     */
     public function bereitsEingeladen($user_id, $g_id) {
     
     	$sql    = new Sql($this->dbAdapter);
@@ -327,4 +383,67 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
     	return 0;
     }
 
+    /**
+     * @param $g_id
+     * @param $user_id
+     * @return bool
+     */
+    public function delete($g_id, $user_id)
+    {
+    	$action = new Delete('mitglied');
+        $action->where(array('b_id = ?' => $user_id, 'g_id =?' => $g_id));
+    
+        $sql    = new Sql($this->dbAdapter);
+        $stmt   = $sql->prepareStatementForSqlObject($action);
+        $result = $stmt->execute();
+    
+        return (bool)$result->getAffectedRows();
+    }
+
+    /**
+     * @param $id
+     * @param $url
+     * @return bool
+     */
+    public function setAva($id, $url) {
+
+        $action = new Update('gruppe');
+        $action->set(array('avatar' => $url));
+        $action->where(array('g_id = ?' => $id));
+
+        $sql    = new Sql($this->dbAdapter);
+        $stmt   = $sql->prepareStatementForSqlObject($action);
+        $result = $stmt->execute();
+
+        if ($result instanceof ResultInterface) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $id
+     * @return array|bool
+     */
+    public function getAva($id) {
+
+        $sql    = new Sql($this->dbAdapter);
+        $select = $sql->select('gruppe');
+        $select->columns(array('avatar'));
+        $select->where(array('g_id = ?' => $id));
+
+        $sql    = new Sql($this->dbAdapter);
+        $stmt   = $sql->prepareStatementForSqlObject($select);
+        $result = $stmt->execute();
+
+        if ($result instanceof ResultInterface && $result->isQueryResult()) {
+            $resultSet = new ResultSet;
+            $resultSet->initialize($result);
+
+            return $resultSet->toArray();
+        }
+
+        return false;
+    }
 }

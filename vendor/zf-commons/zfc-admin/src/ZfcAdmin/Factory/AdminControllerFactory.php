@@ -23,10 +23,12 @@ class AdminControllerFactory implements FactoryInterface {
         $realServiceLocator = $serviceLocator->getServiceLocator();
         $spielService = $realServiceLocator->get('Spiel\Service\SpielServiceInterface');
         $tippService = $realServiceLocator->get('Tipp\Service\TippServiceInterface');
+        $mannschaftService = $realServiceLocator->get('Mannschaft\Service\MannschaftserviceInterface');
 
         return new AdminController(
             $spielService,
-            $tippService
+            $tippService,
+            $mannschaftService
         );
     }
 }

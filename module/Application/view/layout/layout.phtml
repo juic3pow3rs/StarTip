@@ -11,10 +11,13 @@
         ?>
 
         <!-- Le styles -->
-        <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon3.ico'))
+        <?php /**echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon3.ico'))
                         ->prependStylesheet($this->basePath('css/style.css'))
                         ->prependStylesheet($this->basePath('css/bootstrap-theme.min.css'))
-                        ->prependStylesheet($this->basePath('css/bootstrap.min.css')) ?>
+                        ->prependStylesheet($this->basePath('css/bootstrap.min.css')) **/?>
+        <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon3.ico'))
+            ->prependStylesheet($this->basePath('css/background.css'))
+            ->prependStylesheet('//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css') ?>
 
         <!-- Scripts -->
         <?php echo $this->headScript()
@@ -25,7 +28,7 @@
         ; ?>
 
     </head>
-    <body>
+    <body style="padding-top: 70px;">
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
@@ -37,28 +40,27 @@
                     <a class="navbar-brand" href="<?php echo $this->url('home') ?>"><img src="<?php echo $this->basePath('img/navlogo3.png') ?>" alt="Zend Framework 2"/>&nbsp;<?php echo $this->translate('Skeleton Application') ?></a>
                 </div>
                 <div class="collapse navbar-collapse">
-                    <!--<?php
-                    echo $this->navigation('navigation')
-                              ->menu()
-                              ->setMinDepth(0)
-                              ->setMaxDepth(0)
-                              ->setUlClass('nav navbar-nav');
-                    ?>-->
+
                     <?php
-                    $this->navigation('navigation')->menu()->setPartial('partial/partial.phtml');
-                    echo $this->navigation('navigation')->menu()->render();
+                    $this->navigation('Zend\Navigation\Default')->menu()->setPartial('partial/partial.phtml');
+                    echo $this->navigation('Zend\Navigation\Default')->menu()->render();
                     ?>
+                    <?php
+                    $this->navigation('Zend\Navigation\User')->menu()->setPartial('partial/user.phtml');
+                    echo $this->navigation('Zend\Navigation\User')->menu()->render();
+                    ?>
+
                     <!--<ul class="nav navbar-nav">
                         <li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Home') ?></a></li>
                     </ul>-->
                 </div><!--/.nav-collapse -->
             </div>
         </nav>
-        <div class="container">
+        <div class="container transp">
             <?php echo $this->content; ?>
             <hr>
             <footer>
-                <p>&copy; 2005 - <?php echo date('Y') ?> by StarTip LLC <?php echo $this->translate('All rights reserved.') ?></p>
+                <p>&copy; 2015 - <?php echo date('Y') ?> by StarTip LLC <?php echo $this->translate('All rights reserved.') ?></p>
             </footer>
         </div> <!-- /container -->
         <?php echo $this->inlineScript() ?>

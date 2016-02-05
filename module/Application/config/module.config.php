@@ -58,10 +58,11 @@ return array(
         'abstract_factories' => array(
             'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
             'Zend\Log\LoggerAbstractServiceFactory',
+            'Zend\Navigation\Service\NavigationAbstractServiceFactory'
         ),
         'factories' => array(
             'translator' => 'Zend\Mvc\Service\TranslatorServiceFactory',
-            'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
+            //'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
         ),
     ),
     'navigation' => array(
@@ -71,30 +72,14 @@ return array(
                 'route' => 'home',
             ),
             array(
-                'label' => 'User',
-                'route' => 'user',
-                'pages' => array(
-                    array(
-                        'label' => 'Profil',
-                        'route' => 'zfcuser',
-                        'resource' => 'controller/zfcuser:index'
-                    ),
-                    array(
-                        'label' => 'Login',
-                        'route' => 'zfcuser/login',
-                        'resource' => 'controller/zfcuser:login'
-                    ),
-                    array(
-                        'label' => 'Register',
-                        'route' => 'zfcuser/register',
-                        'resource' => 'controller/zfcuser:register'
-                    ),
-                    array(
-                        'label' => 'Logout',
-                        'route' => 'zfcuser/logout',
-                        'resource' => 'controller/zfcuser:logout'
-                    ),
-                )
+                'label' => 'Login',
+                'route' => 'zfcuser/login',
+                'resource' => 'controller/zfcuser:login'
+            ),
+            array(
+                'label' => 'Registrieren',
+                'route' => 'zfcuser/register',
+                'resource' => 'controller/zfcuser:register'
             ),
             array(
                 'label' => 'Spiele',
@@ -109,7 +94,7 @@ return array(
             array(
                 'label' => 'Rangliste',
                 'route' => 'user/list',
-                'resource' => 'controller/Benutzer\Controller\List'
+                'resource' => 'controller/Benutzer\Controller\List:list'
             ),
             array(
                 'label' => 'Tippgemeinschaften',
@@ -131,9 +116,66 @@ return array(
                 )
             ),
             array(
-                'label' => 'Zusatztipp',
-                'route' => 'tipp/addzusatz',
-                'resource' => 'controller/Tipp\Controller\Write:add'
+                'label' => 'Tipps',
+                'route' => 'tipp',
+                'resource' => 'controller/Tipp\Controller\List',
+                'pages' => array(
+                    array(
+                        'label' => 'Meine Tipps',
+                        'route' => 'tipp',
+                        'resource' => 'controller/Tipp\Controller\List'
+                    ),
+                    array(
+                        'label' => 'Zusatztipp',
+                        'route' => 'tipp/addzusatz',
+                        'resource' => 'controller/Tipp\Controller\Write:add'
+                    ),
+                ),
+            ),
+            array(
+                'label' => 'Admin',
+                'route' => 'zfcadmin',
+                'resource' => 'controller/ZfcAdmin\Controller\AdminController:index',
+            ),
+        ),
+        'user' => array(
+            array(
+                'label' => 'User',
+                'icon'=> 'glyphicon glyphicon-user',
+                'route' => 'user',
+                'resource' => 'controller/zfcuser:logout',
+                'pages' => array(
+                    array(
+                        'label' => 'Profil',
+                        'route' => 'zfcuser',
+                        'resource' => 'controller/zfcuser:index'
+                    ),
+                    array(
+                        'label' => 'Profil bearbeiten',
+                        'route' => 'ldc-user-profile',
+                        'resource' => 'controller/LdcUserProfile\Controller\Profile'
+                    ),
+                    array(
+                        'label' => 'Suche',
+                        'route' => 'user/suche',
+                        'resource' => 'controller/Benutzer\Controller\Write:suche',
+                    ),
+                    array(
+                        'label' => 'Login',
+                        'route' => 'zfcuser/login',
+                        'resource' => 'controller/zfcuser:login'
+                    ),
+                    array(
+                        'label' => 'Register',
+                        'route' => 'zfcuser/register',
+                        'resource' => 'controller/zfcuser:register'
+                    ),
+                    array(
+                        'label' => 'Logout',
+                        'route' => 'zfcuser/logout',
+                        'resource' => 'controller/zfcuser:logout'
+                    ),
+                )
             ),
         )
     ),
@@ -148,8 +190,8 @@ return array(
         ),
     ),
     'controllers' => array(
-        'invokables' => array(
-            'Application\Controller\Index' => Controller\IndexController::class
+        'factories' => array(
+            'Application\Controller\Index' => 'Application\Factory\IndexControllerFactory'
         ),
     ),
     'view_manager' => array(
@@ -175,16 +217,4 @@ return array(
             ),
         ),
     ),
-    'htimg' => [
-        'filters' => [
-            'my_thumbnail' => [ // this is  filter service
-                'type' => 'thumbnail', // this is a filter loader
-                'options' => [  // filter loader passes these options to a Filter which manipulates the image
-                    'width' => 100,
-                    'height' => 100,
-                    //'format' => 'jpeg' // format is optional and defaults to the format of given image
-                ]
-            ]
-        ]
-    ],
 );

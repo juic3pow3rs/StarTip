@@ -6,9 +6,22 @@ $form->setAttribute('action', $this->url('user/suche', array(), true));
 $form->prepare();
 
 $form->get('submit')->setValue('Suchen');
+$form->get('submit')->setAttribute('class', 'btn btn-success');
 
 echo $this->form()->openTag($form);
+?>
+<div style="width: 350px;" class="form-group">
 
-echo $this->formCollection($form);
+<?php
+$form->get('username')->setAttribute('class', 'form-control')
+->setAttribute('placeholder', $form->get('username')->getLabel());
 
+#echo $this->formRow($form->get('gruppe-fieldset')->get('name'));
+echo $this->formElement($form->get('username'));
+?>
+
+</div>
+
+<?php 
+echo $this->formSubmit($form->get('submit'));
 echo $this->form()->closeTag();

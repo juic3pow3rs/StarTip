@@ -137,9 +137,10 @@ return [
                 ['controller' => 'zfcuser', 'action' => ['login', 'authenticate', 'register'], 'roles' => ['guest']],
                 ['controller' => 'zfcuser', 'action' => ['index', 'logout'], 'roles' => ['user', 'admin']],
                 ['controller' => 'Benutzer\Controller\List', 'action' => ['list', 'detail'], 'roles' => ['user', 'admin']],
-                ['controller' => 'Benutzer\Controller\Write', 'action' => ['suche'], 'roles' => ['user', 'admin']],
+                ['controller' => 'Benutzer\Controller\Write', 'action' => ['suche', 'avatarUpload', 'profilePicture'], 'roles' => ['user', 'admin']],
                 ['controller' => 'Gruppe\Controller\Write', 'roles' => ['user', 'admin']],
                 ['controller' => 'Gruppe\Controller\List', 'roles' => ['user', 'admin']],
+                ['controller' => 'Gruppe\Controller\Delete', 'roles' => ['user', 'admin']],
                 ['controller' => 'Mannschaft\Controller\List', 'roles' => ['user', 'admin']],
                 ['controller' => 'Mannschaft\Controller\Write', 'roles' => ['admin']],
                 ['controller' => 'Post\Controller\List', 'roles' => ['user', 'admin']],
@@ -149,8 +150,9 @@ return [
                 ['controller' => 'Tipp\Controller\List', 'roles' => ['user', 'admin']],
                 ['controller' => 'Tipp\Controller\Write', 'action'  => ['add', 'edit', 'addZusatztipp'], 'roles' => ['user', 'admin']],
                 ['controller' => 'Tipp\Controller\Write', 'action'  => ['updateZusatztipp', 'setZusatztipp'],'roles' => ['admin']],
-                ['controller' => 'ZfcAdmin\Controller\AdminController', 'action' => ['index'], 'roles' => ['admin']],
+                ['controller' => 'ZfcAdmin\Controller\AdminController', 'action' => ['index', 'activate', 'reset', 'modus'], 'roles' => ['admin']],
                 ['controller' => 'HtUserRegistration', 'roles' => ['guest']],
+                ['controller' => 'LdcUserProfile\Controller\Profile', 'roles' => ['user', 'admin']],
             ],
 
             /* If this guard is specified here (i.e. it is enabled], it will block

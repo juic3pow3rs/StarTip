@@ -22,6 +22,7 @@ $settings = array(
      */
     'validation_group_overrides' => array(
         'zfcuser' => array(
+            'display_name',
             'password',
             'passwordVerify',
     ),
@@ -52,12 +53,5 @@ return array(
             ),
         ),
     ),
-    
-    'zfc_rbac' => [
-        'guards' => [
-            'ZfcRbac\Guard\RouteGuard' => [
-                'ldc-user-profile' => [ 'member' ],
-            ],
-        ],
-    ],
+
 );

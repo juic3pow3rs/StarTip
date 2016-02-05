@@ -34,7 +34,7 @@ class Base extends ProvidesEventsForm
         $this->add(array(
             'name' => 'display_name',
             'options' => array(
-                'label' => 'Display Name',
+                'label' => 'Anzeige Name',
             ),
             'attributes' => array(
                 'type' => 'text'
@@ -45,7 +45,7 @@ class Base extends ProvidesEventsForm
             'name' => 'password',
             'type' => 'password',
             'options' => array(
-                'label' => 'Password',
+                'label' => 'Passwort',
             ),
             'attributes' => array(
                 'type' => 'password'
@@ -56,7 +56,7 @@ class Base extends ProvidesEventsForm
             'name' => 'passwordVerify',
             'type' => 'password',
             'options' => array(
-                'label' => 'Password Verify',
+                'label' => 'Passwort erneut eingeben',
             ),
             'attributes' => array(
                 'type' => 'password'
@@ -65,7 +65,7 @@ class Base extends ProvidesEventsForm
 
         $submitElement = new Element\Button('submit');
         $submitElement
-            ->setLabel('Submit')
+            ->setLabel('Senden')
             ->setAttributes(array(
                 'type'  => 'submit',
             ));

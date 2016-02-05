@@ -83,7 +83,7 @@ $options = array(
      * Subject of account verification email
      *
      */
-    'verification_email_subject' => 'Startip Email Address Verification',
+    'verification_email_subject' => 'Startip E-Mail Verifikation',
     /**
      * Subject of Password request email
      *

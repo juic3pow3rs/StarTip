@@ -58,6 +58,8 @@ class UserRegistrationController extends AbstractActionController
 
         if ($this->userRegistrationService->verifyEmail($user, $token)) {
             // email verified
+            $this->flashMessenger()->addSuccessMessage('E-Mail erfolgreich verifiziert!');
+
             return $this->redirectToPostVerificationRoute();
         }
 

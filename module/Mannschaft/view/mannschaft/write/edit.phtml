@@ -1,19 +1,20 @@
-<h1>Spiel Bearbeiten</h1>
+<!--Mannschaft/view/mannschaft/write-->
+<h1>Mannschaft bearbeiten</h1>
 <?php
 $form = $this->form;
 $form->setAttribute('method', 'POST');
-$form->setAttribute('action', $this->url('spiel/edit', array(), true));
+$form->setAttribute('action', $this->url('mannschaft/edit', array(), true));
 $form->prepare();
 
-$form->get('submit')->setValue('Spiel bearbeiten');
-$form->get('submit')->setAttribute('class', 'btn btn-success');
+$form->get('submit')->setValue('Bearbeiten');
 
 echo $this->form()->openTag($form);
 
-echo $this->formHidden($form->get('spiel-fieldset')->get('s_id'));
+$form->get('submit')->setValue('Mannschaft editieren');
+$form->get('submit')->setAttribute('class', 'btn btn-success');
 ?>
 
-<?php foreach ($form->get('spiel-fieldset') as $element) : ?>
+<?php foreach ($form->get('mannschaft-fieldset') as $element) : ?>
 
     <div style="width: 330px;" class="form-group <?php if ($this->formElementErrors($element)) echo "has-error" ?>">
         <?php

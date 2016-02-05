@@ -1,5 +1,5 @@
 <div class="page-header">
-    <h1><?php echo $this->translate('Your Profile'); ?></h1>
+    <h1><?php echo $this->translate('Profil bearbeiten'); ?></h1>
 </div>
 
 <?php
@@ -7,7 +7,18 @@ if (!$this->options->isEnabled()) {
     echo $this->translate('Profile page is disabled');
     return;
 }
-echo $this->translate('You only can change your password');
+
+$flash = $this->flashMessenger();
+$flash->setMessageOpenFormat('<div%s>
+     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+         &times;
+</button>')
+    ->setMessageCloseString('</div>');
+
+echo $flash->render('error',   array('alert', 'alert-dismissible', 'alert-danger'));
+echo $flash->render('success', array('alert', 'alert-dismissible', 'alert-success'));
+
+echo $this->translate('Du kannst nur den Anzeige Name und das Passwort aendern');
 $form = $this->profileForm;
 $form->prepare();
 $form->setAttribute('action', $this->url('ldc-user-profile'));

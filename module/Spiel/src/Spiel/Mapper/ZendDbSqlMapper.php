@@ -15,9 +15,16 @@ use Zend\Db\ResultSet\HydratingResultSet;
 use Zend\Db\Sql\Insert;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Update;
+use Zend\Db\Sql\Delete;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use Zend\Db\ResultSet\ResultSet;
+use Zend\Http\Client as HttpClient;
+use Zend\Dom\Query;
 
+/**
+ * Class ZendDbSqlMapper
+ * @package Spiel\Mapper
+ */
 class ZendDbSqlMapper implements SpielMapperInterface {
 
     /**
@@ -45,10 +52,9 @@ class ZendDbSqlMapper implements SpielMapperInterface {
     }
 
     /**
-     * @param int|string $id
-     *
+     * @param $s_id
      * @return SpielInterface
-     * @throws \InvalidArgumentException
+     * @internal param int|string $id
      */
     public function find($s_id)
     {
@@ -67,7 +73,11 @@ class ZendDbSqlMapper implements SpielMapperInterface {
         throw new \InvalidArgumentException("Spiel with given ID:{$s_id} not found.");
 
     }
-    
+
+    /**
+     * @param $s_id
+     * @return array
+     */
     public function spielStatus($s_id)
     {
     	$sql    = new Sql($this->dbAdapter);
@@ -149,6 +159,10 @@ class ZendDbSqlMapper implements SpielMapperInterface {
     }
 
     //@todo: Hydrating funktioniert nicht
+    /**
+     * @param $user_id
+     * @return array|ResultSet
+     */
     public function findTippSpiele($user_id)
     {
     	$sql    = new Sql($this->dbAdapter);
@@ -161,7 +175,7 @@ class ZendDbSqlMapper implements SpielMapperInterface {
     	$result = $stmt->execute();
     
     	if ($result instanceof ResultInterface && $result->isQueryResult()) {
-    		$resultSet = new HydratingResultSet($this->hydrator, $this->gruppePrototype);
+    		$resultSet = new HydratingResultSet($this->hydrator, $this->spielPrototype);
     
     		return $resultSet->initialize($result);
     	}
@@ -169,6 +183,32 @@ class ZendDbSqlMapper implements SpielMapperInterface {
     	return array();
     }
 
+    /**
+     * @param $modus
+     * @return array
+     */
+    public function findModusSpiele($modus)
+    {
+        $sql    = new Sql($this->dbAdapter);
+        $select = $sql->select('spiel');
+        $select->where(array('modus = ?' => $modus));
+
+        $stmt   = $sql->prepareStatementForSqlObject($select);
+        $result = $stmt->execute();
+
+        if ($result instanceof ResultInterface && $result->isQueryResult()) {
+            $resultSet = new ResultSet;
+            $resultSet->initialize($result);
+
+            return $resultSet->toArray();
+        }
+
+        return array();
+    }
+
+    /**
+     * @return bool
+     */
     public function activateTurnier() {
 
         $action = new Update('turnier');
@@ -182,6 +222,9 @@ class ZendDbSqlMapper implements SpielMapperInterface {
         return (bool)$result->getAffectedRows();
     }
 
+    /**
+     * @return array
+     */
     public function turnierStatus() {
 
         $sql    = new Sql($this->dbAdapter);
@@ -202,6 +245,10 @@ class ZendDbSqlMapper implements SpielMapperInterface {
         return array();
     }
 
+    /**
+     * @param $m
+     * @return bool
+     */
     public function setModus($m) {
 
         $action = new Update('turnier');
@@ -215,6 +262,9 @@ class ZendDbSqlMapper implements SpielMapperInterface {
         return (bool)$result->getAffectedRows();
     }
 
+    /**
+     * @return array
+     */
     public function getModus() {
 
         $sql    = new Sql($this->dbAdapter);
@@ -233,5 +283,129 @@ class ZendDbSqlMapper implements SpielMapperInterface {
         }
 
         return array();
+    }
+
+    /**
+     * @param $modus
+     * @return bool
+     */
+    public function deleteModus($modus) {
+
+        $action = new Delete('spiel');
+        $action->where(array('modus = ?' => $modus));
+
+        $sql    = new Sql($this->dbAdapter);
+        $stmt   = $sql->prepareStatementForSqlObject($action);
+        $result = $stmt->execute();
+
+        return (bool)$result->getAffectedRows();
+
+    }
+
+    /**
+     * @param $modus
+     * @return array
+     */
+    public function crawl($modus) {
+
+        $client = new HttpClient();
+        $client->setAdapter('Zend\Http\Client\Adapter\Curl');
+
+        switch ($modus) {
+            case 1:
+                $client->setUri('http://84.200.248.53/em2016/vorrunde.html');
+        break;
+            case 2:
+                $client->setUri('http://84.200.248.53/em2016/achtelfinale.html');
+        break;
+            case 3:
+                $client->setUri('http://84.200.248.53/em2016/viertelfinale.html');
+        break;
+            case 4:
+                $client->setUri('http://84.200.248.53/em2016/halbfinale.html');
+        break;
+            case 5:
+                $client->setUri('http://84.200.248.53/em2016/finale.html');
+        }
+
+        $result                 = $client->send();
+        //content of the web
+        $body                   = $result->getBody();
+
+        $dom = new Query($body);
+        //get div with id="content" and td'S NodeList
+        $title = $dom->execute('#content tr > td');
+
+        $i = 0;
+        $j = 0;
+        $spiel = array();
+        $spiele = array();
+
+        foreach ($title as $t) {
+
+            if ($t->nodeValue != 'A' && $t->nodeValue != 'B' && $t->nodeValue != 'C' && $t->nodeValue != 'D' && $t->nodeValue != 'E' && $t->nodeValue != 'F') {
+
+                $spiel[$j] = $t->nodeValue;
+
+                if ($j == 2) {
+
+                    $j = 0;
+                    $spiele[$i] = $spiel;
+                    $i++;
+                    $spiel = array();
+
+                } else {
+
+                    $j++;
+                }
+            }
+        }
+
+        return $spiele;
+
+    }
+
+    /**
+     * @param $modus
+     * @return array
+     */
+    public function count($modus) {
+
+        $sql    = new Sql($this->dbAdapter);
+        $select = $sql->select('spiel')->columns(array('num' => new \Zend\Db\Sql\Expression('COUNT(*)')));
+        $select->where(array('modus = ?' => $modus));
+
+        $stmt   = $sql->prepareStatementForSqlObject($select);
+        $result = $stmt->execute();
+
+        if ($result instanceof ResultInterface && $result->isQueryResult()) {
+            $resultSet = new ResultSet;
+            $resultSet->initialize($result);
+
+            return $resultSet->toArray();
+        }
+
+        return array();
+
+    }
+
+    /**
+     * Flushen von folgenden Tabellen:
+     * - Mannschaft
+     * - Alle Zusatztipps auf aktiviert setzen
+     * - Turnier Status = 0 und modus = 0 setzen
+     */
+    public function reset() {
+
+        $action = new Update('turnier');
+        $action->set(array('status' => 0, 'modus' => 0));
+        $action->where(array('name = ?' => 'em'));
+
+        $sql    = new Sql($this->dbAdapter);
+        $stmt   = $sql->prepareStatementForSqlObject($action);
+        $result = $stmt->execute();
+
+        return (bool)$result->getAffectedRows();
+
     }
 }

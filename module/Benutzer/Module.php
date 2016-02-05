@@ -13,11 +13,18 @@ use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 
+/**
+ * Class Module
+ * @package Benutzer
+ */
 class Module implements
     AutoloaderProviderInterface,
     ConfigProviderInterface
 {
 
+    /**
+     * @param MvcEvent $e
+     */
     public function onBootstrap(MvcEvent $e)
     {
         /**
