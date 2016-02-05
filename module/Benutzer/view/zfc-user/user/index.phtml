@@ -1,10 +1,22 @@
 <div class="page-header">
-    <h1><?php echo $this->translate('User details'); ?></h1>
+    <h1>Profil von <?php echo $this->zfcUserIdentity()->getUsername(); ?></h1>
 </div>
 <div class="container">
     <div class="row">
-        <div style="float:left; padding-right:16px;"><?php echo $this->gravatar($this->zfcUserIdentity()->getEmail()) ?></div>
-        <h3><?php echo $this->translate('Hello'); ?>, <?php echo $this->zfcUserDisplayName() ?>!</h3>
-        <a href="<?php echo $this->url('zfcuser/logout') ?>">[<?php echo $this->translate('Sign Out'); ?>]</a>
+        <div style="float:left; padding-right:16px;">
+            <?php if (empty($ava['profile_picture'])) {
+                echo  $this->gravatar($this->zfcUserIdentity()->getEmail());
+            } else { ?>
+            <img src="<?php echo $ava['profile_picture']?>" width="150"/>
+            <?php } ?>
+        </div>
+        <h3>Hallo, <?php echo $this->zfcUserDisplayName() ?>!</h3>
+        
+        <input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('user/picture')?>';" value="Profilbild bearbeiten" />
+		 <input type="button" class="btn btn-success" onclick="location.href='<?php echo  $this->url('ldc-user-profile') ?>';" value="Profil bearbeiten" />
+		 <input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('zfcuser/logout') ?>';" value="Logout" />
+		
+
+        
     </div>
 </div>

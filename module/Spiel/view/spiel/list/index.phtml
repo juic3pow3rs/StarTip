@@ -1,69 +1,364 @@
-<!--<fieldset><form action="/spiel/edit/2" method="post" >-->
-<h1>Spiele</h1>
+<script>
+    $(document).ready(function(){
+        $(".flip").click(function(){
+            $(".panel1").toggle();
+        });
+        $(".flip2").click(function(){
+            $(".panel2").toggle();
+        });
+        $(".flip3").click(function(){
+            $(".panel3").toggle();
+        });
+        $(".flip4").click(function(){
+            $(".panel4").toggle();
+        });
+        $(".flip5").click(function(){
+            $(".panel5").toggle();
+        });
+    });
+</script>
 
-<table class="table">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Mannschaft 1</th>
-        <th>Mannschaft 2</th>
-        <th>Modus</th>
-        <th>Anpfiff</th>
-        <th>Tore1</th>
-        <th>Tore2</th>
-        <th>Punkte1</th>
-        <th>Punkte2</th>
-        <th>Gelb1</th>
-        <th>Gelb2</th>
-        <th>Rot1</th>
-        <th>Rot2</th>
-        <th>Status</th>
-        <th></th>
-        <th></th>
-      
-    </tr>
-    </thead>
-    <tbody>
-    <?php foreach($this->spiele as $s) : ?>
-        <tr>
-            <td><?php echo $s['s_id'];?></td>
-            <td><?php echo $s['mannschaft1'];?></td>
-            <td><?php echo $s['mannschaft2'];?></td>
-            <td><?php echo $s['modus'];?></td>
-            <td><?php echo $s['anpfiff'];?></td>
-            <td><?php echo $s['tore1'];?></td>
-            <td><?php echo $s['tore2'];?></td>
-            <td><?php echo $s['punkte1'];?></td>
-            <td><?php echo $s['punkte2'];?></td>
-            <td><?php echo $s['gelb1'];?></td>
-            <td><?php echo $s['gelb2'];?></td>
-            <td><?php echo $s['rot1'];?></td>
-            <td><?php echo $s['rot2'];?></td>
-            <td><?php echo $s['status']; ?></td>
-            
-             <td><input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('spiel/edit', array('id' => $s['s_id'])); ?>'"  value="Bearbeiten" /></td>
- 			<?php $count=0;?>
- 			<?php foreach($this->getippt as $t) :
- 				if($s['s_id']==$t['s_id']){
- 				$t_id=$t['t_id'];
- 				$count=1;
- 			}
- 			 endforeach;?>
- 		     <td><?php if($count == 0 && $s['status'] == 0){ ?>
- 		     <input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('tipp/add', array('s_id' => $s['s_id'])); ?>'"  value="Tipp abgeben" />
- 		     <?php }?>
- 		     
- 		     <?php if($count == 1){?>
- 		 
- 		      <input type="button" class="btn btn-danger" onclick="location.href='<?php echo $this->url('tipp/detail', array('t_id' => $t_id)); ?>'"  value="Tipp ansehen" />
- 		     <?php }?>
- 		     </td>
- 			
-            
-        </tr>
-    <?php endforeach; ?>
-    </tbody>
-</table>
+<style type="text/css">
+    p.flip, p.flip2, p.flip3, p.flip4, p.flip5
+    {
+        padding:5px;
+    }
+    div .panel1, .panel2, .panel3, .panel4, .panel5
+    {
+        display:none;
+    }
+    p.flip, p.flip2, p.flip3, p.flip4, p.flip5
+    {
+        cursor:pointer;
+    }
+</style>
 
-<!--</form>
-</fieldset>-->
+<?php
+$flash = $this->flashMessenger();
+$flash->setMessageOpenFormat('<div%s>
+     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+         &times;
+</button>')
+    ->setMessageCloseString('</div>');
+
+echo $flash->render('error',   array('alert', 'alert-dismissible', 'alert-danger'));
+echo $flash->render('info',    array('alert', 'alert-dismissible', 'alert-info'));
+echo $flash->render('warning', array('alert', 'alert-dismissible', 'alert-warning'));
+echo $flash->render('success', array('alert', 'alert-dismissible', 'alert-success'));
+
+?>
+<div class="page-header">
+    <h1>Spiele</h1>
+</div>
+<?php
+if (empty($spiele[1]) && empty($spiele[2]) && empty($spiele[3]) && empty($spiele[4]) && empty($spiele[5])) {
+    echo 'Noch keine Spiele vorhanden';
+}
+?>
+<?php if (!empty($spiele[1])) { ?>
+    <h3>Vorrunde</h3>
+    <p class="flip"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>Anzeigen/Verbergen</p>
+    <div class="panel1">
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr class="success">
+                <th>Mannschaft 1</th>
+                <th>Mannschaft 2</th>
+                <th>Modus</th>
+                <th>Anpfiff</th>
+                <th>Tore1</th>
+                <th>Tore2</th>
+                <th>Punkte1</th>
+                <th>Punkte2</th>
+                <th>Gelb1</th>
+                <th>Gelb2</th>
+                <th>Rot1</th>
+                <th>Rot2</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach($spiele[1] as $s) : ?>
+                <tr>
+                    <td><?php echo $s['mannschaft1'];?></td>
+                    <td><?php echo $s['mannschaft2'];?></td>
+                    <td><?php echo $s['modus'];?></td>
+                    <td><?php echo $s['anpfiff'];?></td>
+                    <td><?php echo $s['tore1'];?></td>
+                    <td><?php echo $s['tore2'];?></td>
+                    <td><?php echo $s['punkte1'];?></td>
+                    <td><?php echo $s['punkte2'];?></td>
+                    <td><?php echo $s['gelb1'];?></td>
+                    <td><?php echo $s['gelb2'];?></td>
+                    <td><?php echo $s['rot1'];?></td>
+                    <td><?php echo $s['rot2'];?></td>
+                    <td><?php echo $s['status']; ?></td>
+                    <?php if ($modus == 1) {?>
+                    <?php $count=0;?>
+                    <?php foreach($this->getippt as $t) :
+                        if($s['s_id']==$t['s_id']){
+                            $t_id=$t['t_id'];
+                            $count=1;
+                        }
+                    endforeach;?>
+                    <td><?php if($count == 0 && ($s['anpfiff'] > date("Y-m-d H:i:s") && $s['status'] == 0)){ ?>
+                            <input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('tipp/add', array('s_id' => $s['s_id'])); ?>'"  value="Tipp abgeben" />
+                        <?php }?>
+
+                        <?php if($count == 1){?>
+
+                            <input type="button" class="btn btn-danger" onclick="location.href='<?php echo $this->url('tipp/detail', array('t_id' => $t_id)); ?>'"  value="Tipp ansehen" />
+                        <?php }?>
+                    </td>
+                    <?php } ?>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+<?php } ?>
+<?php if (!empty($spiele[2])) { ?>
+    <h3>Achtelfinale</h3>
+    <p class="flip2"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>Anzeigen/Verbergen</p>
+    <div class="panel2">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Mannschaft 1</th>
+                <th>Mannschaft 2</th>
+                <th>Modus</th>
+                <th>Anpfiff</th>
+                <th>Tore1</th>
+                <th>Tore2</th>
+                <th>Punkte1</th>
+                <th>Punkte2</th>
+                <th>Gelb1</th>
+                <th>Gelb2</th>
+                <th>Rot1</th>
+                <th>Rot2</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach($spiele[2] as $s) : ?>
+                <tr>
+                    <td><?php echo $s['mannschaft1'];?></td>
+                    <td><?php echo $s['mannschaft2'];?></td>
+                    <td><?php echo $s['modus'];?></td>
+                    <td><?php echo $s['anpfiff'];?></td>
+                    <td><?php echo $s['tore1'];?></td>
+                    <td><?php echo $s['tore2'];?></td>
+                    <td><?php echo $s['punkte1'];?></td>
+                    <td><?php echo $s['punkte2'];?></td>
+                    <td><?php echo $s['gelb1'];?></td>
+                    <td><?php echo $s['gelb2'];?></td>
+                    <td><?php echo $s['rot1'];?></td>
+                    <td><?php echo $s['rot2'];?></td>
+                    <td><?php echo $s['status']; ?></td>
+                    <?php $count=0;?>
+                    <?php foreach($this->getippt as $t) :
+                        if($s['s_id']==$t['s_id']){
+                            $t_id=$t['t_id'];
+                            $count=1;
+                        }
+                    endforeach;?>
+                    <td><?php if($count == 0 && ($s['anpfiff'] > date("Y-m-d H:i:s") && $s['status'] == 0)){ ?>
+                            <input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('tipp/add', array('s_id' => $s['s_id'])); ?>'"  value="Tipp abgeben" />
+                        <?php }?>
+
+                        <?php if($count == 1){?>
+
+                            <input type="button" class="btn btn-danger" onclick="location.href='<?php echo $this->url('tipp/detail', array('t_id' => $t_id)); ?>'"  value="Tipp ansehen" />
+                        <?php }?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+<?php } ?>
+<?php if (!empty($spiele[3])) { ?>
+    <h3>Viertelfinale</h3>
+    <p class="flip3"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>Anzeigen/Verbergen</p>
+    <div class="panel3">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Mannschaft 1</th>
+                <th>Mannschaft 2</th>
+                <th>Modus</th>
+                <th>Anpfiff</th>
+                <th>Tore1</th>
+                <th>Tore2</th>
+                <th>Punkte1</th>
+                <th>Punkte2</th>
+                <th>Gelb1</th>
+                <th>Gelb2</th>
+                <th>Rot1</th>
+                <th>Rot2</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach($spiele[3] as $s) : ?>
+                <tr>
+                    <td><?php echo $s['mannschaft1'];?></td>
+                    <td><?php echo $s['mannschaft2'];?></td>
+                    <td><?php echo $s['modus'];?></td>
+                    <td><?php echo $s['anpfiff'];?></td>
+                    <td><?php echo $s['tore1'];?></td>
+                    <td><?php echo $s['tore2'];?></td>
+                    <td><?php echo $s['punkte1'];?></td>
+                    <td><?php echo $s['punkte2'];?></td>
+                    <td><?php echo $s['gelb1'];?></td>
+                    <td><?php echo $s['gelb2'];?></td>
+                    <td><?php echo $s['rot1'];?></td>
+                    <td><?php echo $s['rot2'];?></td>
+                    <td><?php echo $s['status']; ?></td>
+                    <?php $count=0;?>
+                    <?php foreach($this->getippt as $t) :
+                        if($s['s_id']==$t['s_id']){
+                            $t_id=$t['t_id'];
+                            $count=1;
+                        }
+                    endforeach;?>
+                    <td><?php if($count == 0 && ($s['anpfiff'] > date("Y-m-d H:i:s") && $s['status'] == 0)){ ?>
+                            <input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('tipp/add', array('s_id' => $s['s_id'])); ?>'"  value="Tipp abgeben" />
+                        <?php }?>
+
+                        <?php if($count == 1){?>
+
+                            <input type="button" class="btn btn-danger" onclick="location.href='<?php echo $this->url('tipp/detail', array('t_id' => $t_id)); ?>'"  value="Tipp ansehen" />
+                        <?php }?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+<?php } ?>
+<?php if (!empty($spiele[4])) { ?>
+    <h3>Halbfinale</h3>
+    <p class="flip4"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>Anzeigen/Verbergen</p>
+    <div class="panel4">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Mannschaft 1</th>
+                <th>Mannschaft 2</th>
+                <th>Modus</th>
+                <th>Anpfiff</th>
+                <th>Tore1</th>
+                <th>Tore2</th>
+                <th>Punkte1</th>
+                <th>Punkte2</th>
+                <th>Gelb1</th>
+                <th>Gelb2</th>
+                <th>Rot1</th>
+                <th>Rot2</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach($spiele[4] as $s) : ?>
+                <tr>
+                    <td><?php echo $s['mannschaft1'];?></td>
+                    <td><?php echo $s['mannschaft2'];?></td>
+                    <td><?php echo $s['modus'];?></td>
+                    <td><?php echo $s['anpfiff'];?></td>
+                    <td><?php echo $s['tore1'];?></td>
+                    <td><?php echo $s['tore2'];?></td>
+                    <td><?php echo $s['punkte1'];?></td>
+                    <td><?php echo $s['punkte2'];?></td>
+                    <td><?php echo $s['gelb1'];?></td>
+                    <td><?php echo $s['gelb2'];?></td>
+                    <td><?php echo $s['rot1'];?></td>
+                    <td><?php echo $s['rot2'];?></td>
+                    <td><?php echo $s['status']; ?></td>
+                    <?php $count=0;?>
+                    <?php foreach($this->getippt as $t) :
+                        if($s['s_id']==$t['s_id']){
+                            $t_id=$t['t_id'];
+                            $count=1;
+                        }
+                    endforeach;?>
+                    <td><?php if($count == 0 && ($s['anpfiff'] > date("Y-m-d H:i:s") && $s['status'] == 0)){ ?>
+                            <input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('tipp/add', array('s_id' => $s['s_id'])); ?>'"  value="Tipp abgeben" />
+                        <?php }?>
+
+                        <?php if($count == 1){?>
+
+                            <input type="button" class="btn btn-danger" onclick="location.href='<?php echo $this->url('tipp/detail', array('t_id' => $t_id)); ?>'"  value="Tipp ansehen" />
+                        <?php }?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+<?php } ?>
+<?php if (!empty($spiele[5])) { ?>
+    <h3>Finale</h3>
+    <p class="flip5"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>Anzeigen/Verbergen</p>
+    <div class="panel5">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Mannschaft 1</th>
+                <th>Mannschaft 2</th>
+                <th>Modus</th>
+                <th>Anpfiff</th>
+                <th>Tore1</th>
+                <th>Tore2</th>
+                <th>Punkte1</th>
+                <th>Punkte2</th>
+                <th>Gelb1</th>
+                <th>Gelb2</th>
+                <th>Rot1</th>
+                <th>Rot2</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach($spiele[5] as $s) : ?>
+                <tr>
+                    <td><?php echo $s['mannschaft1'];?></td>
+                    <td><?php echo $s['mannschaft2'];?></td>
+                    <td><?php echo $s['modus'];?></td>
+                    <td><?php echo $s['anpfiff'];?></td>
+                    <td><?php echo $s['tore1'];?></td>
+                    <td><?php echo $s['tore2'];?></td>
+                    <td><?php echo $s['punkte1'];?></td>
+                    <td><?php echo $s['punkte2'];?></td>
+                    <td><?php echo $s['gelb1'];?></td>
+                    <td><?php echo $s['gelb2'];?></td>
+                    <td><?php echo $s['rot1'];?></td>
+                    <td><?php echo $s['rot2'];?></td>
+                    <td><?php echo $s['status']; ?></td>
+                    <?php $count=0;?>
+                    <?php foreach($this->getippt as $t) :
+                        if($s['s_id']==$t['s_id']){
+                            $t_id=$t['t_id'];
+                            $count=1;
+                        }
+                    endforeach;?>
+                    <td><?php if($count == 0 && ($s['anpfiff'] > date("Y-m-d H:i:s") && $s['status'] == 0)){ ?>
+                            <input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('tipp/add', array('s_id' => $s['s_id'])); ?>'"  value="Tipp abgeben" />
+                        <?php }?>
+
+                        <?php if($count == 1){?>
+
+                            <input type="button" class="btn btn-danger" onclick="location.href='<?php echo $this->url('tipp/detail', array('t_id' => $t_id)); ?>'"  value="Tipp ansehen" />
+                        <?php }?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+<?php } ?>

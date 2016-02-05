@@ -13,6 +13,11 @@ use Gruppe\Model\Gruppe;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Stdlib\Hydrator\ClassMethods;
+
+/**
+ * Class ZendDbSqlMapperFactory
+ * @package Gruppe\Factory
+ */
 class ZendDbSqlMapperFactory implements FactoryInterface
 {
     /**

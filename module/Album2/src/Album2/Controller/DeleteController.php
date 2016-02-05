@@ -12,6 +12,10 @@ use Album2\Service\AlbumServiceInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
+/**
+ * Class DeleteController
+ * @package Album2\Controller
+ */
 class DeleteController extends AbstractActionController
 {
     /**
@@ -19,11 +23,17 @@ class DeleteController extends AbstractActionController
      */
     protected $albumService;
 
+    /**
+     * @param AlbumServiceInterface $albumService
+     */
     public function __construct(AlbumServiceInterface $albumService)
     {
         $this->albumService = $albumService;
     }
 
+    /**
+     * @return \Zend\Http\Response|ViewModel
+     */
     public function deleteAction()
     {
         try {

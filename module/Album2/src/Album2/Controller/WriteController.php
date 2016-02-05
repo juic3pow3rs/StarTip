@@ -13,11 +13,19 @@ use Zend\Form\FormInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Helper\ViewModel;
 
+/**
+ * Class WriteController
+ * @package Album2\Controller
+ */
 class WriteController extends AbstractActionController {
 
     protected $albumService;
     protected $albumForm;
 
+    /**
+     * @param AlbumServiceInterface $albumService
+     * @param FormInterface $albumForm
+     */
     public function __construct(
         AlbumServiceInterface $albumService,
         FormInterface $albumForm
@@ -26,6 +34,9 @@ class WriteController extends AbstractActionController {
         $this->albumForm = $albumForm;
     }
 
+    /**
+     * @return array|\Zend\Http\Response
+     */
     public function addAction() {
 
         $request = $this->getRequest();
@@ -37,6 +48,10 @@ class WriteController extends AbstractActionController {
                 try {
                     $this->albumService->saveAlbum($this->albumForm->getData());
 
+                    $this->flashMessenger()->addSuccessMessage('Erfolgreich angelegt');
+                    $this->flashMessenger()->addInfoMessage('Coole Infos hier!');
+                    $this->flashMessenger()->addErrorMessage('Cooler Error hier!');
+                    $this->flashMessenger()->addWarningMessage('Warnung!');
                     return $this->redirect()->toRoute('album2');
                 } catch (\Exception $e) {
                     die($e->getMessage());
@@ -52,6 +67,9 @@ class WriteController extends AbstractActionController {
         );
     }
 
+    /**
+     * @return array|\Zend\Http\Response
+     */
     public function editAction()
     {
         $request = $this->getRequest();

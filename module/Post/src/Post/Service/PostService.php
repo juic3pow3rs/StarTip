@@ -12,6 +12,10 @@ use Post\Mapper\PostMapperInterface;
 use Post\Model\PostInterface;
 use Zend\Db\TableGateway\TableGatewayInterface;
 
+/**
+ * Class PostService
+ * @package Post\Service
+ */
 class PostService implements PostServiceInterface {
 
     protected $postMapper;

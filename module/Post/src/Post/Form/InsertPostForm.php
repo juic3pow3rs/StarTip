@@ -10,8 +10,16 @@ namespace Post\Form;
 
 use Zend\Form\Form;
 
+/**
+ * Class InsertPostForm
+ * @package Post\Form
+ */
 class InsertPostForm extends Form {
 
+    /**
+     * @param null $name
+     * @param array $options
+     */
     public function __construct($name = null, $options = array()) {
 
         parent::__construct($name, $options);

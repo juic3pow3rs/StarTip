@@ -1,5 +1,29 @@
 <h1>Albums</h1>
 
+
+<!--<?php foreach ($message as $m) : ?>
+    <div class="alert alert-success alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <strong>Success!</strong> <?php echo $m?>
+    </div>
+<?php endforeach; ?>-->
+
+<?php
+$flash = $this->flashMessenger();
+$flash->setMessageOpenFormat('<div%s>
+     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+         &times;
+</button>')
+    ->setMessageCloseString('</div>');
+
+echo $flash->render('error',   array('alert', 'alert-dismissible', 'alert-danger'));
+echo $flash->render('info',    array('alert', 'alert-dismissible', 'alert-info'));
+echo $flash->render('warning', array('alert', 'alert-dismissible', 'alert-warning'));
+echo $flash->render('success', array('alert', 'alert-dismissible', 'alert-success'));
+
+?>
+
+
 <table class="table">
     <thead>
     <tr>

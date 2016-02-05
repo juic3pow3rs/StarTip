@@ -12,8 +12,17 @@ use Tipp\Service\TippService;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class TippServiceFactory
+ * @package Tipp\Factory
+ */
 class TippServiceFactory implements FactoryInterface
 {
+    /**
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return mixed|TippService
+     */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         return new TippService(

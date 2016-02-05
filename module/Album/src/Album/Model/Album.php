@@ -12,18 +12,28 @@ use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 
+/**
+ * Class Album
+ * @package Album\Model
+ */
 class Album implements  InputFilterAwareInterface {
     public $id;
     public $artist;
     public $title;
     protected $inputFilter;
 
+    /**
+     * @param $data
+     */
     public function exchangeArray($data) {
         $this->id = (!empty($data['id'])) ? $data['id'] : null;
         $this->artist = (!empty($data['artist'])) ? $data['artist'] : null;
         $this->title = (!empty($data['title'])) ? $data['title'] : null;
     }
 
+    /**
+     * @return array
+     */
     public function getArrayCopy() {
         return get_object_vars($this);
     }
@@ -33,6 +43,7 @@ class Album implements  InputFilterAwareInterface {
      *
      * @param  InputFilterInterface $inputFilter
      * @return InputFilterAwareInterface
+     * @throws \Exception
      */
     public function setInputFilter(InputFilterInterface $inputFilter)
     {

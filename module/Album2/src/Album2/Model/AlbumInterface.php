@@ -8,6 +8,10 @@
 
 namespace Album2\Model;
 
+/**
+ * Interface AlbumInterface
+ * @package Album2\Model
+ */
 interface AlbumInterface {
     /**
      * Will return the ID of the Album

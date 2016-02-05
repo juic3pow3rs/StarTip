@@ -8,6 +8,10 @@
 
 namespace Mannschaft\Model;
 
+/**
+ * Interface MannschaftInterface
+ * @package Mannschaft\Model
+ */
 interface MannschaftInterface {
     /**
      * Will return the ID of the Mannschaft

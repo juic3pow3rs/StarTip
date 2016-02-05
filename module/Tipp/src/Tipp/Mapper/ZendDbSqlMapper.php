@@ -19,22 +19,25 @@ use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Update;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
+/**
+ * Class ZendDbSqlMapper
+ * @package Tipp\Mapper
+ */
 class ZendDbSqlMapper implements TippMapperInterface {
 
-    /**
-     * @var \Zend\Db\Adapter\AdapterInterface
-     */
+    
     protected $dbAdapter;
 
     protected $hydrator;
 
     protected $tippPrototype;
 
-    /**
-     * @param AdapterInterface  $dbAdapter
-     * @param HydratorInterface $hydrator
-     * @param AlbumInterface    $albumPrototype
-     */
+   /**
+    * 
+    * @param AdapterInterface $dbAdapter
+    * @param HydratorInterface $hydrator
+    * @param TippInterface $tippPrototype
+    */
     public function __construct(
         AdapterInterface $dbAdapter,
         HydratorInterface $hydrator,
@@ -46,9 +49,9 @@ class ZendDbSqlMapper implements TippMapperInterface {
     }
 
     /**
-     * @param int|string $id
-     *
-     * @return AlbumInterface
+     * Sucht den Tipp mit der übergebenen Id
+     * @param  $t_id
+     * @return object|AlbumInterface
      * @throws \InvalidArgumentException
      */
     public function find($t_id)
@@ -66,20 +69,24 @@ class ZendDbSqlMapper implements TippMapperInterface {
 
         throw new \InvalidArgumentException("Tipp with given ID:{$t_id} not found.");
     }
-    
+
+    /**
+     * Prüft ob bereits ein Tipp zur gegebenen s_id und user_id existiert
+     * @param  $s_id
+     * @param  $user_id
+     * @return array
+     */
     public function tippAbgegeben($s_id, $user_id)
     {
     	$sql    = new Sql($this->dbAdapter);
     	$select = $sql->select('tipp');
     	$select->join(array("s" => "spiel"), "s.s_id = tipp.s_id")
     	->where(array('tipp.b_id = ?' => $user_id, 'tipp.s_id = ?' => $s_id));
-    	
-    	
-    	    
+    	   
     	$stmt   = $sql->prepareStatementForSqlObject($select);
     	$result = $stmt->execute();
     
-    	 if ($result instanceof ResultInterface && $result->isQueryResult()) {
+    	if ($result instanceof ResultInterface && $result->isQueryResult()) {
         	$resultSet = new ResultSet;
         	$resultSet->initialize($result);
         
@@ -91,6 +98,8 @@ class ZendDbSqlMapper implements TippMapperInterface {
     }
 
     /**
+     * Gibt alle Tipps des Benutzers mit der übergebenen user_id zurück
+     * @param  $user_id
      * @return array|AlbumInterface[]
      */
     public function findAllTipps($user_id)
@@ -99,9 +108,7 @@ class ZendDbSqlMapper implements TippMapperInterface {
         $select = $sql->select('tipp');
         $select->join(array("s" => "spiel"), "s.s_id = tipp.s_id")
      	 ->where(array('tipp.b_id = ?' => $user_id));
-        
-        
-    
+            
         $stmt   = $sql->prepareStatementForSqlObject($select);
         $result = $stmt->execute();
          
@@ -116,7 +123,13 @@ class ZendDbSqlMapper implements TippMapperInterface {
     
     }
 
-   
+    /**
+     * Legt einen neuen Tipp an/Updatet einen vorhandenen Tipp
+     * @param TippInterface $tippObject
+     * @param  $s_id
+     * @return AlbumInterface|TippInterface
+     * @throws \Exception
+     */
     public function save(TippInterface $tippObject, $s_id)
     {
     	
@@ -125,41 +138,25 @@ class ZendDbSqlMapper implements TippMapperInterface {
         unset($tippData['punkte']);
         $tippData['s_id']=$s_id;
         
-        //Prüft ob die Tore für Mannschaft 1 nummerisch sind
-        if(is_numeric($tippData['tipp1'])){
-        	$tore1=1;
-        }else {
-        	$tore1=0;
-        }
-        
-        //Prüft ob die Tore für Mannschaft 2 nummerisch sind
-        if(is_numeric($tippData['tipp2'])){
-        	$tore2=1;
-        }else {
-        	$tore2=0;
-        }
-
-       //Wird nur upgedatet/eingefügt in die DB wenn die Tore nummerisch sind
-        if($tore1==1 && $tore2==1){
-           //Prüft ob bereits ein tipp existiert also der Tipp nur bearbeitet werden soll
-     	   if ($tippObject->getT_id()) {
-        	 	//Update des Tipp
-        		$action = new Update('tipp');
-        		$action->set($tippData);
-        		$action->where(array('t_id = ?' => $tippObject->getT_id()));
+        //Prüft ob bereits ein tipp existiert also der Tipp nur bearbeitet werden soll
+     	if ($tippObject->getT_id()) {
+        	//Update des Tipp
+        	$action = new Update('tipp');
+        	$action->set($tippData);
+        	$action->where(array('t_id = ?' => $tippObject->getT_id()));
         
       	  //Da noch kein Tipp existiert muss ein neuer Tipp eingefügt werden	
           } else {
         		
-     		   $tippData['s_id']=$s_id;
-     		   $action = new Insert('tipp');
-     		   $action->values($tippData);
+     		  $tippData['s_id']=$s_id;
+     		  $action = new Insert('tipp');
+     		  $action->values($tippData);
      		   
         	}
                 
-     	   $sql    = new Sql($this->dbAdapter);
+     	  $sql    = new Sql($this->dbAdapter);
       	  $stmt   = $sql->prepareStatementForSqlObject($action);
-     	   $result = $stmt->execute();
+     	  $result = $stmt->execute();
 
       	  if ($result instanceof ResultInterface) {
       	      if ($newId = $result->getGeneratedValue()) {
@@ -168,20 +165,20 @@ class ZendDbSqlMapper implements TippMapperInterface {
         	    }
 
          	   return $tippObject;
-      	  }
+      	  
         
+        }else {
+        	throw new \Exception("Fehler beim speichern.");
         }
-
-        if($tore1 ==0 && $tore2==0)
-        	throw new \Exception("Die Anzahl der Tore fuer die Erste Mannschaft und Zweite Mannschaft muessen als Zahl angegeben werden.");
-        if($tore1==0)
-        throw new \Exception("Die Anzahl der Tore fuer die Erste Mannschaft muessen als Zahl angegeben werden.");
-        if($tore2==0)
-        	throw new \Exception("Die Anzahl der Tore fuer die Zweite Mannschaft muessen als Zahl angegeben werden");
-     
-        
+       
     }
 
+    /**
+     * Updatet einen Zusatztipp
+     * @param  $id
+     * @param  $status
+     * @return boolean
+     */
     public function updateZusatztipp($id, $status) {
 
         $data = array('status' => $status);
@@ -198,6 +195,13 @@ class ZendDbSqlMapper implements TippMapperInterface {
         return (bool)$result->getAffectedRows();
     }
 
+    //Legt einen neuen Zusatztipp an
+    /**
+     * @param $id
+     * @param $user_id
+     * @param $m_id
+     * @return bool
+     */
     public function addZusatztipp($id, $user_id, $m_id) {
 
         $action = new Insert('zusatztipp_abgabe');
@@ -215,6 +219,35 @@ class ZendDbSqlMapper implements TippMapperInterface {
 
     }
 
+    /**
+     * @param $user_id
+     * @return array
+     */
+    public function getZusatztipp($user_id) {
+
+        $sql    = new Sql($this->dbAdapter);
+        $select = $sql->select('zusatztipp_abgabe');
+        $select->where(array('b_id = ?' => $user_id));
+
+        $stmt   = $sql->prepareStatementForSqlObject($select);
+        $result = $stmt->execute();
+
+        if ($result instanceof ResultInterface && $result->isQueryResult()) {
+            $resultSet = new ResultSet;
+            $resultSet->initialize($result);
+
+            return $resultSet->toArray();
+        }
+
+        return array();
+
+    }
+
+    /**
+     * @param $id
+     * @param $m_id
+     * @return bool
+     */
     public function setZusatztipp($id, $m_id) {
 
         $data = array('erg' => $m_id);
@@ -232,6 +265,9 @@ class ZendDbSqlMapper implements TippMapperInterface {
 
     }
 
+    /**
+     * @return array
+     */
     public function isActive() {
 
         $sql    = new Sql($this->dbAdapter);
@@ -253,6 +289,9 @@ class ZendDbSqlMapper implements TippMapperInterface {
 
     }
 
+    /**
+     * @param $id
+     */
     public function zusatzPunkteBerechnen($id) {
 
         $sql    = new Sql($this->dbAdapter);
@@ -310,6 +349,9 @@ class ZendDbSqlMapper implements TippMapperInterface {
 
     }
 
+    /**
+     * @param $s_id
+     */
     public function punkteBerechnen($s_id) {
 
         $sql    = new Sql($this->dbAdapter);
@@ -416,6 +458,21 @@ class ZendDbSqlMapper implements TippMapperInterface {
 
         }
 
+    }
+
+    /**
+     * @return bool
+     */
+    public function resetZusatztipp() {
+
+        $action = new Update('zusatztipp');
+        $action->set(array('status' => 1));
+
+        $sql    = new Sql($this->dbAdapter);
+        $stmt   = $sql->prepareStatementForSqlObject($action);
+        $result = $stmt->execute();
+
+        return (bool)$result->getAffectedRows();
     }
 
 }

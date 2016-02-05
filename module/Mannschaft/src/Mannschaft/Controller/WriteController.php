@@ -8,40 +8,87 @@
 
 namespace Mannschaft\Controller;
 
-use Mannschaft\Form\UploadInputFilter;
-use Zend\Filter\File\RenameUpload;
+use Mannschaft\Model\Mannschaft;
 use Mannschaft\Service\MannschaftServiceInterface;
+use Spiel\Service\SpielServiceInterface;
 use Zend\Form\FormInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Helper\ViewModel;
-use Mannschaft\Form\UploadForm;
 
+/**
+ * Class WriteController
+ * @package Mannschaft\Controller
+ */
 class WriteController extends AbstractActionController {
 
     protected $mannschaftService;
     protected $mannschaftForm;
+    protected $spielService;
 
+    /**
+     * @param MannschaftServiceInterface $mannschaftService
+     * @param FormInterface $mannschaftForm
+     * @param SpielServiceInterface $spielService
+     */
     public function __construct(
         MannschaftServiceInterface $mannschaftService,
-        FormInterface $mannschaftForm
+        FormInterface $mannschaftForm,
+        SpielServiceInterface $spielService
     ) {
         $this->mannschaftService = $mannschaftService;
         $this->mannschaftForm = $mannschaftForm;
+        $this->spielService = $spielService;
     }
 
+    /**
+     * @return array|\Zend\Http\Response
+     */
     public function addAction() {
+
+        $status = $this->spielService->turnierStatus();
+
+        if ($status[0]['status'] == 1) {
+
+            $this->flashMessenger()->addErrorMessage('Mannschaft anlegen nicht mehr moeglich. Turnier bereits aktiviert');
+
+            return  $this->redirect()->toRoute('zfcadmin');
+        }
+
+        $anzahl = $this->mannschaftService->count();
+
+        if ($anzahl[0]['num'] == 24) {
+
+            $this->flashMessenger()->addErrorMessage('Das Maximum an Mannschaften (24) wurde bereits erreicht!');
+
+            return  $this->redirect()->toRoute('zfcadmin');
+        }
 
         $request = $this->getRequest();
 
         if ($request->isPost()) {
             $this->mannschaftForm->setData($request->getPost());
 
-            if ($this->mannschaftForm->isValid()) {
+            $name = $this->mannschaftForm->get('mannschaft-fieldset')->get('name')->getValue();
+
+            $double = $this->mannschaftService->findId($name);
+
+            $check = 0;
+
+            if (!empty($double)) {
+
+                $this->mannschaftForm->get('mannschaft-fieldset')->get('name')->setMessages(array('Mannschaft mit Namen '.$name.' existiert bereits!'));
+
+                $check = 1;
+            }
+
+            if ($this->mannschaftForm->isValid() && $check == 0) {
                 try {
                     //\Zend\Debug\Debug::dump($this->mannschaftForm->getData());die();
                     $this->mannschaftService->saveMannschaft($this->mannschaftForm->getData());
 
-                    return $this->redirect()->toRoute('mannschaft');
+                    $this->flashMessenger()->addSuccessMessage('Mannschaft erfolgreich angelegt!');
+
+                    return $this->redirect()->toRoute('zfcadmin');
                 } catch (\Exception $e) {
                     die($e->getMessage());
                     //Some DB Error happened, log it and let the user know
@@ -56,8 +103,21 @@ class WriteController extends AbstractActionController {
         );
     }
 
+    /**
+     * @return array|\Zend\Http\Response
+     */
     public function editAction()
     {
+
+        $status = $this->spielService->turnierStatus();
+
+        if ($status[0]['status'] == 1) {
+
+            $this->flashMessenger()->addErrorMessage('Mannschaften editieren nicht mehr moeglich. Turnier bereits aktiviert');
+
+            return  $this->redirect()->toRoute('zfcadmin');
+        }
+
         $request = $this->getRequest();
         $mannschaft  = $this->mannschaftService->findMannschaft($this->params('id'));
 
@@ -66,11 +126,25 @@ class WriteController extends AbstractActionController {
         if ($request->isPost()) {
             $this->mannschaftForm->setData($request->getPost());
 
-            if ($this->mannschaftForm->isValid()) {
+            $name = $this->mannschaftForm->get('mannschaft-fieldset')->get('name')->getValue();
+
+            $double = $this->mannschaftService->findId($name);
+
+            $check = 0;
+
+            if (!empty($double)) {
+
+                $this->mannschaftForm->get('mannschaft-fieldset')->get('name')->setMessages(array('Mannschaft mit Namen '.$name.' existiert bereits!'));
+
+                $check = 1;
+            }
+
+            if ($this->mannschaftForm->isValid() && $check == 0) {
                 try {
                     $this->mannschaftService->saveMannschaft($mannschaft);
 
-                    return $this->redirect()->toRoute('mannschaft');
+                    return $this->redirect()->toRoute('zfcadmin');
+
                 } catch (\Exception $e) {
                     die($e->getMessage());
                     // Some DB Error happened, log it and let the user know
@@ -83,68 +157,52 @@ class WriteController extends AbstractActionController {
         );
     }
 
-    public function uploadFormAction()
-    {
-        $form = new UploadForm('upload-form');
-
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-
-
-            $inputFilter = new UploadInputFilter();
-            $inputFilter->init();
-            $form->setInputFilter($inputFilter);
-
-            $files = $request->getFiles()->toArray();
-
-            $form->setData($files);
-
-            if ($form->isValid()) {
-
-                $filter = new RenameUpload('/srv/www/zend/data/uploads/bla.csv');
-                $filter->setOverwrite(true);
-                $filter->filter($files['csv-file']);
-
-                return array('servus');
-            }
-        }
-
-        return array('form' => $form);
-    }
-
     /**
-    public function uploadFormAction()
+     * @return \Zend\Http\Response
+     */
+    public function crawlAction()
     {
+        $status = $this->spielService->turnierStatus();
+
+        if ($status[0]['status'] == 1) {
+
+            $this->flashMessenger()->addErrorMessage('Mannschaften crawlen nicht mehr moeglich. Turnier bereits aktiviert');
+
+            return  $this->redirect()->toRoute('zfcadmin');
+        }
 
         $request = $this->getRequest();
 
         if ($request->isPost()) {
 
-            print_r($request->getFiles()->toArray());
+            $crwl = $request->getPost('crawl_confirmation', 'nein');
 
-                $file = $request->getFiles()->toArray();
+            if ($crwl === 'ja') {
 
-                $errors= array();
-                $file_name = $file['image']['name'];
-                $file_size = $file['image']['size'];
-                $file_tmp = $file['image']['tmp_name'];
-                $file_type = $file['image']['type'];
-                $file_ext=strtolower(end(explode('.',$file['image']['name'])));
+                $mannschaften = $this->mannschaftService->crawl();
 
-                $expensions= array("jpeg","jpg","png");
-                if(in_array($file_ext,$expensions)=== false){
-                    $errors[]="extension not allowed, please choose a JPEG or PNG file.";
+                $this->mannschaftService->delete();
+
+                foreach ($mannschaften as $m) {
+
+                    $team = new Mannschaft();
+
+                    $team->setName($m[0]);
+                    $team->setKuerzel($m[1]);
+                    $team->setGruppe($m[2]);
+
+                    $this->mannschaftService->saveMannschaft($team);
                 }
-                if($file_size > 2097152){
-                    $errors[]='File size must be excately 2 MB';
-                }
-                if(empty($errors)==true){
-                    move_uploaded_file($file_tmp,"/srv/www/zend/data/uploads/".$file_name);
-                    echo "Success";
-                }else{
-                    print_r($errors);
-                }
+
+
+                $this->flashMessenger()->addSuccessMessage('Crawlen erfolgreich!');
+
+                return $this->redirect()->toRoute('zfcadmin');
+            }
+
+            return $this->redirect()->toRoute('mannschaft');
         }
-    }**/
+
+    }
 
 }

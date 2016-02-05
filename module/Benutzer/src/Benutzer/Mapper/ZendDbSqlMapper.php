@@ -15,8 +15,13 @@ use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\ResultSet\HydratingResultSet;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Insert;
+use Zend\Db\Sql\Update;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
+/**
+ * Class ZendDbSqlMapper
+ * @package Benutzer\Mapper
+ */
 class ZendDbSqlMapper implements BenutzerMapperInterface {
 
     /**
@@ -47,12 +52,11 @@ class ZendDbSqlMapper implements BenutzerMapperInterface {
     /**
      * @return array|UserInterface[]
      * @todo: Error handling
-     * @todo: Punkte von Zusatztipps nicht berücksichtigt!
      */
     public function findAll()
     {
         $sql    = new Sql($this->dbAdapter);
-        $select = $sql->select('rang_global');
+        $select = $sql->select('rang_overall');
 
         $stmt   = $sql->prepareStatementForSqlObject($select);
         $result = $stmt->execute();
@@ -98,23 +102,36 @@ class ZendDbSqlMapper implements BenutzerMapperInterface {
 
         //throw new \InvalidArgumentException("User with given Name:{$name} not found.");
     }
-    
+
+    /**
+     * @param $id
+     * @return object
+     */
     public function findUser($id)
     {
     	
-    	 	$sql    = new Sql($this->dbAdapter);
-    	$select = $sql->select('user');
-    	$select->where(array('user_id = ?' => $id));
-    
-    	$stmt   = $sql->prepareStatementForSqlObject($select);
-    	$result = $stmt->execute();
-    
-    
-    	return $result->current();
-   
-    
+    	 $sql    = new Sql($this->dbAdapter);
+        $select = $sql->select('user');
+        $select->where(array('user_id = ?' => $id));
+
+        $stmt   = $sql->prepareStatementForSqlObject($select);
+        $result = $stmt->execute();
+
+        if ($result instanceof ResultInterface && $result->isQueryResult() && $result->getAffectedRows()) {
+            return $this->hydrator->hydrate($result->current(), $this->benutzerPrototype);
+        }
+
+        throw new \InvalidArgumentException("Benutzer with given ID:{$id} not found.");
     }
 
+
+    /**
+     * @param $g_id
+     * @param $id
+     * @param $leiter
+     * @return bool
+     * @throws \Exception
+     */
     public function invite($g_id, $id, $leiter) {
 	
     	$fehler=0;
@@ -131,30 +148,33 @@ class ZendDbSqlMapper implements BenutzerMapperInterface {
     		
     	//Wenn kein Fehler aufgetreten ist
     	if($fehler == 0)   	{
-        $action = new Insert('mitglied');
-        $action->values(
-            array(
-                'b_id' => $id,
-                'g_id' => $g_id
-            )
-        );
+            $action = new Insert('mitglied');
+            $action->values(
+                array(
+                    'b_id' => $id,
+                    'g_id' => $g_id
+                )
+            );
 
-        $sql    = new Sql($this->dbAdapter);
-        $stmt   = $sql->prepareStatementForSqlObject($action);
-        $result = $stmt->execute();
+            $sql    = new Sql($this->dbAdapter);
+            $stmt   = $sql->prepareStatementForSqlObject($action);
+            $result = $stmt->execute();
 
-        if ($result instanceof ResultInterface) {
-
-            return true;
-        }
+            if ($result instanceof ResultInterface) {
+                return true;
+            }
     	}
 
     	if($fehler == 2)
-        throw new \Exception("Sie sind der Leiter dieser Gruppe und koenen sich selbst keine Einladung schicken");
+            throw new \Exception("Sie sind der Leiter dieser Gruppe und koenen sich selbst keine Einladung schicken");
     	if($fehler == 1)
-    	throw new \Exception("Der Benutzername existiert nicht");
+    	    throw new \Exception("Der Benutzername existiert nicht");
     }
 
+    /**
+     * @param $benutzername
+     * @return array
+     */
     public function such($benutzername)
     {
     	    	    	    
@@ -185,6 +205,51 @@ class ZendDbSqlMapper implements BenutzerMapperInterface {
       
         }
 
-    
+    /**
+     * @param $id
+     * @param $url
+     * @return bool
+     */
+    public function setAva($id, $url) {
+
+            $action = new Update('user');
+            $action->set(array('profile_picture' => $url));
+            $action->where(array('user_id = ?' => $id));
+
+            $sql    = new Sql($this->dbAdapter);
+            $stmt   = $sql->prepareStatementForSqlObject($action);
+            $result = $stmt->execute();
+
+            if ($result instanceof ResultInterface) {
+                return true;
+            }
+
+            return false;
+        }
+
+    /**
+     * @param $id
+     * @return array|bool
+     */
+    public function getAva($id) {
+
+            $sql    = new Sql($this->dbAdapter);
+            $select = $sql->select('user');
+            $select->columns(array('profile_picture'));
+            $select->where(array('user_id = ?' => $id));
+
+            $sql    = new Sql($this->dbAdapter);
+            $stmt   = $sql->prepareStatementForSqlObject($select);
+            $result = $stmt->execute();
+
+            if ($result instanceof ResultInterface && $result->isQueryResult()) {
+                $resultSet = new ResultSet;
+                $resultSet->initialize($result);
+
+                return $resultSet->toArray();
+            }
+
+            return false;
+        }
     
 }

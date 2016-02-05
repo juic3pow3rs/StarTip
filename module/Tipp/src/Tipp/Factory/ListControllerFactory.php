@@ -12,14 +12,16 @@ use Tipp\Controller\ListController;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class ListControllerFactory
+ * @package Tipp\Factory
+ */
 class ListControllerFactory implements FactoryInterface
 {
     /**
-     * Create service
      *
      * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return mixed
+     * @return mixed|ListController
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {

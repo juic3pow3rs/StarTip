@@ -1,0 +1,9 @@
+<h1>Mannschaften crawlen</h1>
+<p>
+    Automatisches crawlen der Mannschaften?
+    Achtung: Hierbei werden alle Mannschaften, die schon eingetragen sind, geloescht!
+</p>
+<form action="<?php echo $this->url('mannschaft/crawl', array(), true) ?>" method="post">
+    <input type="submit" name="crawl_confirmation" value="ja" />
+    <input type="submit" name="crawl_confirmation" value="nein" />
+</form>

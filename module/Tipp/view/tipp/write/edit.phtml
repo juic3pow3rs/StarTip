@@ -1,11 +1,15 @@
-<h1>Tipp Bearbeiten</h1>
+<div class="page-header">
+<h1>Tipp bearbeiten </h1>
+</div>
 
-<table class="table">
-    <tr>
+
+
+<table class="table table-bordered ">
+    <tr class="success">
         <th>Erste Mannschaft</th>
         <th>Zweite Mannschaft</th>
     </tr>
-    <tr>
+  <tr class="success">
         <td>
        <?php echo $mannschaft1['name']?> 
      
@@ -23,9 +27,46 @@ $form->setAttribute('action', $this->url('tipp/edit', array(), true));
 $form->prepare();
 
 $form->get('submit')->setValue('Tipp bearbeiten');
+$form->get('submit')->setAttribute('class', 'btn btn-success');
 
 echo $this->form()->openTag($form);
+?>
 
-echo $this->formCollection($form);
+<div style="width: 500px;" class="form-group <?php if ($this->formElementErrors($form->get('tipp-fieldset')->get('tipp1'))) echo "has-error" ?>">
 
+    <?php
+    $form->get('tipp-fieldset')->get('tipp1')->setAttribute('class', 'form-control')
+        ->setAttribute('placeholder', $form->get('tipp-fieldset')->get('tipp1')->getLabel());
+
+    echo $this->formElement($form->get('tipp-fieldset')->get('tipp1'));
+
+    if ($this->formElementErrors($form->get('tipp-fieldset')->get('tipp1'))) :
+        echo $this->formElementErrors()
+            ->setMessageOpenFormat('<p class="help-block">')
+            ->setMessageSeparatorString('</p><p class="help-block">')
+            ->setMessageCloseString('</p>')
+            ->render($form->get('tipp-fieldset')->get('tipp1'));
+    endif; ?>
+</div>
+
+<div style="width: 500px;" class="form-group <?php if ($this->formElementErrors($form->get('tipp-fieldset')->get('tipp2'))) echo "has-error" ?>">
+
+    <?php
+    $form->get('tipp-fieldset')->get('tipp2')->setAttribute('class', 'form-control')
+        ->setAttribute('placeholder', $form->get('tipp-fieldset')->get('tipp2')->getLabel());
+
+    echo $this->formElement($form->get('tipp-fieldset')->get('tipp2'));
+
+    if ($this->formElementErrors($form->get('tipp-fieldset')->get('tipp2'))) :
+        echo $this->formElementErrors()
+            ->setMessageOpenFormat('<p class="help-block">')
+            ->setMessageSeparatorString('</p><p class="help-block">')
+            ->setMessageCloseString('</p>')
+            ->render($form->get('tipp-fieldset')->get('tipp2'));
+    endif; ?>
+</div>
+
+<?php
+echo $this->formSubmit($form->get('submit'));
 echo $this->form()->closeTag();
+?>

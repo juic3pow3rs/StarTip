@@ -13,6 +13,10 @@ use Spiel\Model\Spiel;
 use Zend\Form\Fieldset;
 use Zend\Stdlib\Hydrator\ClassMethods;
 
+/**
+ * Class SpielFieldset
+ * @package Spiel\Form
+ */
 class SpielFieldset extends Fieldset {
 
     protected $mannschaftServiceInterface;
@@ -77,19 +81,17 @@ class SpielFieldset extends Fieldset {
         
         
         $this->add(array(
-        		'type' => 'text',
+        		'type' => 'hidden',
         		'name' => 'modus',
-        		'options' => array(
-        				'label' => 'Modus'
-        		)
         ));
-        
+
         $this->add(array(
         		'type' => 'text',
         		'name' => 'anpfiff',
+                'required' => true,
         		'options' => array(
-        				'label' => 'Anpfiff'
-        		)
+        			'label' => 'Anpfiff',
+        		),
         ));
         
         $this->add(array(
@@ -171,4 +173,5 @@ class SpielFieldset extends Fieldset {
         );
 
     }
+
 }

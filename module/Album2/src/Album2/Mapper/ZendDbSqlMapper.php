@@ -18,6 +18,10 @@ use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Update;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
+/**
+ * Class ZendDbSqlMapper
+ * @package Album2\Mapper
+ */
 class ZendDbSqlMapper implements AlbumMapperInterface {
 
     /**

@@ -1,4 +1,53 @@
+<?php
+$flash = $this->flashMessenger();
+$flash->setMessageOpenFormat('<div%s>
+     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+         &times;
+</button>')
+    ->setMessageCloseString('</div>');
+
+echo $flash->render('error',   array('alert', 'alert-dismissible', 'alert-danger'));
+echo $flash->render('info',    array('alert', 'alert-dismissible', 'alert-info'));
+echo $flash->render('warning', array('alert', 'alert-dismissible', 'alert-warning'));
+echo $flash->render('success', array('alert', 'alert-dismissible', 'alert-success'));
+
+?>
+
 <h1>StarTip LLC</h1>
-<div class="img">
-    <img src="../../../../../public/img/logo.jpg" width="300" class="img-responsive"/>
+<div>
+    <div class="pull-right" style="margin-right: 25%;">
+        <table class="table">
+            <tr>
+                <th>System Status</th>
+            </tr>
+            <tr>
+                <td>Turnier Status:</td><?php if ($turnierstatus) { ?>
+                    <td class="text-success">Aktiv</td>
+                <?php } else { ?>
+                    <td class="text-warning">Inaktiv</td>
+                <?php } ?>
+            </tr>
+            <tr>
+                <td>Turnier Modus:</td>
+                <td class="text-primary"><?php echo $mod ?></td>
+            </tr>
+            <tr>
+                <td>Zusatztipp abgeben:</td><?php if ($turnierstatus == 1 && $modus == 0) { ?>
+                    <td class="text-success">Ja</td>
+                <?php } else { ?>
+                    <td class="text-warning">Nein</td>
+                <?php } ?>
+            </tr>
+            <?php if($this->zfcUserIdentity()) { ?>
+            <tr>
+                <td>Offene Einladungen:</td>
+                <td><?php echo $einladungen ?></td>
+            </tr>
+            <?php } ?>
+        </table>
+
+    </div>
+    <div class="img">
+        <img src="../../../../../public/img/logo_schatten.png" width="300" class="img-responsive"/>
+    </div>
 </div>

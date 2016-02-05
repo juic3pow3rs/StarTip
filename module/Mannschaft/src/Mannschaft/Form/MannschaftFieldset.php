@@ -12,8 +12,16 @@ use Mannschaft\Model\Mannschaft;
 use Zend\Form\Fieldset;
 use Zend\Stdlib\Hydrator\ClassMethods;
 
+/**
+ * Class MannschaftFieldset
+ * @package Mannschaft\Form
+ */
 class MannschaftFieldset extends Fieldset {
 
+    /**
+     * @param null $name
+     * @param array $options
+     */
     public function __construct($name = null, $options = array()) {
 
         parent::__construct($name, $options);

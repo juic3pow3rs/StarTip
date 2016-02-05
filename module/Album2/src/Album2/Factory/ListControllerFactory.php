@@ -12,6 +12,10 @@ use Album2\Controller\ListController;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class ListControllerFactory
+ * @package Album2\Factory
+ */
 class ListControllerFactory implements FactoryInterface
 {
     /**

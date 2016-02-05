@@ -1,14 +1,43 @@
-<h1>Welchen Benutzer moechten Sie in Ihre Tippgemeinschaft einladen?</h1>
+<?php
+$flash = $this->flashMessenger();
+$flash->setMessageOpenFormat('<div%s>
+     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+         &times;
+</button>')
+    ->setMessageCloseString('</div>');
+
+echo $flash->render('error',   array('alert', 'alert-dismissible', 'alert-danger'));
+echo $flash->render('info',    array('alert', 'alert-dismissible', 'alert-info'));
+echo $flash->render('warning', array('alert', 'alert-dismissible', 'alert-warning'));
+echo $flash->render('success', array('alert', 'alert-dismissible', 'alert-success'));
+
+?>
+
+<h1>Welchen Benutzer wollen Sie einladen?</h1>
+
+
 <?php
 $form = $this->form;
 $form->setAttribute('method', 'POST');
 $form->setAttribute('action', $this->url('gruppe/invite', array(), true));
 $form->prepare();
 
-$form->get('submit')->setValue('Einladen');
 
 echo $this->form()->openTag($form);
+?>
+<div style="width: 350px;" class="form-group">
 
-echo $this->formCollection($form);
+<?php
+$form->get('username')->setAttribute('class', 'form-control')
+->setAttribute('placeholder', $form->get('username')->getLabel());
+
+#echo $this->formRow($form->get('gruppe-fieldset')->get('name'));
+echo $this->formElement($form->get('username'));
+?>
+
+</div>
+
+<?php 
+echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-success'));
 
 echo $this->form()->closeTag();

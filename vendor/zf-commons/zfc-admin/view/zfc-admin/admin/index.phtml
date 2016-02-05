@@ -1,3 +1,56 @@
+<script>
+    $(document).ready(function(){
+        $(".flip").click(function(){
+            $(".panel").toggle();
+        });
+        $(".flip2").click(function(){
+            $(".panel2").toggle();
+        });
+        $(".flip3").click(function(){
+            $(".panel3").toggle();
+        });
+        $(".flip4").click(function(){
+            $(".panel4").toggle();
+        });
+        $(".flip5").click(function(){
+            $(".panel5").toggle();
+        });
+        $(".flip6").click(function(){
+            $(".panel6").toggle();
+        });
+    });
+</script>
+
+<style type="text/css">
+    p.flip, p.flip2, p.flip3, p.flip4, p.flip5, p.flip6
+    {
+        padding:5px;
+    }
+    div .panel, .panel2, .panel3, .panel4, .panel5, .panel6
+    {
+        display:none;
+    }
+    p.flip, p.flip2, p.flip3, p.flip4, p.flip5, p.flip6
+    {
+        cursor:pointer;
+    }
+</style>
+
+<?php
+$flash = $this->flashMessenger();
+$flash->setMessageOpenFormat('<div%s>
+     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+         &times;
+</button>')
+    ->setMessageCloseString('</div>');
+
+echo $flash->render('error',   array('alert', 'alert-dismissible', 'alert-danger'));
+echo $flash->render('info',    array('alert', 'alert-dismissible', 'alert-info'));
+echo $flash->render('warning', array('alert', 'alert-dismissible', 'alert-warning'));
+echo $flash->render('success', array('alert', 'alert-dismissible', 'alert-success'));
+
+?>
+
 <h1>Admin Dashboard</h1>
 
 <p>Das ist die Turnier-Uebersicht und Verwaltung</p>
@@ -6,7 +59,16 @@
 <table class="table">
     <tr>
         <td>Status: <?php (($status == 0) ? print 'Inaktiv' : print 'Aktiv'); ?></td>
-        <td><?php if ($status == 0) { ?><a href="#">Link zum aktivieren/deaktivieren</a><?php } ?></td>
+        <?php if ($status == 0) {?>
+            <td><input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('zfcadmin/activate') ?>'"  value="Turnier aktivieren" /></td>
+        <?php } else { ?>
+            <td><input type="button" class="btn btn-danger" onclick="location.href='<?php echo $this->url('zfcadmin/reset') ?>'"  value="Turnier zuruecksetzen" /></td>
+        <?php } ?>
+        <?php if ($status == 0 && $modus == 0) { ?>
+            <td><input type="button" class="btn btn-default" onclick="location.href='<?php echo $this->url('mannschaft/add') ?>'"  value="Mannschaft hinzufuegen" /></td>
+            <td><input type="button" class="btn btn-default" onclick="location.href='<?php echo $this->url('mannschaft/crawl') ?>'"  value="Mannschaften crawlen" /></td>
+            <td><input type="button" class="btn btn-default" onclick="location.href='<?php echo $this->url('tipp/update') ?>'"  value="Zusatztipps aktualisieren" /></td>
+        <?php } ?>
     </tr>
     <tr>
         <td>Modus:
@@ -14,44 +76,326 @@
                 switch($modus) {
                     case 0: print 'Vor Turnier'; break;
                     case 1: print 'Vorrunde'; break;
-                    case 2: print 'Viertelfinale'; break;
-                    case 3: print 'Halbfinale'; break;
-                    case 4: print 'Finale'; break;
+                    case 2: print 'Achtelfinale'; break;
+                    case 3: print 'Viertelfinale'; break;
+                    case 4: print 'Halbfinale'; break;
+                    case 5: print 'Finale'; break;
                 }
-            ?></td>
-        <td><?php if ($status == 0 && $modus == 0) { ?><a href="#">Mannschaften hinzufuegen</a> / <a href="">Zusatztipps updaten</a><?php } ?></td>
+            ?>
+        </td>
     </tr>
 </table>
+<h3>Mannschaften</h3>
+<?php if ((count($mannschaften) != 0)) { ?>
+    <p class="flip6"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>Anzeigen/Verbergen</p>
+    <div class="panel6">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Kuerzel</th>
+                <th>Gruppe</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach($mannschaften as $m) : ?>
+                <tr>
+                    <td><?php echo $m->getName();?></td>
+                    <td><?php echo $m->getKuerzel();?></td>
+                    <td><?php echo $m->getGruppe();?></td>
+                    <td><input type="button" class="btn btn-default" onclick="location.href='<?php echo $this->url('mannschaft/edit', array('id' => $m->getM_id())); ?>'"  value="Bearbeiten" /></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+<?php } ?>
 <h3>Vorrunde</h3>
-<table class="table">
+<table class="table table-striped">
     <tr>
         <td>Modus: <?php (($modus == 1) ? print 'Aktiv' : print 'Inaktiv'); ?></td>
-        <td><?php if ($status == 1 && $modus == 0) { ?><a href="">Link zum aktivieren</a><?php } ?></td>
+        <?php if ($status == 1 && $modus == 0) { ?>
+            <td><input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('zfcadmin/modus') ?>'"  value="Aktivieren" /></td>
+            <td><input type="button" class="btn btn-default" onclick="location.href='<?php echo $this->url('spiel/add') ?>'"  value="Spiel hinzufuegen" /></td>
+            <td><input type="button" class="btn btn-default" onclick="location.href='<?php echo $this->url('spiel/crawl') ?>'"  value="Spiele crawlen" /></td>
+        <?php } ?>
     </tr>
 </table>
-<p>Hier eine Liste der Spiele zur Vorrunde quasi getSpiele($modus), Ausgabe als Tabelle
-    und pro Spiel die Moeglichkeit zu editieren. Zusaetzlich anzeige des Status des Spiels (Aktiv/Beendet)</p>
+<?php if (!empty($spiele[1])) { ?>
+    <p class="flip"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>Anzeigen/Verbergen</p>
+    <div class="panel">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Mannschaft 1</th>
+                    <th>Mannschaft 2</th>
+                    <th>Modus</th>
+                    <th>Anpfiff</th>
+                    <th>Tore1</th>
+                    <th>Tore2</th>
+                    <th>Punkte1</th>
+                    <th>Punkte2</th>
+                    <th>Gelb1</th>
+                    <th>Gelb2</th>
+                    <th>Rot1</th>
+                    <th>Rot2</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($spiele[1] as $s) : ?>
+                    <tr>
+                        <td><?php echo $s['mannschaft1'];?></td>
+                        <td><?php echo $s['mannschaft2'];?></td>
+                        <td><?php echo $s['modus'];?></td>
+                        <td><?php echo $s['anpfiff'];?></td>
+                        <td><?php echo $s['tore1'];?></td>
+                        <td><?php echo $s['tore2'];?></td>
+                        <td><?php echo $s['punkte1'];?></td>
+                        <td><?php echo $s['punkte2'];?></td>
+                        <td><?php echo $s['gelb1'];?></td>
+                        <td><?php echo $s['gelb2'];?></td>
+                        <td><?php echo $s['rot1'];?></td>
+                        <td><?php echo $s['rot2'];?></td>
+                        <td><?php echo $s['status']; ?></td>
+                        <td><input type="button" class="btn btn-default" onclick="location.href='<?php echo $this->url('spiel/edit', array('id' => $s['s_id'])); ?>'"  value="Bearbeiten" /></td>
+                        <td><input type="button" class="btn btn-default" onclick="location.href='<?php echo $this->url('spiel/erg', array('id' => $s['s_id'])); ?>'"  value="Ergebnis eintragen" /></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+<?php } ?>
+<h3>Achtelfinale</h3>
+<table class="table">
+    <tr>
+        <td>Modus: <?php (($modus == 2) ? print 'Aktiv' : print 'Inaktiv'); ?></td>
+        <?php if ($status == 1 && $modus == 1) { ?>
+            <td><input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('zfcadmin/modus') ?>'"  value="Aktivieren" /></td>
+            <td><input type="button" class="btn btn-default" onclick="location.href='<?php echo $this->url('spiel/add') ?>'"  value="Spiel hinzufuegen" /></td>
+            <td><input type="button" class="btn btn-default" onclick="location.href='<?php echo $this->url('spiel/crawl') ?>'"  value="Spiele crawlen" /></td>
+        <?php } ?>
+    </tr>
+</table>
+<?php if (!empty($spiele[2])) { ?>
+    <p class="flip2"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>Anzeigen/Verbergen</p>
+    <div class="panel2">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Mannschaft 1</th>
+                <th>Mannschaft 2</th>
+                <th>Modus</th>
+                <th>Anpfiff</th>
+                <th>Tore1</th>
+                <th>Tore2</th>
+                <th>Punkte1</th>
+                <th>Punkte2</th>
+                <th>Gelb1</th>
+                <th>Gelb2</th>
+                <th>Rot1</th>
+                <th>Rot2</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach($spiele[2] as $s) : ?>
+                <tr>
+                    <td><?php echo $s['mannschaft1'];?></td>
+                    <td><?php echo $s['mannschaft2'];?></td>
+                    <td><?php echo $s['modus'];?></td>
+                    <td><?php echo $s['anpfiff'];?></td>
+                    <td><?php echo $s['tore1'];?></td>
+                    <td><?php echo $s['tore2'];?></td>
+                    <td><?php echo $s['punkte1'];?></td>
+                    <td><?php echo $s['punkte2'];?></td>
+                    <td><?php echo $s['gelb1'];?></td>
+                    <td><?php echo $s['gelb2'];?></td>
+                    <td><?php echo $s['rot1'];?></td>
+                    <td><?php echo $s['rot2'];?></td>
+                    <td><?php echo $s['status']; ?></td>
+                    <td><input type="button" class="btn btn-default" onclick="location.href='<?php echo $this->url('spiel/edit', array('id' => $s['s_id'])); ?>'"  value="Bearbeiten" /></td>
+                    <td><input type="button" class="btn btn-default" onclick="location.href='<?php echo $this->url('spiel/erg', array('id' => $s['s_id'])); ?>'"  value="Ergebnis eintragen" /></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+<?php } ?>
 <h3>Viertelfinale</h3>
 <table class="table">
     <tr>
-        <th>Status</th>
-        <th>Links zum aktivieren</th>
+        <td>Modus: <?php (($modus == 3) ? print 'Aktiv' : print 'Inaktiv'); ?></td>
+        <?php if ($status == 1 && $modus == 2) { ?>
+            <td><input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('zfcadmin/modus') ?>'"  value="Aktivieren" /></td>
+            <td><input type="button" class="btn btn-default" onclick="location.href='<?php echo $this->url('spiel/add') ?>'"  value="Spiel hinzufuegen" /></td>
+            <td><input type="button" class="btn btn-default" onclick="location.href='<?php echo $this->url('spiel/crawl') ?>'"  value="Spiele crawlen" /></td>
+        <?php } ?>
     </tr>
 </table>
-<p>Hier eine Liste der Spiele zur Vorrunde quasi getSpiele($modus), Ausgabe als Tabelle und pro Spiel die Moeglichkeit zu editieren und Punkte zu berechnen</p>
+<?php if (!empty($spiele[3])) { ?>
+    <p class="flip3"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>Anzeigen/Verbergen</p>
+    <div class="panel3">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Mannschaft 1</th>
+                <th>Mannschaft 2</th>
+                <th>Modus</th>
+                <th>Anpfiff</th>
+                <th>Tore1</th>
+                <th>Tore2</th>
+                <th>Punkte1</th>
+                <th>Punkte2</th>
+                <th>Gelb1</th>
+                <th>Gelb2</th>
+                <th>Rot1</th>
+                <th>Rot2</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach($spiele[3] as $s) : ?>
+                <tr>
+                    <td><?php echo $s['mannschaft1'];?></td>
+                    <td><?php echo $s['mannschaft2'];?></td>
+                    <td><?php echo $s['modus'];?></td>
+                    <td><?php echo $s['anpfiff'];?></td>
+                    <td><?php echo $s['tore1'];?></td>
+                    <td><?php echo $s['tore2'];?></td>
+                    <td><?php echo $s['punkte1'];?></td>
+                    <td><?php echo $s['punkte2'];?></td>
+                    <td><?php echo $s['gelb1'];?></td>
+                    <td><?php echo $s['gelb2'];?></td>
+                    <td><?php echo $s['rot1'];?></td>
+                    <td><?php echo $s['rot2'];?></td>
+                    <td><?php echo $s['status']; ?></td>
+                    <td><input type="button" class="btn btn-default" onclick="location.href='<?php echo $this->url('spiel/edit', array('id' => $s['s_id'])); ?>'"  value="Bearbeiten" /></td>
+                    <td><input type="button" class="btn btn-default" onclick="location.href='<?php echo $this->url('spiel/erg', array('id' => $s['s_id'])); ?>'"  value="Ergebnis eintragen" /></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+<?php } ?>
 <h3>Halbfinale</h3>
 <table class="table">
     <tr>
-        <th>Status</th>
-        <th>Links zum aktivieren</th>
-    </tr>
+        <td>Modus: <?php (($modus == 4) ? print 'Aktiv' : print 'Inaktiv'); ?></td>
+        <?php if ($status == 1 && $modus == 3) { ?>
+            <td><input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('zfcadmin/modus') ?>'"  value="Aktivieren" /></td>
+            <td><input type="button" class="btn btn-default" onclick="location.href='<?php echo $this->url('spiel/add') ?>'"  value="Spiel hinzufuegen" /></td>
+            <td><input type="button" class="btn btn-default" onclick="location.href='<?php echo $this->url('spiel/crawl') ?>'"  value="Spiele crawlen" /></td>
+        <?php } ?>    </tr>
 </table>
-<p>Hier eine Liste der Spiele zur Vorrunde quasi getSpiele($modus), Ausgabe als Tabelle und pro Spiel die Moeglichkeit zu editieren und Punkte zu berechnen</p>
+<?php if (!empty($spiele[4])) { ?>
+    <p class="flip4"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>Anzeigen/Verbergen</p>
+    <div class="panel4">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Mannschaft 1</th>
+                <th>Mannschaft 2</th>
+                <th>Modus</th>
+                <th>Anpfiff</th>
+                <th>Tore1</th>
+                <th>Tore2</th>
+                <th>Punkte1</th>
+                <th>Punkte2</th>
+                <th>Gelb1</th>
+                <th>Gelb2</th>
+                <th>Rot1</th>
+                <th>Rot2</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach($spiele[4] as $s) : ?>
+                <tr>
+                    <td><?php echo $s['mannschaft1'];?></td>
+                    <td><?php echo $s['mannschaft2'];?></td>
+                    <td><?php echo $s['modus'];?></td>
+                    <td><?php echo $s['anpfiff'];?></td>
+                    <td><?php echo $s['tore1'];?></td>
+                    <td><?php echo $s['tore2'];?></td>
+                    <td><?php echo $s['punkte1'];?></td>
+                    <td><?php echo $s['punkte2'];?></td>
+                    <td><?php echo $s['gelb1'];?></td>
+                    <td><?php echo $s['gelb2'];?></td>
+                    <td><?php echo $s['rot1'];?></td>
+                    <td><?php echo $s['rot2'];?></td>
+                    <td><?php echo $s['status']; ?></td>
+                    <td><input type="button" class="btn btn-default" onclick="location.href='<?php echo $this->url('spiel/edit', array('id' => $s['s_id'])); ?>'"  value="Bearbeiten" /></td>
+                    <td><input type="button" class="btn btn-default" onclick="location.href='<?php echo $this->url('spiel/erg', array('id' => $s['s_id'])); ?>'"  value="Ergebnis eintragen" /></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+<?php } ?>
 <h3>Finale</h3>
 <table class="table">
     <tr>
-        <th>Status</th>
-        <th>Links zum aktivieren</th>
+        <td>Modus: <?php (($modus == 5) ? print 'Aktiv' : print 'Inaktiv'); ?></td>
+        <?php if ($status == 1 && $modus == 4) { ?>
+            <td><input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('zfcadmin/modus') ?>'"  value="Aktivieren" /></td>
+            <td><input type="button" class="btn btn-default" onclick="location.href='<?php echo $this->url('spiel/add') ?>'"  value="Spiel hinzufuegen" /></td>
+            <td><input type="button" class="btn btn-default" onclick="location.href='<?php echo $this->url('spiel/crawl') ?>'"  value="Spiele crawlen" /></td>
+        <?php } ?>
+        <?php if ($spiele[5][0]['status'] == 1) { ?>
+            <td><input type="button" class="btn btn-default" onclick="location.href='<?php echo $this->url('tipp/setzusatz') ?>'"  value="Zusatztipp Ergebnis eintragen" /></td>
+        <?php } ?>
     </tr>
 </table>
-<p>Hier eine Liste der Spiele zur Vorrunde quasi getSpiele($modus), Ausgabe als Tabelle und pro Spiel die Moeglichkeit zu editieren und Punkte zu berechnen</p>
+<?php $spiele[5][0]['status'] ?>
+<?php if (!empty($spiele[5])) { ?>
+    <p class="flip5"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>Anzeigen/Verbergen</p>
+    <div class="panel5">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Mannschaft 1</th>
+                <th>Mannschaft 2</th>
+                <th>Modus</th>
+                <th>Anpfiff</th>
+                <th>Tore1</th>
+                <th>Tore2</th>
+                <th>Punkte1</th>
+                <th>Punkte2</th>
+                <th>Gelb1</th>
+                <th>Gelb2</th>
+                <th>Rot1</th>
+                <th>Rot2</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach($spiele[5] as $s) : ?>
+                <tr>
+                    <td><?php echo $s['mannschaft1'];?></td>
+                    <td><?php echo $s['mannschaft2'];?></td>
+                    <td><?php echo $s['modus'];?></td>
+                    <td><?php echo $s['anpfiff'];?></td>
+                    <td><?php echo $s['tore1'];?></td>
+                    <td><?php echo $s['tore2'];?></td>
+                    <td><?php echo $s['punkte1'];?></td>
+                    <td><?php echo $s['punkte2'];?></td>
+                    <td><?php echo $s['gelb1'];?></td>
+                    <td><?php echo $s['gelb2'];?></td>
+                    <td><?php echo $s['rot1'];?></td>
+                    <td><?php echo $s['rot2'];?></td>
+                    <td><?php echo $s['status']; ?></td>
+                    <td><input type="button" class="btn btn-default" onclick="location.href='<?php echo $this->url('spiel/edit', array('id' => $s['s_id'])); ?>'"  value="Bearbeiten" /></td>
+                    <td><input type="button" class="btn btn-default" onclick="location.href='<?php echo $this->url('spiel/erg', array('id' => $s['s_id'])); ?>'"  value="Ergebnis eintragen" /></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+<?php } ?>

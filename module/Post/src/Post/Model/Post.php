@@ -8,6 +8,10 @@
 
 namespace Post\Model;
 
+/**
+ * Class Post
+ * @package Post\Model
+ */
 class Post implements PostInterface {
     /**
      * @var int

@@ -37,11 +37,12 @@ class UserControllerFactory implements FactoryInterface
         $serviceLocator = $controllerManager->getServiceLocator();
 
         $userService = $serviceLocator->get('zfcuser_user_service');
+        $benutzerService = $serviceLocator->get('Benutzer\Service\BenutzerServiceInterface');
         $registerForm = $serviceLocator->get('zfcuser_register_form');
         $loginForm = $serviceLocator->get('zfcuser_login_form');
         $options = $serviceLocator->get('zfcuser_module_options');
 
-        $controller = new UserController($userService, $options, $registerForm, $loginForm);
+        $controller = new UserController($userService, $benutzerService, $options, $registerForm, $loginForm);
 
         return $controller;
     }

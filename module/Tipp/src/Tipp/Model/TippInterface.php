@@ -8,41 +8,51 @@
 
 namespace Tipp\Model;
 
+/**
+ * Interface TippInterface
+ * @package Tipp\Model
+ */
 interface TippInterface {
+	
     /**
-     * Will return the ID of the Album
+     * Gibt die t_d des Tipps zurück
      *
      * @return int
      */
     public function getT_id();
 
     /**
-     * Will return the TITLE of the Album
+     * Gibt die B_id des Tipps zurück 
      *
-     * @return string
+     * @return int
      */
     public function getB_id();
 
     /**
-     * Will return the ARTIST of the Album
+     * Gibt die S_id des Tipps zurück
      *
-     * @return string
+     * @return int
      */
     public function getS_id();
     
+    /**
+     * Gibt die Tore1 des Tipps zurück
+     *
+     * @return int
+     */
     public function getTipp1();
     
-    /**
-     * Will return the TITLE of the Album
+     /**
+     * Gibt die Tore2 des Tipps zurück
      *
-     * @return string
+     * @return int
      */
     public function getTipp2();
     
-    /**
-     * Will return the ARTIST of the Album
+      /**
+     * Gibt die Punkte des Tipps zurück
      *
-     * @return string
+     * @return int
      */
     public function getPunkte();
 }

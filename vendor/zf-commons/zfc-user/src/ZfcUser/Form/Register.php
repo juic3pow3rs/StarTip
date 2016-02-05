@@ -27,7 +27,7 @@ class Register extends Base
         if (!$this->getRegistrationOptions()->getEnableDisplayName()) {
             $this->remove('display_name');
         }
-        $this->get('submit')->setLabel('Register');
+        $this->get('submit')->setLabel('Registrieren');
         $this->getEventManager()->trigger('init', $this);
     }
 

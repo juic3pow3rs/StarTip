@@ -1,11 +1,19 @@
-<h1>Tipp zu folgendem Spiel abgeben:</h1>
+<?php if($fehler!=""){?>
+<div class="alert alert-danger"><?php print $fehler;?></div>
+<?php }?>
 
-<table class="table">
-    <tr>
+
+<div class="page-header">
+<h1>Tipp zu folgendem Spiel abgeben: </h1>
+</div>
+
+
+<table class="table table-bordered ">
+    <tr class="success">
         <th>Erste Mannschaft</th>
         <th>Zweite Mannschaft</th>
     </tr>
-    <tr>
+    <tr class="success">
         <td>
        <?php echo $mannschaft1['name']?> 
      
@@ -23,16 +31,48 @@ $form->setAttribute('action', $this->url('tipp/add', array(), true));
 $form->prepare();
 
 $form->get('submit')->setValue('Tipp abgeben');
+$form->get('submit')->setAttribute('class', 'btn btn-success');
 
 echo $this->form()->openTag($form);
 echo $this->formHidden($form->get('tipp-fieldset')->get('t_id'));
 echo $this->formHidden($form->get('tipp-fieldset')->get('b_id')->setValue($this->zfcUserIdentity()->getId()));
+?>
 
-echo $this->formRow($form->get('tipp-fieldset')->get('tipp1'));
-echo $this->formRow($form->get('tipp-fieldset')->get('tipp2'));
+<div style="width: 500px;" class="form-group <?php if ($this->formElementErrors($form->get('tipp-fieldset')->get('tipp1'))) echo "has-error" ?>">
+
+    <?php
+    $form->get('tipp-fieldset')->get('tipp1')->setAttribute('class', 'form-control')
+        ->setAttribute('placeholder', $form->get('tipp-fieldset')->get('tipp1')->getLabel());
+
+    echo $this->formElement($form->get('tipp-fieldset')->get('tipp1'));
+
+    if ($this->formElementErrors($form->get('tipp-fieldset')->get('tipp1'))) :
+        echo $this->formElementErrors()
+            ->setMessageOpenFormat('<p class="help-block">')
+            ->setMessageSeparatorString('</p><p class="help-block">')
+            ->setMessageCloseString('</p>')
+            ->render($form->get('tipp-fieldset')->get('tipp1'));
+    endif; ?>
+</div>
+
+<div style="width: 500px;" class="form-group <?php if ($this->formElementErrors($form->get('tipp-fieldset')->get('tipp2'))) echo "has-error" ?>">
+
+    <?php
+    $form->get('tipp-fieldset')->get('tipp2')->setAttribute('class', 'form-control')
+        ->setAttribute('placeholder', $form->get('tipp-fieldset')->get('tipp2')->getLabel());
+
+    echo $this->formElement($form->get('tipp-fieldset')->get('tipp2'));
+
+    if ($this->formElementErrors($form->get('tipp-fieldset')->get('tipp2'))) :
+        echo $this->formElementErrors()
+            ->setMessageOpenFormat('<p class="help-block">')
+            ->setMessageSeparatorString('</p><p class="help-block">')
+            ->setMessageCloseString('</p>')
+            ->render($form->get('tipp-fieldset')->get('tipp2'));
+    endif; ?>
+</div>
+
+<?php
 echo $this->formSubmit($form->get('submit'));
-
-#Statt der Zeile:
-#echo $this->formCollection($form);
-
 echo $this->form()->closeTag();
+?>

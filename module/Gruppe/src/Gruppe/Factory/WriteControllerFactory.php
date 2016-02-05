@@ -12,6 +12,10 @@ use Gruppe\Controller\WriteController;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class WriteControllerFactory
+ * @package Gruppe\Factory
+ */
 class WriteControllerFactory implements FactoryInterface {
 
     /**
@@ -25,12 +29,14 @@ class WriteControllerFactory implements FactoryInterface {
         $gruppeInsertForm = $realServiceLocator->get('FormElementManager')->get('Gruppe\Form\InsertGruppeForm');
         $benutzerService = $realServiceLocator->get('Benutzer\Service\BenutzerServiceInterface');
         $gruppeInviteForm = $realServiceLocator->get('FormElementManager')->get('Gruppe\Form\InviteGruppeForm');
+        $pictureForm = $realServiceLocator->get('FormElementManager')->get('Benutzer\Form\PictureForm');
 
         return new WriteController(
             $gruppeService,
             $gruppeInsertForm,
             $benutzerService,
-            $gruppeInviteForm
+            $gruppeInviteForm,
+            $pictureForm
         );
     }
 }

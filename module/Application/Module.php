@@ -11,13 +11,23 @@ namespace Application;
 
 use Zend\View\Helper\Navigation;
 
+/**
+ * Class Module
+ * @package Application
+ */
 class Module
 {
+    /**
+     * @return mixed
+     */
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
     }
 
+    /**
+     * @return array
+     */
     public function getAutoloaderConfig()
     {
         return array(
@@ -29,6 +39,9 @@ class Module
         );
     }
 
+    /**
+     * @param $e
+     */
     public function onBootstrap($e)
     {
         /**$sm = $e->getApplication()->getServiceManager();
@@ -48,5 +61,16 @@ class Module
         $role = $auth->getIdentity();
         \Zend\View\Helper\Navigation::setDefaultAcl($acl);
         \Zend\View\Helper\Navigation::setDefaultRole($role);
+
+        /**
+        $em = $e->getApplication()->getEventManager();
+        $em->attach(\Zend\Mvc\MvcEvent::EVENT_RENDER, function($e) {
+            $messenger = new \Zend\Mvc\Controller\Plugin\FlashMessenger();
+            if ($messenger->hasMessages()) {
+                $messages = $messenger->getMessages();
+                $e->getViewModel()->setVariable('flashMessages', $messages);
+            }
+        });
+         **/
     }
 }

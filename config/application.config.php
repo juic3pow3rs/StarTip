@@ -10,8 +10,8 @@ return array(
     'modules' => array(
         'Album',
         'Album2',
-        'ZendDeveloperTools',
-        'SanSessionToolbar',
+        //'ZendDeveloperTools',
+        //'SanSessionToolbar',
         'ZfcBase',
         'ZfcUser',
         'Application',
@@ -26,8 +26,6 @@ return array(
         'MtMail',
         'HtUserRegistration',
         'Tipp',
-        //'HtImgModule',
-        //'HtProfileImage',
     ),
 
     // These are various options for the listeners attached to the ModuleManager

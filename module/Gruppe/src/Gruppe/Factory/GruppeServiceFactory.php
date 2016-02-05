@@ -12,8 +12,16 @@ use Gruppe\Service\GruppeService;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class GruppeServiceFactory
+ * @package Gruppe\Factory
+ */
 class GruppeServiceFactory implements FactoryInterface
 {
+    /**
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return GruppeService
+     */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         return new GruppeService(

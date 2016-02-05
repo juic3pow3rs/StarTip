@@ -12,6 +12,10 @@ use Post\Controller\WriteController;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class WriteControllerFactory
+ * @package Post\Factory
+ */
 class WriteControllerFactory implements FactoryInterface {
 
     /**
@@ -22,10 +26,12 @@ class WriteControllerFactory implements FactoryInterface {
 
         $realServiceLocator = $serviceLocator->getServiceLocator();
         $postService = $realServiceLocator->get('Post\Service\PostServiceInterface');
+        $gruppeService = $realServiceLocator->get('Gruppe\Service\GruppeServiceInterface');
         $postInsertForm = $realServiceLocator->get('FormElementManager')->get('Post\Form\InsertPostForm');
 
         return new WriteController(
             $postService,
+        	$gruppeService,
             $postInsertForm
         );
     }

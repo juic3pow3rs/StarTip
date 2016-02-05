@@ -10,18 +10,33 @@ namespace Album\Model;
 
 use Zend\Db\TableGateway\TableGateway;
 
+/**
+ * Class AlbumTable
+ * @package Album\Model
+ */
 class AlbumTable {
     protected $tableGateway;
 
+    /**
+     * @param TableGateway $tableGateway
+     */
     public function __construct(TableGateway $tableGateway) {
         $this->tableGateway = $tableGateway;
     }
 
+    /**
+     * @return \Zend\Db\ResultSet\ResultSet
+     */
     public function fetchAll() {
         $resultSet = $this->tableGateway->select();
         return $resultSet;
     }
 
+    /**
+     * @param $id
+     * @return array|\ArrayObject|null
+     * @throws \Exception
+     */
     public function getAlbum($id) {
         $id = (int) $id;
         $rowset = $this->tableGateway->select(array('id' => $id));
@@ -32,6 +47,10 @@ class AlbumTable {
         return $row;
     }
 
+    /**
+     * @param Album $album
+     * @throws \Exception
+     */
     public function saveAlbum(Album $album) {
         $data = array(
             'artist' => $album->artist,
@@ -50,6 +69,9 @@ class AlbumTable {
         }
     }
 
+    /**
+     * @param $id
+     */
     public function deleteAlbum($id) {
         $this->tableGateway->delete(array('id' => (int) $id));
     }

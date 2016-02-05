@@ -10,6 +10,10 @@ namespace Album2\Mapper;
 
 use Album2\Model\AlbumInterface;
 
+/**
+ * Interface AlbumMapperInterface
+ * @package Album2\Mapper
+ */
 interface AlbumMapperInterface {
 
     /**

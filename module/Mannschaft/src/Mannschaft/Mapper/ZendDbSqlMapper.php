@@ -15,9 +15,16 @@ use Zend\Db\ResultSet\HydratingResultSet;
 use Zend\Db\Sql\Insert;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Update;
+use Zend\Db\Sql\Delete;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use Zend\Db\ResultSet\ResultSet;
+use Zend\Http\Client as HttpClient;
+use Zend\Dom\Query;
 
+/**
+ * Class ZendDbSqlMapper
+ * @package Mannschaft\Mapper
+ */
 class ZendDbSqlMapper implements MannschaftMapperInterface {
 
     /**
@@ -45,10 +52,9 @@ class ZendDbSqlMapper implements MannschaftMapperInterface {
     }
 
     /**
-     * @param int|string $id
-     *
+     * @param $m_id
      * @return MannschaftInterface
-     * @throws \InvalidArgumentException
+     * @internal param int|string $id
      */
     public function find($m_id)
     {
@@ -137,9 +143,113 @@ class ZendDbSqlMapper implements MannschaftMapperInterface {
         $stmt   = $sql->prepareStatementForSqlObject($select);
         $result = $stmt->execute();
         
-   
-        
         return $result->current();   
- }
+    }
+
+    /**
+     * @param $name
+     * @return array
+     */
+    public function findId($name) {
+
+        $sql    = new Sql($this->dbAdapter);
+        $select = $sql->select('mannschaft')->columns(array('m_id'));
+        $select->where(array('name = ?' => $name));
+
+        $stmt   = $sql->prepareStatementForSqlObject($select);
+        $result = $stmt->execute();
+
+        if ($result instanceof ResultInterface && $result->isQueryResult()) {
+            $resultSet = new ResultSet;
+            $resultSet->initialize($result);
+
+            return $resultSet->toArray();
+        }
+
+
+        return array();
+
+    }
+
+    /**
+     * @return array
+     */
+    public function crawl() {
+
+        $client = new HttpClient();
+        $client->setAdapter('Zend\Http\Client\Adapter\Curl');
+        $client->setUri('http://84.200.248.53/em2016/mannschaften.html');
+
+
+        $result                 = $client->send();
+        //content of the web
+        $body                   = $result->getBody();
+
+        $dom = new Query($body);
+        //get div with id="content" and td'S NodeList
+        $title = $dom->execute('#content tr > td');
+
+        $i = 0;
+        $j = 0;
+        $mannschaft = array();
+        $mannschaften = array();
+
+        foreach ($title as $t) {
+
+            $mannschaft[$j] = $t->nodeValue;
+
+            if ($j == 2) {
+
+                $j = 0;
+                $mannschaften[$i] = $mannschaft;
+                $i++;
+                $mannschaft = array();
+
+            } else {
+
+                $j++;
+            }
+        }
+
+        return $mannschaften;
+
+    }
+
+    /**
+     * @return bool
+     */
+    public function delete() {
+
+        $action = new Delete('mannschaft');
+
+        $sql    = new Sql($this->dbAdapter);
+        $stmt   = $sql->prepareStatementForSqlObject($action);
+        $result = $stmt->execute();
+
+        return (bool)$result->getAffectedRows();
+
+    }
+
+    /**
+     * @return array
+     */
+    public function count() {
+
+        $sql    = new Sql($this->dbAdapter);
+        $select = $sql->select('mannschaft')->columns(array('num' => new \Zend\Db\Sql\Expression('COUNT(*)')));
+
+        $stmt   = $sql->prepareStatementForSqlObject($select);
+        $result = $stmt->execute();
+
+        if ($result instanceof ResultInterface && $result->isQueryResult()) {
+            $resultSet = new ResultSet;
+            $resultSet->initialize($result);
+
+            return $resultSet->toArray();
+        }
+
+        return array();
+
+    }
 
 }

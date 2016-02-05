@@ -16,6 +16,10 @@ use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\Stdlib\Hydrator\ClassMethods;
 
+/**
+ * Class Module
+ * @package Post
+ */
 class Module implements
     AutoloaderProviderInterface,
     ConfigProviderInterface,

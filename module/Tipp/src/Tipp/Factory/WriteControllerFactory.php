@@ -12,6 +12,10 @@ use Tipp\Controller\WriteController;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class WriteControllerFactory
+ * @package Tipp\Factory
+ */
 class WriteControllerFactory implements FactoryInterface {
 
     /**

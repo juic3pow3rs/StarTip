@@ -10,30 +10,24 @@ namespace Post\Service;
 
 use Post\Model\PostInterface;
 
+/**
+ * Interface PostServiceInterface
+ * @package Post\Service
+ */
 interface PostServiceInterface {
-    /**
-     * Should return a set of all Spiele that we can iterate over. Single entries of the array or \Traversable object
-     * should be of type \Spiel\Model\Spiel
-     *
-     * @return array|\Traversable
-     */
+    
     public function findAllPosts();
- 
 
     /**
-     * Should return a single Spiel
-     *
-     * @param  int $s_id Identifier of the Spiel that should be returned
-     * @return \Spiel\Model\Album
+     * @param $g_id
+     * @return mixed
      */
     public function findPost($g_id);
 
     /**
-     * Should save a given implementation of the SpielInterface and return it. If it is an existing Spiel the Spiel
-     * should be updated, if it's a new Spiel it should be created.
-     *
-     * @param  SpielInterface $Spiel
-     * @return SpielInterface
+     * @param PostInterface $post
+     * @param $g_id
+     * @return mixed
      */
     public function savePost(PostInterface $post, $g_id);
 

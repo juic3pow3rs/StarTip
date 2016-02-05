@@ -8,6 +8,10 @@
 
 namespace Spiel\Model;
 
+/**
+ * Interface SpielInterface
+ * @package Spiel\Model
+ */
 interface SpielInterface {
     /**
      * Will return the s_id of the Spiel

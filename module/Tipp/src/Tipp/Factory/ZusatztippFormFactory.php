@@ -13,14 +13,17 @@ use Tipp\Service\TippServiceInterface;
 use Mannschaft\Service\MannschaftServiceInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+
+/**
+ * Class ZusatztippFormFactory
+ * @package Tipp\Factory
+ */
 class ZusatztippFormFactory implements FactoryInterface
 {
     /**
-     * Create service
-     *
+     * 
      * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return mixed
+     * @return \Tipp\Form\ZusatztippForm
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {

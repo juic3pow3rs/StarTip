@@ -81,6 +81,29 @@ return array(
                             )
                         )
                     ),
+                    'erg' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route'    => '/erg/:id',
+                            'defaults' => array(
+                                'controller' => 'Spiel\Controller\Write',
+                                'action'     => 'erg'
+                            ),
+                            'constraints' => array(
+                                'id' => '\d+'
+                            )
+                        )
+                    ),
+                    'crawl' => array(
+                        'type' => 'literal',
+                        'options' => array(
+                            'route' => '/crawl',
+                            'defaults' => array(
+                                'controller' => 'Spiel\Controller\Write',
+                                'action'     => 'crawl'
+                            )
+                        )
+                    ),
                 )
             ),
         )

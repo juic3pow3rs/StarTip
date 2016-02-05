@@ -12,6 +12,10 @@ use Gruppe\Controller\ListController;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class ListControllerFactory
+ * @package Gruppe\Factory
+ */
 class ListControllerFactory implements FactoryInterface
 {
     /**

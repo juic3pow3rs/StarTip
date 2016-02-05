@@ -13,6 +13,11 @@ use Benutzer\Model\User;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Stdlib\Hydrator\ClassMethods;
+
+/**
+ * Class ZendDbSqlMapperFactory
+ * @package Benutzer\Factory
+ */
 class ZendDbSqlMapperFactory implements FactoryInterface
 {
     /**

@@ -13,15 +13,18 @@ use Tipp\Model\Tipp;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Stdlib\Hydrator\ClassMethods;
+
+/**
+ * Class ZendDbSqlMapperFactory
+ * @package Tipp\Factory
+ */
 class ZendDbSqlMapperFactory implements FactoryInterface
 {
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return mixed
-     */
+   /**
+    * 
+    * @param ServiceLocatorInterface $serviceLocator
+    * @return \Tipp\Mapper\ZendDbSqlMapper
+    */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         return new ZendDbSqlMapper(

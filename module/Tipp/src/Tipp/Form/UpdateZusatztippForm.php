@@ -11,10 +11,19 @@ namespace Tipp\Form;
 use Tipp\Service\TippServiceInterface;
 use Zend\Form\Form;
 
+/**
+ * Class UpdateZusatztippForm
+ * @package Tipp\Form
+ */
 class UpdateZusatztippForm extends Form {
 
     protected $tippServiceInterface;
 
+    /**
+     * @param null $name
+     * @param array $options
+     * @param TippServiceInterface $tippServiceInterface
+     */
     public function __construct(
         $name = null,
         $options = array(),
@@ -39,7 +48,7 @@ class UpdateZusatztippForm extends Form {
                 'type' => 'Zend\Form\Element\Radio',
                 'name' => 'status1',
                 'options' => array(
-                    'label' => 'Aktivieren ?',
+                    'label' => '1. Platz aktivieren?',
                     'value_options' => array(
                         array(
                             'value' => '0',
@@ -61,7 +70,7 @@ class UpdateZusatztippForm extends Form {
                 'type' => 'Zend\Form\Element\Radio',
                 'name' => 'status2',
                 'options' => array(
-                    'label' => 'Aktivieren ?',
+                    'label' => '2. Platz aktivieren?',
                     'value_options' => array(
                         array(
                             'value' => '0',
@@ -83,7 +92,7 @@ class UpdateZusatztippForm extends Form {
                 'type' => 'Zend\Form\Element\Radio',
                 'name' => 'status3',
                 'options' => array(
-                    'label' => 'Aktivieren ?',
+                    'label' => '3. Platz aktivieren?',
                     'value_options' => array(
                         array(
                             'value' => '0',
@@ -105,7 +114,7 @@ class UpdateZusatztippForm extends Form {
                 'type' => 'Zend\Form\Element\Radio',
                 'name' => 'status4',
                 'options' => array(
-                    'label' => 'Aktivieren ?',
+                    'label' => 'Fairste Mannschaft aktivieren?',
                     'value_options' => array(
                         array(
                             'value' => '0',
@@ -127,7 +136,7 @@ class UpdateZusatztippForm extends Form {
                 'type' => 'Zend\Form\Element\Radio',
                 'name' => 'status5',
                 'options' => array(
-                    'label' => 'Aktivieren ?',
+                    'label' => 'Unfairste Mannschaft aktivieren?',
                     'value_options' => array(
                         array(
                             'value' => '0',
@@ -149,7 +158,7 @@ class UpdateZusatztippForm extends Form {
                 'type' => 'Zend\Form\Element\Radio',
                 'name' => 'status6',
                 'options' => array(
-                    'label' => 'Aktivieren ?',
+                    'label' => 'Mannschaft mit meisten Toren aktivieren?',
                     'value_options' => array(
                         array(
                             'value' => '0',

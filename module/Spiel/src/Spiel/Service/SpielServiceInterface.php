@@ -10,6 +10,10 @@ namespace Spiel\Service;
 
 use Spiel\Model\SpielInterface;
 
+/**
+ * Interface SpielServiceInterface
+ * @package Spiel\Service
+ */
 interface SpielServiceInterface {
     /**
      * Should return a set of all Spiele that we can iterate over. Single entries of the array or \Traversable object
@@ -26,27 +30,68 @@ interface SpielServiceInterface {
      * @return \Spiel\Model\Spiel
      */
     public function findSpiel($s_id);
-    
+
+    /**
+     * @param $s_id
+     * @return mixed
+     */
     public function spielStatus($s_id);
 
     /**
      * Should save a given implementation of the SpielInterface and return it. If it is an existing Spiel the Spiel
      * should be updated, if it's a new Spiel it should be created.
      *
-     * @param  SpielInterface $Spiel
+     * @param SpielInterface $spiel
      * @return SpielInterface
+     * @internal param SpielInterface $Spiel
      */
     public function saveSpiel(SpielInterface $spiel);
 
-    
+
+    /**
+     * @param $user_id
+     * @return mixed
+     */
     public function findTippSpiele($user_id);
+
+    /**
+     * @param $modus
+     * @return mixed
+     */
+    public function findModusSpiele($modus);
+
+    public function deactivateTurnier();
 
     public function activateTurnier();
 
     public function turnierStatus();
 
+    /**
+     * @param $m
+     * @return mixed
+     */
     public function setModus($m);
 
     public function getModus();
+
+    /**
+     * @param $modus
+     * @return mixed
+     */
+    public function crawl($modus);
+
+    /**
+     * @param $modus
+     * @return mixed
+     */
+    public function deleteModus($modus);
+
+    /**
+     * @param $modus
+     * @return mixed
+     */
+    public function count($modus);
+
+    public function reset();
   
 }

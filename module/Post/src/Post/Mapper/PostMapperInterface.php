@@ -10,12 +10,16 @@ namespace Post\Mapper;
 
 use Post\Model\PostInterface;
 
+/**
+ * Interface PostMapperInterface
+ * @package Post\Mapper
+ */
 interface PostMapperInterface {
 
     /**
-     * @param int|string $id
+     * @param $g_id
      * @return PostInterface
-     * @throws \InvalidArgumentException
+     * @internal param int|string $id
      */
     public function find($g_id);
 
@@ -26,10 +30,8 @@ interface PostMapperInterface {
 
     /**
      * @param PostInterface $postObject
-     *
-     * @param PostInterface $postObject
+     * @param $g_id
      * @return PostInterface
-     * @throws \Exception
      */
     public function save(PostInterface $postObject, $g_id);
 

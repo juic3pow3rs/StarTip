@@ -13,6 +13,10 @@ use Gruppe\Service\GruppeServiceInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
+/**
+ * Class ListController
+ * @package Gruppe\Controller
+ */
 class ListController extends  AbstractActionController {
 
     /**
@@ -20,14 +24,24 @@ class ListController extends  AbstractActionController {
      */
     protected $gruppeService;
 
-    public function __construct(GruppeServiceInterface $gruppeService)
+	/**
+	 * @param GruppeServiceInterface $gruppeService
+     */
+	public function __construct(GruppeServiceInterface $gruppeService)
     {
         $this->gruppeService = $gruppeService;
     }
 
-    public function indexAction()
+	/**
+	 * @return ViewModel
+     */
+	public function indexAction()
     
     {
+    	$flashMessenger = $this->flashMessenger();
+    	if ($flashMessenger->hasMessages()) {
+    		$return['messages'] = $flashMessenger->getMessages();
+    	}
         //@todo: Abfrage wieder rausnehmen.
     	//$user_id=$this->zfcUserAuthentication()->getIdentity()->getId();
         // Direkter Zugriff auf getId nicht möglich, daher die Lösung wie folgt
@@ -40,14 +54,55 @@ class ListController extends  AbstractActionController {
         //print_r($this->gruppeService->isMitglied($user_id, 5));
 
          return new ViewModel(array(
-                'gruppen' => $this->gruppeService->findAllGruppen($user_id)
+                'gruppen' => $this->gruppeService->findAllGruppen($user_id),
+         		'message' => $this->flashMessenger()->getMessages()
             ));
     }
 
+	/**
+	 * @return \Zend\Http\Response|ViewModel
+     */
+	public function detailAction()
+    {
+    	//Id der Gruppe aus der Route
+    	$g_id = $this->params()->fromRoute('g_id');
+    	
+    	//Id des eingeloggten User
+    	$user  = $this->zfcUserAuthentication()->getIdentity();
+    	$user_id = $user->getId();
+    	
+    	//Prüft ob die übergebene g_id überhaupt existiert
+    	$gruppe = $this->gruppeService->findGruppe($this->params('g_id'));
+
+    	if($gruppe == 0){
+
+    		$this->flashMessenger()->addErrorMessage('Tippgemeinschaft existiert nicht.');
+    		return $this->redirect()->toRoute('gruppe');
+    	}
+
+		$avatar = $this->gruppeService->getAva($g_id);
+
+    	//Prüft ob der User überhaupt Mitglied in der Tippgemeinschaft ist
+    	if($this->gruppeService->isMitglied($user_id, $gruppe->getG_id()) == 0){
+    		$this->flashMessenger()->addErrorMessage('Sie sind kein Mitglied der Tippgemeinschaft "'.$gruppe->getName().'".');
+    		return $this->redirect()->toRoute('gruppe');
+    	}
+    	if($this->gruppeService->isMitglied($user_id, $g_id)){
+
+			$gruppe = $this->gruppeService->findGruppe($g_id);
+
+			return new ViewModel(array(
+					'gruppe' => $gruppe,
+					'avatar' => $avatar
+
+			));
+    	}else{
+    		return $this->redirect()->toRoute('gruppe');
+    	}
+    }
+    
     /**
      * @return array|ViewModel
-     * @todo: Error Handling (redirect zu 403 oder was weiss ich)
-     * @todo: ?> in der URL noch drin
      */
     public function compareAction()
     {
@@ -55,66 +110,116 @@ class ListController extends  AbstractActionController {
         $user  = $this->zfcUserAuthentication()->getIdentity();
         $user_id = $user->getId();
 
+        //Prüft ob die übergebene g_id überhaupt existiert
+        $gruppe = $this->gruppeService->findGruppe($this->params('g_id'));
+
+        if($gruppe == 0){
+
+        	$this->flashMessenger()->addErrorMessage('Tippgemeinschaft existiert nicht.');
+        	return $this->redirect()->toRoute('gruppe');
+        }
+        //Prüft ob der User überhaupt Mitglied in der Tippgmeinschaft ist
+        if($this->gruppeService->isMitglied($user_id, $gruppe->getG_id()) == 0){
+        	$this->flashMessenger()->addErrorMessage('Sie sind kein Mitglied der Tippgemeinschaft "'.$gruppe->getName().'".');
+        	return $this->redirect()->toRoute('gruppe');
+        }
+        
         if ($this->gruppeService->isMitglied($user_id, $g_id)){
             $compare = $this->gruppeService->compare($g_id);
 
             return new ViewModel(array(
-                'benutzer' => $compare
+                'benutzer' => $compare,
+            	'gruppe' => $gruppe,
+            	'message' => $this->flashMessenger()->getMessages()
             ));
         }
         return array();
 
     }
 
-    /**
-     * @todo: Wenn keine Einladungen vorhanden sind ausgeben, dass man zur zeit keine Einladungen hat
+
+	/**
+	 * @return ViewModel
      */
-    public function showAction()
+	public function showAction()
     
     {
     	if ($this->zfcUserAuthentication()->hasIdentity()) {
     	$user  = $this->zfcUserAuthentication()->getIdentity();
     	$user_id = $user->getId();
     	}
-    	if(count( $this->gruppeService->findAllEinladungen($user_id)) == 0)
+
+    	if(count($this->gruppeService->findAllEinladungen($user_id)) == 0)
     	{
-    		return print('Sie haben im Moment keine Einladungen');
+    		$fehler='Sie haben im Moment keine Einladungen.';
     	}
     	return new ViewModel(array(
-    			'einladungen' => $this->gruppeService->findAllEinladungen($user_id)
+    			'einladungen' => $this->gruppeService->findAllEinladungen($user_id),
+    			'fehler' => $fehler
     			
     			
     	));
     
     }
-    
-    public function annehmenAction()
+
+	/**
+	 * @return \Zend\Http\Response
+     */
+	public function annehmenAction()
     {
     	
     	$g_id = $this->params()->fromRoute('g_id');
-    	    	
-    	if ($this->zfcUserAuthentication()->hasIdentity()) {
-    			$user  = $this->zfcUserAuthentication()->getIdentity();
-    			$user_id = $user->getId();
+    	//Id des eingeloggten User
+    	$user  = $this->zfcUserAuthentication()->getIdentity();
+    	$user_id = $user->getId();
+    	    	    
+    	//Prüft ob die übergebene g_id überhaupt existiert
+    	$gruppe = $this->gruppeService->findGruppe($this->params('g_id'));
+    	if($gruppe == 0){
+
+    		$this->flashMessenger()->addErrorMessage('Tippgemeinschaft existiert nicht.');
+    		return $this->redirect()->toRoute('gruppe');
     	}
-    		
-    	$this->gruppeService->annehmen($user_id, $g_id);
-    		
     	
-    
+    	//Prüft ob der User überhaupt eine Einladung bekommen hat
+    	$eingeladen = $this->gruppeService->bereitsEingeladen($user_id, $g_id);
+    	if($eingeladen == 0){
+
+    		$this->flashMessenger()->addErrorMessage('Sie haben keine Einladung fuer diese Tippgemeinschaft erhalten.');
+    		return $this->redirect()->toRoute('gruppe');
+    	}
+    	    		
+    	$this->gruppeService->annehmen($user_id, $g_id);
+    	
     	return $this->redirect()->toRoute('gruppe/show');
     
     
     }
-    
-    public function ablehnenAction()
+
+	/**
+	 * @return \Zend\Http\Response
+     */
+	public function ablehnenAction()
     {
     
     	$g_id = $this->params()->fromRoute('g_id');
+    	//Id des eingeloggten User
+    	$user  = $this->zfcUserAuthentication()->getIdentity();
+    	$user_id = $user->getId();
     	
-    	if ($this->zfcUserAuthentication()->hasIdentity()) {
-    		$user  = $this->zfcUserAuthentication()->getIdentity();
-    		$user_id = $user->getId();
+    	//Prüft ob die übergebene g_id überhaupt existiert
+    	$gruppe = $this->gruppeService->findGruppe($this->params('g_id'));
+    	if($gruppe == 0){
+
+    		$this->flashMessenger()->addErrorMessage('Tippgemeinschaft existiert nicht.');
+    		return $this->redirect()->toRoute('gruppe');
+    	}
+    	//Prüft ob der User überhaupt eine Einladung bekommen hat
+    	$eingeladen = $this->gruppeService->bereitsEingeladen($user_id, $g_id);
+    	if($eingeladen == 0){
+
+    		$this->flashMessenger()->addErrorMessage('Sie haben keine Einladung fuer diese Tippgemeinschaft erhalten.');
+    		return $this->redirect()->toRoute('gruppe');
     	}
     
     	$this->gruppeService->ablehnen($user_id, $g_id);

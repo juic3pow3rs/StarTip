@@ -81,13 +81,13 @@ return array(
                             )
                         )
                     ),
-                    'upload' => array(
+                    'crawl' => array(
                         'type' => 'literal',
                         'options' => array(
-                            'route'    => '/upload',
+                            'route'    => '/crawl',
                             'defaults' => array(
                                 'controller' => 'Mannschaft\Controller\Write',
-                                'action'     => 'uploadForm'
+                                'action'     => 'crawl'
                             ),
                         )
                     ),

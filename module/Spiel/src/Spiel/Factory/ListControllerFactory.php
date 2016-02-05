@@ -12,6 +12,10 @@ use Spiel\Controller\ListController;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class ListControllerFactory
+ * @package Spiel\Factory
+ */
 class ListControllerFactory implements FactoryInterface
 {
     /**

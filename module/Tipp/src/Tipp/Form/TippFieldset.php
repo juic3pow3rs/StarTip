@@ -12,9 +12,17 @@ use Tipp\Model\Tipp;
 use Zend\Form\Fieldset;
 use Zend\Stdlib\Hydrator\ClassMethods;
 
+/**
+ * Class TippFieldset
+ * @package Tipp\Form
+ */
 class TippFieldset extends Fieldset {
 
-    public function __construct($name = null, $options = array()) {
+	/**
+	 * @param null $name
+	 * @param array $options
+     */
+	public function __construct($name = null, $options = array()) {
 
         parent::__construct($name, $options);
 
@@ -34,35 +42,42 @@ class TippFieldset extends Fieldset {
         
         
         $this->add(array(
+        		'type' =>'Zend\Form\Element\Number',
         		'name' => 'tipp1',
+        		'options' => array(
+        				'label' => 'Anzahl Tore der ersten Mannschaft?'
+        		),
         		'attributes'=>array(
-        				'type' => 'text',
-        				'required' => true,
-        				'size' => '2',
-        				'maxlength' => '2',
+        			    'required' => true,
+        				'min'=> '0',
+        				'max'=> '20',
+        				'step' => '1',
+        				
         
         
         		),
         
-        		'options' => array(
-        				'label' => 'Wie viele Tore wird die Erste Mannschaft Ihrer Meinung nach erziehlen?'
-        		)
+        		
         ));
         
         $this->add(array(
+        		'type' =>'Zend\Form\Element\Number',
         		'name' => 'tipp2',
+        		
+        		'options' => array(
+        				'label' => 'Anzahl Tore der zweiten Mannschaft?'
+        		),
         		'attributes'=>array(
-        				'type' => 'text',
-        				'required' => true,
-        				'size' => '2',
-        				'maxlength' => '2',
+        				 'required' => true,
+        				'min'=> '0',
+        				'max'=> '20',
+        				'step' => '1',
+        				
         
         
         		),
         
-        		'options' => array(
-        				'label' => 'Wie viele Tore wird die Zweite Mannschaft Ihrer Meinung nach erziehlen?'
-        		)
+        		
         ));
         
       

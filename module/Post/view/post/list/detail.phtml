@@ -1,23 +1,46 @@
-
+<div class="page-header">
 <h1>Pinnwand</h1>
+</div>
+
+<!--<?php foreach ($message as $m) : ?>
+    <div class="alert alert-success alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <strong>Success!</strong> <?php echo $m?>
+    </div>
+<?php endforeach; ?>-->
+
+<?php
+$flash = $this->flashMessenger();
+$flash->setMessageOpenFormat('<div%s>
+     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+         &times;
+     </button>')
+    ->setMessageCloseString('</div>');
+
+echo $flash->render('success', array('alert', 'alert-dismissible', 'alert-success'));
+
+?>
+<input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('post/add', array('g_id' => $this->gruppe)) ?>';" value="Beitrag verfassen" />
+<br><br>
 <?php $i=1; ?>
  <?php foreach($this->liste as $p) : ?>
 
 <table class="table table-bordered">
     <thead>
-    <tr>
-       <th class='success'> Nr: <?php echo $i; ?></th>
+    
+     <tr>
+        <th class='success'>Beitrag verfasst von: <?php echo $p['username'];?></th>
     </tr>
     <tr>
-        <th class='success'><?php echo $p->getDatum_zeit();?></th>
+        <th class='success'><?php echo $p['datum_zeit'];?></th>
     </tr>
     </thead>
     <tbody>
         <tr>
-           <th class='success'>Betreff: <?php echo $p->getBetreff();?></th>
+           <th class='success'>Betreff: <?php echo $p['betreff'];?></th>
         </tr>
         <tr>
-            <td class='success' ><?php echo $p->getText();?></td>
+            <td class='success' ><?php echo $p['text'];?></td>
         </tr>
     </tbody>
 </table>

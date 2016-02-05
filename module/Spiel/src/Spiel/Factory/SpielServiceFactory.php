@@ -12,8 +12,16 @@ use Spiel\Service\SpielService;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class SpielServiceFactory
+ * @package Spiel\Factory
+ */
 class SpielServiceFactory implements FactoryInterface
 {
+    /**
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return SpielService
+     */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         return new SpielService(

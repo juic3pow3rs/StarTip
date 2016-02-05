@@ -12,6 +12,10 @@ use Mannschaft\Service\MannschaftServiceInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
+/**
+ * Class ListController
+ * @package Mannschaft\Controller
+ */
 class ListController extends  AbstractActionController {
 
     /**
@@ -19,11 +23,17 @@ class ListController extends  AbstractActionController {
      */
     protected $mannschaftService;
 
+    /**
+     * @param MannschaftServiceInterface $mannschaftService
+     */
     public function __construct(MannschaftServiceInterface $mannschaftService)
     {
         $this->mannschaftService = $mannschaftService;
     }
 
+    /**
+     * @return ViewModel
+     */
     public function indexAction()
     {
             return new ViewModel(array(

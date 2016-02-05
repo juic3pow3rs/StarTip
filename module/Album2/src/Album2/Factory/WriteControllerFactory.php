@@ -12,6 +12,10 @@ use Album2\Controller\WriteController;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class WriteControllerFactory
+ * @package Album2\Factory
+ */
 class WriteControllerFactory implements FactoryInterface {
 
     /**

@@ -8,6 +8,10 @@
 
 namespace Gruppe\Model;
 
+/**
+ * Class Gruppe
+ * @package Gruppe\Model
+ */
 class Gruppe implements GruppeInterface {
     /**
      * @var int

@@ -1,14 +1,82 @@
+<div class="page-header">
 <h1>Tippgemeinschaft bearbeiten </h1>
+</div>
+
+<!--<?php foreach ($message as $m) : ?>
+    <div class="alert alert-success alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <strong>Success!</strong> <?php echo $m?>
+    </div>
+<?php endforeach; ?>-->
+
+<?php
+$flash = $this->flashMessenger();
+$flash->setMessageOpenFormat('<div%s>
+     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+         &times;
+     </button>')
+    ->setMessageCloseString('</div>');
+
+echo $flash->render('error',   array('alert', 'alert-dismissible', 'alert-danger'));
+
+?>
+
 <?php
 $form = $this->form;
 $form->setAttribute('method', 'POST');
 $form->setAttribute('action', $this->url('gruppe/edit', array(), true));
 $form->prepare();
+$form->get('submit')->setValue('Tippgemeinschaft bearbeiten');
+$form->get('submit')->setAttribute('class', 'btn btn-success');
 
-$form->get('submit')->setValue('Bearbeiten');
+
+
 
 echo $this->form()->openTag($form);
 
-echo $this->formCollection($form);
+#Die paar Zeilen:
+echo $this->formHidden($form->get('gruppe-fieldset')->get('g_id'));
+#setValue setzt das was in dem Feld schon von vornherein drinstehen soll. Hier nur beispielhaft mit der Mail.
+#die UserId sollte natürlich ein hidden field sein (wie die erste Zeile) und das wird dann halt befüllt.
+echo $this->formHidden($form->get('gruppe-fieldset')->get('user_id')->setValue($this->zfcUserIdentity()->getId()));
+?>
+
+<div style="width: 500px;" class="form-group <?php if ($this->formElementErrors($form->get('gruppe-fieldset')->get('name'))) echo "has-error" ?>">
+
+    <?php
+    $form->get('gruppe-fieldset')->get('name')->setAttribute('class', 'form-control')
+        ->setAttribute('placeholder', $form->get('gruppe-fieldset')->get('name')->getLabel());
+
+    #echo $this->formRow($form->get('gruppe-fieldset')->get('name'));
+    echo $this->formElement($form->get('gruppe-fieldset')->get('name'));
+
+    if ($this->formElementErrors($form->get('gruppe-fieldset')->get('name'))) :
+        echo $this->formElementErrors()
+            ->setMessageOpenFormat('<p class="help-block">')
+            ->setMessageSeparatorString('</p><p class="help-block">')
+            ->setMessageCloseString('</p>')
+            ->render($form->get('gruppe-fieldset')->get('name'));
+    endif; ?>
+</div>
+
+<div style="width: 800px;" class="form-group">
+
+    <?php
+    $form->get('gruppe-fieldset')->get('beschreibung')->setAttribute('class', 'form-control')
+        ->setAttribute('placeholder', $form->get('gruppe-fieldset')->get('beschreibung')->getLabel());
+
+    #echo $this->formRow($form->get('gruppe-fieldset')->get('name'));
+    echo $this->formElement($form->get('gruppe-fieldset')->get('beschreibung'));
+    ?>
+
+</div>
+
+    <?php
+    #echo $this->formRow($form->get('gruppe-fieldset')->get('beschreibung'));
+
+    echo $this->formSubmit($form->get('submit'));
+
+#Statt der Zeile:
+#echo $this->formCollection($form);
 
 echo $this->form()->closeTag();

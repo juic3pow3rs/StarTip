@@ -1,8 +1,56 @@
-<h1>Album Details</h1>
+<h1>Profil der Tippgemeinschaft: <?php echo $gruppe->getName();?></h1>
 
-<dl>
-    <dt>Album Title</dt>
-    <dd><?php echo $this->album->getTitle(); ?></dd>
-    <dt>Album Artist</dt>
-    <dd><?php echo $this->album->getArtist(); ?></dd>
-</dl>
+<!--<?php foreach ($message as $m) : ?>
+    <div class="alert alert-success alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <strong>Success!</strong> <?php echo $m?>
+    </div>
+<?php endforeach; ?>-->
+
+<?php
+$flash = $this->flashMessenger();
+$flash->setMessageOpenFormat('<div%s>
+     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+         &times;
+     </button>')
+    ->setMessageCloseString('</div>');
+
+echo $flash->render('success',   array('alert', 'alert-dismissible', 'alert-success'));
+
+?>
+
+<?php if (!empty($avatar[0]['avatar'])) { ?>
+    <img src="<?php echo $avatar[0]['avatar']?>" width="150"/><br><br>
+<?php } ?>
+
+<table class="table table-hover">
+	<thead>
+   	 <tr class="success">
+    	 <th>Beschreibung:</th>
+     </tr >
+    </thead>
+    <tbody>
+   		<tr >
+       		<td><?php echo $gruppe->getBeschreibung();?></td>
+         </tr>
+    </tbody>
+</table>
+
+<input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('post/detail', array('g_id' => $gruppe->getG_id())); ?>';" value="Pinnwand" />
+<input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('gruppe/compare', array('g_id' => $gruppe->getG_id())); ?>';" value="Rangliste" />
+
+<?php if ($gruppe->getUser_id() == $this->zfcUserIdentity()->getId()){ ?>
+    <input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('gruppe/invite', array('id' => $gruppe->getG_id())); ?>';" value="Einladung verschicken" />
+<?php } ?>
+
+<?php if ($gruppe->getUser_id() == $this->zfcUserIdentity()->getId()){ ?>
+    <input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('gruppe/edit', array('g_id' => $gruppe->getG_id())); ?>';" value="Bearbeiten" />
+<?php } ?>
+
+<?php if ($gruppe->getUser_id() == $this->zfcUserIdentity()->getId()){ ?>
+    <input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('gruppe/picture', array('g_id' => $gruppe->getG_id())); ?>';" value="Profilbild bearbeiten" />
+<?php } ?>
+
+<?php if ($gruppe->getUser_id() != $this->zfcUserIdentity()->getId()){ ?>
+    <input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('gruppe/delete', array('g_id' => $gruppe->getG_id())); ?>';" value="Tippgemeinschaft verlassen" />
+<?php } ?>

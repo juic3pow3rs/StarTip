@@ -12,6 +12,10 @@ use Spiel\Controller\WriteController;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class WriteControllerFactory
+ * @package Spiel\Factory
+ */
 class WriteControllerFactory implements FactoryInterface {
 
     /**
@@ -24,11 +28,13 @@ class WriteControllerFactory implements FactoryInterface {
         $spielService = $realServiceLocator->get('Spiel\Service\SpielServiceInterface');
         $spielInsertForm = $realServiceLocator->get('FormElementManager')->get('Spiel\Form\InsertSpielForm');
         $tippService = $realServiceLocator->get('Tipp\Service\TippServiceInterface');
+        $mannschaftService = $realServiceLocator->get('Mannschaft\Service\MannschaftServiceInterface');
 
         return new WriteController(
             $spielService,
             $spielInsertForm,
-            $tippService
+            $tippService,
+            $mannschaftService
         );
     }
 }

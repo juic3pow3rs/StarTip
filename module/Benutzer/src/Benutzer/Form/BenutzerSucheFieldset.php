@@ -10,8 +10,16 @@ namespace Benutzer\Form;
 
 use Zend\Form\Fieldset;
 
+/**
+ * Class BenutzerSucheFieldset
+ * @package Benutzer\Form
+ */
 class BenutzerSucheFieldset extends Fieldset {
 
+    /**
+     * @param null $name
+     * @param array $options
+     */
     public function __construct($name = null, $options = array()) {
 
         parent::__construct($name, $options);

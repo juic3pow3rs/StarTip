@@ -10,6 +10,10 @@ namespace Benutzer\Model;
 
 use ZfcUser\Entity\UserInterface;
 
+/**
+ * Class User
+ * @package Benutzer\Model
+ */
 class User implements UserInterface
 {
     /**
@@ -41,6 +45,8 @@ class User implements UserInterface
      * @var int
      */
     protected $state;
+
+    protected $profile_picture;
 
     /**
      * Get id.
@@ -171,6 +177,29 @@ class User implements UserInterface
     public function setState($state)
     {
         $this->state = (int) $state;
+        return $this;
+    }
+
+    /**
+     * Get profile_picture.
+     *
+     * @return int
+     */
+    public function getProfile_picture()
+    {
+        return $this->profile_picture;
+    }
+
+    /**
+     * Set profile_picture.
+     *
+     * @param $profile_picture
+     * @return UserInterface
+     * @internal param int $state
+     */
+    public function setProfile_picture($profile_picture)
+    {
+        $this->profile_picture = $profile_picture;
         return $this;
     }
 

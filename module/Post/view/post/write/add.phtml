@@ -1,4 +1,6 @@
+<div class="page-header">
 <h1>Neuen Beitrag verfassen</h1>
+</div>
 <?php
 
 $form = $this->form;
@@ -7,21 +9,48 @@ $form->setAttribute('action', $this->url('post/add', array(), true));
 $form->prepare();
 
 $form->get('submit')->setValue('Beitrag erstellen');
+$form->get('submit')->setAttribute('class', 'btn btn-success');
+
+
+
 
 echo $this->form()->openTag($form);
 
-#Die paar Zeilen:
+
 echo $this->formHidden($form->get('post-fieldset')->get('p_id'));
-#setValue setzt das was in dem Feld schon von vornherein drinstehen soll. Hier nur beispielhaft mit der Mail.
-#die UserId sollte natürlich ein hidden field sein (wie die erste Zeile) und das wird dann halt befüllt.
 echo $this->formHidden($form->get('post-fieldset')->get('b_id')->setValue($this->zfcUserIdentity()->getId()));
 echo $this->formHidden($form->get('post-fieldset')->get('g_id'));
-echo $this->formRow($form->get('post-fieldset')->get('betreff'));
-echo $this->formRow($form->get('post-fieldset')->get('text'));
+?>
 
-echo $this->formSubmit($form->get('submit'));
+<div style="width: 800px;" class="form-group">
+
+    <?php
+    $form->get('post-fieldset')->get('betreff')->setAttribute('class', 'form-control')
+        ->setAttribute('placeholder', $form->get('post-fieldset')->get('betreff')->getLabel());
+
+    echo $this->formElement($form->get('post-fieldset')->get('betreff'));
+    ?>
+
+</div>
+
+<div style="width: 800px;" class="form-group">
+
+    <?php
+    $form->get('post-fieldset')->get('text')->setAttribute('class', 'form-control')
+        ->setAttribute('placeholder', $form->get('post-fieldset')->get('text')->getLabel());
+
+    echo $this->formElement($form->get('post-fieldset')->get('text'));
+    ?>
+
+</div>
+
+    <?php
+  
+
+    echo $this->formSubmit($form->get('submit'));
 
 #Statt der Zeile:
 #echo $this->formCollection($form);
 
 echo $this->form()->closeTag();
+

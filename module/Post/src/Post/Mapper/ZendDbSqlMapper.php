@@ -13,10 +13,15 @@ use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\Adapter\Driver\ResultInterface;
 use Zend\Db\ResultSet\HydratingResultSet;
 use Zend\Db\Sql\Insert;
+use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Update;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
+/**
+ * Class ZendDbSqlMapper
+ * @package Post\Mapper
+ */
 class ZendDbSqlMapper implements PostMapperInterface {
 
     /**
@@ -28,11 +33,12 @@ class ZendDbSqlMapper implements PostMapperInterface {
 
     protected $postPrototype;
 
-    /**
-     * @param AdapterInterface  $dbAdapter
-     * @param HydratorInterface $hydrator
-     * @param PostInterface    $postPrototype
-     */
+   /**
+    * 
+    * @param AdapterInterface $dbAdapter
+    * @param HydratorInterface $hydrator
+    * @param PostInterface $postPrototype
+    */
     public function __construct(
         AdapterInterface $dbAdapter,
         HydratorInterface $hydrator,
@@ -44,31 +50,38 @@ class ZendDbSqlMapper implements PostMapperInterface {
     }
 
     /**
-     * @param int|string $id
-     *
-     * @return PostInterface
-     * @throws \InvalidArgumentException
+     * Sucht alle Posts der durch g_id übergebenen Gruppe
+     * @param  $g_id
+     * @return array|PostInterface
      */
     public function find($g_id)
     {
         $sql    = new Sql($this->dbAdapter);
         $select = $sql->select('post');
         $select->where(array('g_id = ?' => $g_id));
+        $select->join(array("u" => "user"), "u.user_id = post.b_id")
+        ->order(array("post.datum_zeit DESC"));
 
+        
         $stmt   = $sql->prepareStatementForSqlObject($select);
         $result = $stmt->execute();
-
+         
         if ($result instanceof ResultInterface && $result->isQueryResult()) {
-            $resultSet = new HydratingResultSet($this->hydrator, $this->postPrototype);
-
-            return $resultSet->initialize($result);
+        	$resultSet = new ResultSet;
+        	$resultSet->initialize($result);
+        
+        	return $resultSet->toArray();
         }
-
+        
         return array();
+        
+        
+        
+      
     }
 
     /**
-     * @return array|SpielInterface[]
+     * Gibt alle Posts zurück
      */
     public function findAll()
     {
@@ -87,37 +100,30 @@ class ZendDbSqlMapper implements PostMapperInterface {
         return array();
     }
 
-    /**
-     * @param PostInterface $postObject
-     *
-     * @return PostInterface
-     * @throws \Exception
-     */
+  /**
+   * Speichert einen neuen Post
+   * @param PostInterface $postObject
+   * @param  $g_id
+   * @throws \Exception
+   * @return \Post\Model\PostInterface
+   */
     public function save(PostInterface $postObject, $g_id)
     {
         $postData = $this->hydrator->extract($postObject);
-      // Neither Insert nor Update needs the ID in the array
-    	   $postData['g_id']=$g_id;
+  		$postData['g_id']=$g_id;
+  		
 		unset($postData['datum_zeit']);
-        if ($postObject->getP_id()) {
-            // ID present, it's an Update
-            $action = new Update('post');
-            $action->set($postData);
-            $action->where(array('p_id = ?' => $postObject->getP_id()));
-        } else {
-            // ID NOT present, it's an Insert
-            $action = new Insert('post');
-            $action->values($postData);
-            
-        }
-
+		
+		$action = new Insert('post');
+        $action->values($postData);
+       
         $sql    = new Sql($this->dbAdapter);
         $stmt   = $sql->prepareStatementForSqlObject($action);
         $result = $stmt->execute();
 
         if ($result instanceof ResultInterface) {
             if ($newP_id = $result->getGeneratedValue()) {
-                // When a value has been generated, set it on the object
+               
                 $postObject->setP_id($newP_id);
             }
 

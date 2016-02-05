@@ -12,9 +12,17 @@ use Spiel\Model\Spiel;
 use Zend\Form\Fieldset;
 use Zend\Stdlib\Hydrator\ClassMethods;
 
+/**
+ * Class IndexFieldset
+ * @package Spiel\Form
+ */
 class IndexFieldset extends Fieldset {
 
-    public function __construct($name = null, $options = array()) {
+	/**
+	 * @param null $name
+	 * @param array $options
+     */
+	public function __construct($name = null, $options = array()) {
     	
         parent::__construct($name, $options);
 

@@ -12,6 +12,10 @@ use Post\Controller\ListController;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class ListControllerFactory
+ * @package Post\Factory
+ */
 class ListControllerFactory implements FactoryInterface
 {
     /**
@@ -25,8 +29,10 @@ class ListControllerFactory implements FactoryInterface
     {
         $realServiceLocator = $serviceLocator->getServiceLocator();
         $postService       = $realServiceLocator->get('Post\Service\PostServiceInterface');
+        $gruppeService       = $realServiceLocator->get('Gruppe\Service\GruppeServiceInterface');
+        $benutzerService     = $realServiceLocator->get('Benutzer\Service\BenutzerServiceInterface');
        
 
-        return new ListController($postService);
+        return new ListController($postService, $gruppeService, $benutzerService);
     }
 }

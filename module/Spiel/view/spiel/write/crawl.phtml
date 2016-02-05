@@ -1,0 +1,27 @@
+<h1>Crawl Spiele</h1>
+<p>
+    <?php switch($modus) {
+        case 1:
+            echo 'Automatisches crawlen der Spiele fuer die Vorrunde?';
+            break;
+        case 2:
+            echo ' Automatisches crawlen der Spiele fuer das Achtelfinale?';
+            break;
+        case 3:
+            echo 'Automatisches crawlen der Spiele fuer das Viertelfinale?';
+            break;
+        case 4:
+            echo 'Automatisches crawlen der Spiele fuer das Halbfinale?';
+            break;
+        case 5:
+            echo 'Automatisches crawlen des Final-Spiels?';
+            break;
+    }?>
+</p>
+<p>
+    Achtung: Hierbei werden alle Spiele, die schon fuer diesen Modus eingetragen sind geloescht!
+</p>
+<form action="<?php echo $this->url('spiel/crawl', array(), true) ?>" method="post">
+    <input type="submit" name="crawl_confirmation" value="ja" />
+    <input type="submit" name="crawl_confirmation" value="nein" />
+</form>

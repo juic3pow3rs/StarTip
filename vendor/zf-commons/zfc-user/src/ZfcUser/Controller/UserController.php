@@ -18,6 +18,7 @@
 
 namespace ZfcUser\Controller;
 
+use Benutzer\Service\BenutzerServiceInterface;
 use Zend\Form\Form;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Stdlib\ResponseInterface as Response;
@@ -38,6 +39,8 @@ class UserController extends AbstractActionController
      */
     protected $userService;
 
+    protected $benutzerService;
+
     /**
      * @var Form
      */
@@ -52,7 +55,7 @@ class UserController extends AbstractActionController
      * @todo Make this dynamic / translation-friendly
      * @var string
      */
-    protected $failedLoginMessage = 'Authentication failed. Please try again.';
+    protected $failedLoginMessage = 'Login fehlgeschlagen. Bitte E-Mail/Passwort ueberpruefen!';
 
     /**
      * @var string
@@ -64,9 +67,10 @@ class UserController extends AbstractActionController
      */
     protected $options;
 
-    public function __construct($userService, $options, $registerForm, $loginForm)
+    public function __construct($userService, BenutzerServiceInterface $benutzerService, $options, $registerForm, $loginForm)
     {
         $this->userService = $userService;
+        $this->benutzerService = $benutzerService;
         $this->options = $options;
         $this->registerForm = $registerForm;
         $this->loginForm = $loginForm;
@@ -80,7 +84,14 @@ class UserController extends AbstractActionController
         if (!$this->zfcUserAuthentication()->hasIdentity()) {
             return $this->redirect()->toRoute(static::ROUTE_LOGIN);
         }
-        return new ViewModel();
+
+        $id = $this->zfcUserAuthentication()->getIdentity()->getId();
+
+        $ava = $this->benutzerService->getAva($id);
+
+        return new ViewModel(array(
+            'ava' => $ava[0],
+        ));
     }
 
     /**
@@ -257,6 +268,7 @@ class UserController extends AbstractActionController
         }
 
         // TODO: Add the redirect parameter here...
+        $this->flashMessenger()->addInfoMessage('Bitte Registrierung via Link, der Ihnen per E-Mail geschickt wurde, bestaetigen');
         return $this->redirect()->toUrl($this->url()->fromRoute(static::ROUTE_LOGIN) . ($redirect ? '?redirect='. rawurlencode($redirect) : ''));
     }
 }

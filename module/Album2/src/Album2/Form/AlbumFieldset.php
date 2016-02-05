@@ -12,8 +12,16 @@ use Album2\Model\Album;
 use Zend\Form\Fieldset;
 use Zend\Stdlib\Hydrator\ClassMethods;
 
+/**
+ * Class AlbumFieldset
+ * @package Album2\Form
+ */
 class AlbumFieldset extends Fieldset {
 
+    /**
+     * @param null $name
+     * @param array $options
+     */
     public function __construct($name = null, $options = array()) {
 
         parent::__construct($name, $options);

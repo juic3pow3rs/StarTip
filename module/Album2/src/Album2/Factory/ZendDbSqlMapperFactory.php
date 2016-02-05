@@ -13,6 +13,11 @@ use Album2\Model\Album;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Stdlib\Hydrator\ClassMethods;
+
+/**
+ * Class ZendDbSqlMapperFactory
+ * @package Album2\Factory
+ */
 class ZendDbSqlMapperFactory implements FactoryInterface
 {
     /**

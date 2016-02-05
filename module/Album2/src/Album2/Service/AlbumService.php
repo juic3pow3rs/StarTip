@@ -12,6 +12,10 @@ use Album2\Mapper\AlbumMapperInterface;
 use Album2\Model\AlbumInterface;
 use Zend\Db\TableGateway\TableGatewayInterface;
 
+/**
+ * Class AlbumService
+ * @package Album2\Service
+ */
 class AlbumService implements AlbumServiceInterface {
 
     protected $albumMapper;

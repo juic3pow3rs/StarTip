@@ -8,6 +8,10 @@
 
 namespace Mannschaft\Model;
 
+/**
+ * Class Mannschaft
+ * @package Mannschaft\Model
+ */
 class Mannschaft implements MannschaftInterface {
     /**
      * @var int

@@ -1,0 +1,8 @@
+<h1>Modus <?php echo $modus ?> aktivieren</h1>
+
+Modus <?php echo $modus ?> aktivieren?
+
+<form action="<?php echo $this->url('zfcadmin/modus', array(), true) ?>" method="post">
+    <input type="submit" class="btn btn-success" name="modus_confirmation" value="ja" />
+    <input type="submit" class="btn btn-danger" name="modus_confirmation" value="nein" />
+</form>

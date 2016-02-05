@@ -1,1 +1,13 @@
-<h1>Profil</h1>
+<h1>Profil vom Benutzer: <?php echo $benutzer->getUsername()?> </h1>
+<?php if (empty($ava[0]['profile_picture'])) {
+    echo  $this->gravatar($this->zfcUserIdentity()->getEmail());
+} else { ?>
+    <img src="<?php echo $ava[0]['profile_picture']?>" width="150"/>
+<?php } ?>
+
+
+
+         
+         
+        
+   

@@ -12,6 +12,11 @@ use Tipp\Form\UpdateZusatztippForm;
 use Tipp\Service\TippServiceInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+
+/**
+ * Class UpdateZusatztippFormFactory
+ * @package Tipp\Factory
+ */
 class UpdateZusatztippFormFactory implements FactoryInterface
 {
     /**

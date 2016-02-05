@@ -10,8 +10,16 @@ namespace Gruppe\Form;
 
 use Zend\Form\Form;
 
+/**
+ * Class InsertGruppeForm
+ * @package Gruppe\Form
+ */
 class InsertGruppeForm extends Form {
 
+    /**
+     * @param null $name
+     * @param array $options
+     */
     public function __construct($name = null, $options = array()) {
 
         parent::__construct($name, $options);
@@ -28,7 +36,7 @@ class InsertGruppeForm extends Form {
             'name' => 'submit',
             'type' => 'submit',
             'attributes' => array(
-                'value' => 'Add new Gruppe'
+                'value' => 'Neue Gruppe erstellen'
             )
         ));
     }

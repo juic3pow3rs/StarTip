@@ -8,6 +8,10 @@
 
 namespace Gruppe\Model;
 
+/**
+ * Interface GruppeInterface
+ * @package Gruppe\Model
+ */
 interface GruppeInterface {
     /**
      * Will return the ID of the Gruppe

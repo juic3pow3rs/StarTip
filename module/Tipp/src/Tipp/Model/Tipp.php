@@ -8,6 +8,10 @@
 
 namespace Tipp\Model;
 
+/**
+ * Class Tipp
+ * @package Tipp\Model
+ */
 class Tipp implements TippInterface {
     /**
      * @var int
@@ -15,12 +19,12 @@ class Tipp implements TippInterface {
     protected $t_id;
 
     /**
-     * @var string
+     * @var int
      */
     protected $b_id;
 
     /**
-     * @var string
+     * @var int
      */
     protected $s_id;
     
@@ -30,12 +34,12 @@ class Tipp implements TippInterface {
     protected $tipp1;
     
     /**
-     * @var string
+     * @var int
      */
     protected $tipp2;
     
     /**
-     * @var string
+     * @var int
      */
     protected $punkte;
 

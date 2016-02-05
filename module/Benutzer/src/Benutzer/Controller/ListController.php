@@ -12,6 +12,10 @@ use Benutzer\Service\BenutzerServiceInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
+/**
+ * Class ListController
+ * @package Benutzer\Controller
+ */
 class ListController extends  AbstractActionController {
 
     /**
@@ -19,11 +23,17 @@ class ListController extends  AbstractActionController {
      */
     protected $benutzerService;
 
+    /**
+     * @param BenutzerServiceInterface $benutzerService
+     */
     public function __construct(BenutzerServiceInterface $benutzerService)
     {
         $this->benutzerService = $benutzerService;
     }
 
+    /**
+     * @return ViewModel
+     */
     public function listAction()
     {
         $globalRang = $this->benutzerService->findAllBenutzer();
@@ -33,10 +43,14 @@ class ListController extends  AbstractActionController {
             'benutzer' => $globalRang
         ));
     }
-    
+
+    /**
+     * @return \Zend\Http\Response|ViewModel
+     */
     public function detailAction()
     {
     	$id = $this->params()->fromRoute('id');
+        $ava = $this->benutzerService->getAva($id);
     
     	try {
     		$benutzer = $this->benutzerService->findUser($id);
@@ -46,7 +60,8 @@ class ListController extends  AbstractActionController {
     	}
   
     	return new ViewModel(array(
-    			'benutzer' => $benutzer
+    			'benutzer' => $benutzer,
+                'ava' => $ava
     	));
     }
 }

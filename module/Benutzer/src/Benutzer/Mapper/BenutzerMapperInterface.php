@@ -10,6 +10,10 @@ namespace Benutzer\Mapper;
 
 use ZfcUser\Entity\UserInterface;
 
+/**
+ * Interface BenutzerMapperInterface
+ * @package Benutzer\Mapper
+ */
 interface BenutzerMapperInterface {
 
     /**
@@ -17,12 +21,43 @@ interface BenutzerMapperInterface {
      */
     public function findAll();
 
+    /**
+     * @param $name
+     * @return mixed
+     */
     public function find($name);
-    
+
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function findUser($id);
 
+    /**
+     * @param $g_id
+     * @param $id
+     * @param $leiter
+     * @return mixed
+     */
     public function invite($g_id, $id, $leiter);
-    
+
+    /**
+     * @param $benutzername
+     * @return mixed
+     */
     public function such($benutzername);
+
+    /**
+     * @param $id
+     * @param $url
+     * @return mixed
+     */
+    public function setAva($id, $url);
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function getAva($id);
 
 }

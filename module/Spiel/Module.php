@@ -19,6 +19,10 @@ use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\Stdlib\Hydrator\ClassMethods;
 use Zend\ModuleManager\Feature\FormElementProviderInterface;
 
+/**
+ * Class Module
+ * @package Spiel
+ */
 class Module implements
     AutoloaderProviderInterface,
     ConfigProviderInterface,

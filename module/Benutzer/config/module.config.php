@@ -72,9 +72,29 @@ return array(
                 			'defaults' => array(
                 				'controller' => 'Benutzer\Controller\Write',
                 				'action'     => 'suche'
-                						)
-                				)
-                		),
+                            )
+                        )
+                    ),
+                    'avatar' => array(
+                        'type' => 'literal',
+                        'options' => array(
+                            'route' => '/avatar',
+                            'defaults' => array(
+                                'controller' => 'Benutzer\Controller\Write',
+                                'action' => 'avatarUpload'
+                            )
+                        )
+                    ),
+                    'picture' => array(
+                        'type' => 'literal',
+                        'options' => array(
+                            'route' => '/picture',
+                            'defaults' => array(
+                                'controller' => 'Benutzer\Controller\Write',
+                                'action' => 'profilePicture'
+                            )
+                        )
+                    ),
                 )
             )
         )

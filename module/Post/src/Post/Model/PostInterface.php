@@ -8,6 +8,10 @@
 
 namespace Post\Model;
 
+/**
+ * Interface PostInterface
+ * @package Post\Model
+ */
 interface PostInterface {
     /**
      * Will return the p_id of the Post

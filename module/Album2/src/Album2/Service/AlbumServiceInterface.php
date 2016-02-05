@@ -10,6 +10,10 @@ namespace Album2\Service;
 
 use Album2\Model\AlbumInterface;
 
+/**
+ * Interface AlbumServiceInterface
+ * @package Album2\Service
+ */
 interface AlbumServiceInterface {
     /**
      * Should return a set of all albums that we can iterate over. Single entries of the array or \Traversable object

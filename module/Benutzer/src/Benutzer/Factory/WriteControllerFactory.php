@@ -12,6 +12,10 @@ use Benutzer\Controller\WriteController;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class WriteControllerFactory
+ * @package Benutzer\Factory
+ */
 class WriteControllerFactory implements FactoryInterface {
 
     /**
@@ -23,10 +27,12 @@ class WriteControllerFactory implements FactoryInterface {
         $realServiceLocator = $serviceLocator->getServiceLocator();
        	$benutzerService = $realServiceLocator->get('Benutzer\Service\BenutzerServiceInterface');
        	$suchBenutzerForm = $realServiceLocator->get('FormElementManager')->get('Benutzer\Form\SuchBenutzerForm');
+       	$pictureForm = $realServiceLocator->get('FormElementManager')->get('Benutzer\Form\PictureForm');
 
         return new WriteController(
            	$benutzerService,
-            $suchBenutzerForm
+            $suchBenutzerForm,
+            $pictureForm
         );
     }
 }

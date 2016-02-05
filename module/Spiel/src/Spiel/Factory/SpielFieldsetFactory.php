@@ -12,6 +12,11 @@ use Spiel\Form\SpielFieldset;
 use Mannschaft\Service\MannschaftServiceInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+
+/**
+ * Class SpielFieldsetFactory
+ * @package Spiel\Factory
+ */
 class SpielFieldsetFactory implements FactoryInterface
 {
     /**

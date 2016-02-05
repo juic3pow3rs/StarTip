@@ -1,8 +1,15 @@
-<h1>Einladungen</h1>
+<?php if($fehler!=""){?>
+<div class="alert alert-danger"><?php print $fehler;?></div>
+<?php }else{?>
 
-<table class="table">
+<div class="page-header">
+<h1>Einladungen</h1>
+</div>
+
+
+<table class="table table-hover">
     <thead>
-    <tr>
+    <tr class="success">
         <th>Name der Tippgemeinschaft</th>
         <th>Beschreibung der Tippgemeinschaft</th>
         <th></th>
@@ -14,10 +21,10 @@
         <tr>
           	<td><?php echo $e->getName()?></td>
             <td><?php echo $e->getBeschreibung();?></td>
-            <td> <input type="button" onclick="location.href='<?php echo $this->url('gruppe/annehmen', array('g_id' => $e->getG_id())); ?>';" value="Annehmen" /></td>
-  		    <td> <input type="button" onclick="location.href='<?php echo $this->url('gruppe/ablehnen', array('g_id' => $e->getG_id()));  ?>';" value="Ablehnen" /></td>
- 
+            <td> <input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('gruppe/annehmen', array('g_id' => $e->getG_id())); ?>';" value="Einladung annehmen" /></td>
+  		    <td> <input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('gruppe/ablehnen', array('g_id' => $e->getG_id()));  ?>';" value="Einladung ablehnen" /></td>
         </tr>
     <?php endforeach; ?>
     </tbody>
 </table>
+<?php }?>

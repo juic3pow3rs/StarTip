@@ -12,8 +12,16 @@ use Benutzer\Service\BenutzerService;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class BenutzerServiceFactory
+ * @package Benutzer\Factory
+ */
 class BenutzerServiceFactory implements FactoryInterface
 {
+    /**
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return BenutzerService
+     */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         return new BenutzerService(

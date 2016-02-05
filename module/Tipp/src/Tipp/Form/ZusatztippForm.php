@@ -12,6 +12,10 @@ use Mannschaft\Service\MannschaftServiceInterface;
 use Tipp\Service\TippServiceInterface;
 use Zend\Form\Form;
 
+/**
+ * Class ZusatztippForm
+ * @package Tipp\Form
+ */
 class ZusatztippForm extends Form {
 
     protected $mannschaftServiceInterface;
@@ -19,9 +23,10 @@ class ZusatztippForm extends Form {
     protected $tippServiceInterface;
 
     /**
-     * @param MannschaftServiceInterface $mannschaftServiceInterface
      * @param $name
      * @param array $options
+     * @param MannschaftServiceInterface $mannschaftServiceInterface
+     * @param TippServiceInterface $tippServiceInterface
      */
     public function __construct(
         $name = null,

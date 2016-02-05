@@ -12,8 +12,16 @@ use Post\Model\Post;
 use Zend\Form\Fieldset;
 use Zend\Stdlib\Hydrator\ClassMethods;
 
+/**
+ * Class PostFieldset
+ * @package Post\Form
+ */
 class PostFieldset extends Fieldset {
 
+    /**
+     * @param null $name
+     * @param array $options
+     */
     public function __construct($name = null, $options = array()) {
 
         parent::__construct($name, $options);
@@ -55,7 +63,7 @@ class PostFieldset extends Fieldset {
         		),
         
         		'options' => array(
-        				'label' => 'Betreff'
+        				'label' => 'Geben Sie hier den Betreff ein.'
         		)
         ));
         
@@ -72,7 +80,7 @@ class PostFieldset extends Fieldset {
         		),
         		
         		'options' => array(
-        				'label' => 'Text max. 2500 Zeichen'
+        				'label' => 'Geben Sie hier den Text ein (max. 2500 Zeichen).'
         		)
         ));
         
