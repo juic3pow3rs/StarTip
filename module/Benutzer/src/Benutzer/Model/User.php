@@ -48,6 +48,8 @@ class User implements UserInterface
 
     protected $profile_picture;
 
+    protected $geburtsdatum;
+
     /**
      * Get id.
      *
@@ -195,7 +197,6 @@ class User implements UserInterface
      *
      * @param $profile_picture
      * @return UserInterface
-     * @internal param int $state
      */
     public function setProfile_picture($profile_picture)
     {
@@ -203,4 +204,21 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getGeburtsdatum() {
+
+        return $this->geburtsdatum;
+    }
+
+    /**
+     * @param $geburtsdatum
+     * @return $this
+     */
+    public function setGeburtsdatum($geburtsdatum) {
+
+        $this->geburtsdatum = $geburtsdatum;
+        return $this;
+    }
 }

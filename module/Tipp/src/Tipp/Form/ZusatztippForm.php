@@ -45,6 +45,7 @@ class ZusatztippForm extends Form {
 
         $data = array();
 
+        // Mannschaften aus der DB holen
         foreach ($mannschaften as $m) {
             $data[$m->getM_id()] = $m->getName();
         }
@@ -53,10 +54,13 @@ class ZusatztippForm extends Form {
         $stati = $this->tippServiceInterface->isActive();
         $status = array();
 
+        // Stati der Zusatztipps aus der DB holen
         foreach ($stati as $s) {
             $status[++$i] = $s['status'];
         }
 
+        // Wenn status == 1, wird das Element angezeigt
+        // $data = array mit den Mannschaften, die in der DB vorhanden sind
         if ($status[1]) {
             $this->add(
                 array(

@@ -37,6 +37,8 @@ class IndexController extends AbstractActionController
     }
 
     /**
+     * Wird ausgeführt, wenn man 'Home' aufruft.
+     * Inhalt der Funktion: Den System Status mit Informationen füllen
      * @return ViewModel
      */
     public function indexAction()

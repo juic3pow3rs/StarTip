@@ -24,8 +24,11 @@ use Zend\View\View;
 class WriteController extends AbstractActionController {
 
     protected $spielService;
+
     protected $spielForm;
+
     protected $tippService;
+
     protected $mannschaftService;
 
     /**
@@ -103,6 +106,8 @@ class WriteController extends AbstractActionController {
                 break;
         }
 
+
+        //Felder, die mit dem Ergebnis in verbindung stehen, deaktivieren
         $this->spielForm->get('spiel-fieldset')->get('modus')->setValue($modus[0]['modus']+1);
         $this->spielForm->get('spiel-fieldset')->get('tore1')->setAttributes(array('disabled' => 'disabled'));
         $this->spielForm->get('spiel-fieldset')->get('tore2')->setAttributes(array('disabled' => 'disabled'));
@@ -139,6 +144,8 @@ class WriteController extends AbstractActionController {
 
             $datetime = $this->spielForm->get('spiel-fieldset')->get('anpfiff')->getValue();
 
+            //Das eingegebene Datum validieren
+            //@todo: Den von ZF2 bereitgestellten, Date-InputFilter verwenden
             $valid = preg_match('/20\d{2}(-)((0[1-9])|(1[0-2]))(-)((0[1-9])|([1-2][0-9])|(3[0-1]))(\s)(([0-1][0-9])|(2[0-3])):([0-5][0-9]):([0-5][0-9])/', $datetime);
 
             if ($valid == 0) {
@@ -170,6 +177,7 @@ class WriteController extends AbstractActionController {
     }
 
     /**
+     * Funktion zum editieren eines Spiels
      * @return array|\Zend\Http\Response
      */
     public function editAction()
@@ -206,6 +214,7 @@ class WriteController extends AbstractActionController {
             $punkte1 = $this->spielForm->get('spiel-fieldset')->get('punkte1')->getValue();
             $punkte2 = $this->spielForm->get('spiel-fieldset')->get('punkte2')->getValue();
 
+            //Validieren, dass alle benötigten Felder ausgefüllt sind
             if ($tore1 != 0 || $tore2 != 0 || $punkte1 != 0 || $punkte2 != 0) {
 
                 $this->spielForm->get('spiel-fieldset')->get('tore1')->setMessages(array('Bitte "Ergebnis eintragen"-Funktion nutzen, um Ergebnis einzutragen'));
@@ -215,6 +224,7 @@ class WriteController extends AbstractActionController {
                 $check = 1;
             }
 
+            // Falls versucht wird, den Status des Spiels auf abgeschlossen zu setzen, Ausgabe von einer Fehlermeldung
             if ($status == 1) {
 
                 $this->spielForm->get('spiel-fieldset')->get('status')->setMessages(array('Bitte "Ergebnis eintragen"-Funktion nutzen, um Spiel abzuschließen!'));
@@ -223,6 +233,7 @@ class WriteController extends AbstractActionController {
 
             $datetime = $this->spielForm->get('spiel-fieldset')->get('anpfiff')->getValue();
 
+            //Datum validieren, siehe addAction()
             $valid = preg_match('/20\d{2}(-)((0[1-9])|(1[0-2]))(-)((0[1-9])|([1-2][0-9])|(3[0-1]))(\s)(([0-1][0-9])|(2[0-3])):([0-5][0-9]):([0-5][0-9])/', $datetime);
 
             if ($valid == 0) {
@@ -252,6 +263,7 @@ class WriteController extends AbstractActionController {
     }
 
     /**
+     * Funktion zum eintragen des Ergebnis für ein Spiel
      * @return array|\Zend\Http\Response
      */
     public function ergAction()
@@ -261,6 +273,7 @@ class WriteController extends AbstractActionController {
 
         $this->spielForm->bind($spiel);
 
+        //Felder, die für das Eintragen des Ergebnis irrelevant sind, deaktivieren
         $this->spielForm->get('spiel-fieldset')->get('modus')->setAttributes(array('disabled' => 'disabled'));
         $this->spielForm->get('spiel-fieldset')->get('anpfiff')->setAttributes(array('disabled' => 'disabled'));
         $this->spielForm->get('spiel-fieldset')->get('status')->setValue(1);
@@ -279,16 +292,19 @@ class WriteController extends AbstractActionController {
 
             $check = 0;
 
+            //Prüfen, ob versucht wurde die Mannschften zu ändern
             if ($mannschaft1 != $spiel->getMannschaft1()) {
 
                 $this->spielForm->get('spiel-fieldset')->get('mannschaft1')->setMessages(array('Mannschaft aendern nicht erlaubt!'));
                 $check = 1;
+
             } elseif ($mannschaft2 != $spiel->getMannschaft2()) {
 
                 $this->spielForm->get('spiel-fieldset')->get('mannschaft2')->setMessages(array('Mannschaft aendern nicht erlaubt!'));
                 $check = 1;
             }
 
+            //Prüfen, ob die Eingabe der Tore konsitent mit der Eingabe der Punkte ist und umgekehrt
             if (($tore1 > $tore2 && $punkte1 <= $punkte2) || ($tore1 < $tore2 && $punkte1 >= $punkte2) || ($tore1 == $tore2 && ($punkte1 != 1 || $punkte2 != 1))) {
 
                 $this->spielForm->get('spiel-fieldset')->get('tore1')->setMessages(array('Ergebnisse und Punkte muessen konsistent sein!'));
@@ -298,6 +314,8 @@ class WriteController extends AbstractActionController {
                 $check = 1;
             }
 
+            //Wenn Ergebnis eingetragen ist das Spiel beendet. Falls versucht wird, den Status auf "nicht beendet" zu setzen,
+            //Fehlermeldung ausgeben
             if ($status != 1) {
 
                 $this->spielForm->get('spiel-fieldset')->get('status')->setMessages(array('Ergebnis eintragen, ohne Spiel zu beenden nicht erlaubt!'));
@@ -330,11 +348,11 @@ class WriteController extends AbstractActionController {
     }
 
     /**
+     * Funktion zum Crawlen der Spiele von http://84.200.248.53/em2016/
      * @return \Zend\Http\Response|ViewModel
      */
     public function crawlAction()
     {
-
         $modus = $this->spielService->getModus();
         $modus = $modus[0]['modus'] + 1;
 
@@ -347,6 +365,7 @@ class WriteController extends AbstractActionController {
 
                 $spiele = $this->spielService->crawl($modus);
 
+                //Prüfen, ob die Mannschaften der gecrawlten Spiele in der DB existieren, wenn nicht => Fehlermeldung
                 foreach ($spiele as $s) {
 
                     $m1 = $this->mannschaftService->findId($s[0]);
@@ -364,8 +383,10 @@ class WriteController extends AbstractActionController {
                     }
                 }
 
+                // Alle Spiele des Modus, der gecrawlt wird, löschen
                 $this->spielService->deleteModus($modus);
 
+                // Die gecrawlten Spiele speichern
                 foreach ($spiele as $s) {
 
                     $m1 = $this->mannschaftService->findId($s[0]);
@@ -384,7 +405,7 @@ class WriteController extends AbstractActionController {
                     $game->setRot2(0);
                     $game->setPunkte1(0);
                     $game->setPunkte2(0);
-                    $game->setAnpfiff(date('Y-m-d H:i:s', strtotime($s[2])));
+                    $game->setAnpfiff(date('Y-m-d H:i:s', strtotime($s[2]))); //Datum so formatieren, dass es kompatibel mit der DB ist
                     $game->setStatus(0);
 
                     $this->spielService->saveSpiel($game);
@@ -398,7 +419,6 @@ class WriteController extends AbstractActionController {
 
             return $this->redirect()->toRoute('zfcadmin');
         }
-
 
         return new ViewModel(array(
             'modus' => $modus

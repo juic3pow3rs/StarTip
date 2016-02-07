@@ -33,6 +33,7 @@ class ListController extends  AbstractActionController {
     }
 
 	/**
+	 * Funktion für das auflisten, der Tippgemeinschaften in denen der Benutzer Mitglied ist
 	 * @return ViewModel
      */
 	public function indexAction()
@@ -42,24 +43,18 @@ class ListController extends  AbstractActionController {
     	if ($flashMessenger->hasMessages()) {
     		$return['messages'] = $flashMessenger->getMessages();
     	}
-        //@todo: Abfrage wieder rausnehmen.
-    	//$user_id=$this->zfcUserAuthentication()->getIdentity()->getId();
-        // Direkter Zugriff auf getId nicht möglich, daher die Lösung wie folgt
        
-            $user  = $this->zfcUserAuthentication()->getIdentity();
-            $user_id = $user->getId();
-        
+        $user  = $this->zfcUserAuthentication()->getIdentity();
+		$user_id = $user->getId();
 
-        //print_r($this->gruppeService->isAdmin($user_id, 5));
-        //print_r($this->gruppeService->isMitglied($user_id, 5));
-
-         return new ViewModel(array(
-                'gruppen' => $this->gruppeService->findAllGruppen($user_id),
-         		'message' => $this->flashMessenger()->getMessages()
-            ));
+		return new ViewModel(array(
+            'gruppen' => $this->gruppeService->findAllGruppen($user_id),
+        	'message' => $this->flashMessenger()->getMessages()
+        ));
     }
 
 	/**
+	 * Detail-Ansicht einer Tippgemeinschaft
 	 * @return \Zend\Http\Response|ViewModel
      */
 	public function detailAction()
@@ -76,6 +71,7 @@ class ListController extends  AbstractActionController {
 
     	if($gruppe == 0){
 
+			//Fehlermeldung im Flash-Messenger speichern, wird nach Redirect zur Route 'gruppe' angezeigt
     		$this->flashMessenger()->addErrorMessage('Tippgemeinschaft existiert nicht.');
     		return $this->redirect()->toRoute('gruppe');
     	}
@@ -84,6 +80,7 @@ class ListController extends  AbstractActionController {
 
     	//Prüft ob der User überhaupt Mitglied in der Tippgemeinschaft ist
     	if($this->gruppeService->isMitglied($user_id, $gruppe->getG_id()) == 0){
+
     		$this->flashMessenger()->addErrorMessage('Sie sind kein Mitglied der Tippgemeinschaft "'.$gruppe->getName().'".');
     		return $this->redirect()->toRoute('gruppe');
     	}
@@ -163,6 +160,7 @@ class ListController extends  AbstractActionController {
     }
 
 	/**
+	 * Funktion, um eine Einladung anzunehmen
 	 * @return \Zend\Http\Response
      */
 	public function annehmenAction()
@@ -197,6 +195,7 @@ class ListController extends  AbstractActionController {
     }
 
 	/**
+	 * Funktion zum Ablehnen, einer Einladung
 	 * @return \Zend\Http\Response
      */
 	public function ablehnenAction()

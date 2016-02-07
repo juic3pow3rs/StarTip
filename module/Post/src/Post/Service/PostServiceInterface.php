@@ -31,5 +31,4 @@ interface PostServiceInterface {
      */
     public function savePost(PostInterface $post, $g_id);
 
-  
 }

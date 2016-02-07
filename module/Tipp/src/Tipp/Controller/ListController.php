@@ -20,11 +20,9 @@ use Zend\View\Model\ViewModel;
  */
 class ListController extends  AbstractActionController {
 
-   
     protected $tippService;
     
 /**
- * 
  * @param TippServiceInterface $tippService
  * @param SpielServiceInterface $spielService
  * @param MannschaftServiceInterface $mannschaftService
@@ -38,18 +36,19 @@ class ListController extends  AbstractActionController {
         $this->mannschaftService = $mannschaftService;
     }
 
-    /**
-     * Erstellt eine Übersicht über alle Tipps die der Benutzer abgegeben hat
+	/**
+	 * Erstellt eine Liste aller Tipps, die der Benutzer abgegeben hat
+	 * @return ViewModel
      */
-    public function indexAction()
+	public function indexAction()
     {
     	//Id des Users 
     	$user  = $this->zfcUserAuthentication()->getIdentity();
     	$user_id = $user->getId();
     	
     	//Alle Tipps des Users mit der user_id
-    	$tipps=array();
-    	$tipps=$this->tippService->findAllTipps($user_id);
+    	$tipps = array();
+    	$tipps = $this->tippService->findAllTipps($user_id);
     	
     	$flashMessenger = $this->flashMessenger();
     	if ($flashMessenger->hasMessages()) {
@@ -62,13 +61,13 @@ class ListController extends  AbstractActionController {
     	
     	foreach($tipps as $t){
     		
-    		$name=array();
-    		$name=$this->mannschaftService->findName($t['mannschaft1']);
+    		$name = array();
+    		$name = $this->mannschaftService->findName($t['mannschaft1']);
     		$t['mannschaft1']=$name['name'];
     		
     		
-    		$name=array();
-    		$name=$this->mannschaftService->findName($t['mannschaft2']);
+    		$name = array();
+    		$name = $this->mannschaftService->findName($t['mannschaft2']);
     		$t['mannschaft2']=$name['name'];
     		
     		$test[$i]=$t;
@@ -100,17 +99,17 @@ class ListController extends  AbstractActionController {
 
         //Prüfen ob es den Tipp mit der id gibt
         try {
-            $tipp= $this->tippService->findTipp($t_id);
+            $tipp = $this->tippService->findTipp($t_id);
         } catch (\InvalidArgumentException $ex) {
         	   return $this->redirect()->toRoute('tipp');
         }
 
         //Spiel zur t_id laden
-        $spiel=$this->spielService->findSpiel($tipp->getS_id());
+        $spiel = $this->spielService->findSpiel($tipp->getS_id());
    
-        $mannschaft1=$this->mannschaftService->findName($spiel->getMannschaft1());
+        $mannschaft1 = $this->mannschaftService->findName($spiel->getMannschaft1());
 
-     	$mannschaft2=$this->mannschaftService->findName($spiel->getMannschaft2());
+     	$mannschaft2 = $this->mannschaftService->findName($spiel->getMannschaft2());
    
         
         return new ViewModel(array(
@@ -118,8 +117,6 @@ class ListController extends  AbstractActionController {
         	'spiel' => $spiel,
         	'mannschaft1' => $mannschaft1,
         	'mannschaft2' => $mannschaft2
-        		
-        	
         ));
     }
 }

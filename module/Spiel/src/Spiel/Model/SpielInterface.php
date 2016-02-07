@@ -44,7 +44,7 @@ interface SpielInterface {
     /**
      * Will return the anpfiff of the Spiel
      *
-     * @return datetime
+     * @return int
      */
     public function getAnpfiff();
     
@@ -104,5 +104,8 @@ interface SpielInterface {
      */
     public function getRot2();
 
+    /**
+     * @return mixed
+     */
     public function getStatus();
 }

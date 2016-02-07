@@ -12,6 +12,7 @@ use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
+use Zend\Validator\Date;
 
 /**
  * Class Module
@@ -27,7 +28,6 @@ class Module implements
      */
     public function onBootstrap(MvcEvent $e)
     {
-        /**
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
@@ -36,26 +36,27 @@ class Module implements
 
         $zfcServiceEvents = $e->getApplication()->getServiceManager()->get('zfcuser_user_service')->getEventManager();
 
-        // To validate new field
+        // Filter für das Feld Geburtsdatum, welches an die RegisterForm angehängt werden soll
         $em->attach(
             'ZfcUser\Form\RegisterFilter',
             'init',
             function($e) {
                 $filter = $e->getTarget();
                 $filter->add(array(
-                    'name'       => 'website',
+                    'name'       => 'geburtsdatum',
                     'required'   => true,
                     'allowEmpty' => false,
-                    'filters'    => array(array('name' => 'StringTrim')),
                     'validators' => array(
                         array(
                             'name' => 'NotEmpty',
-                        )
+                        ),
+                    $date = new Date()
                     ),
                 ));
             }
         );
 
+        // Feld Geburtsdatum an die RegisterForm anhängen
         $em->attach(
             'ZfcUser\Form\Register',
             'init',
@@ -65,21 +66,9 @@ class Module implements
                 $form = $e->getTarget();
                 $form->add(
                     array(
-                        'name' => 'username',
+                        'name' => 'geburtsdatum',
                         'options' => array(
-                            'label' => 'Username',
-                        ),
-                        'attributes' => array(
-                            'type'  => 'text',
-                        ),
-                    )
-                );
-
-                $form->add(
-                    array(
-                        'name' => 'website',
-                        'options' => array(
-                            'label' => 'Website',
+                            'label' => 'Geburtsdatum',
                         ),
                         'attributes' => array(
                             'type'  => 'text',
@@ -89,15 +78,14 @@ class Module implements
             }
         );
 
-        // Store the field.
+        // Das Feld im Objekt abspeichern
         $zfcServiceEvents->attach('register', function($e) {
             $form = $e->getParam('form');
             $user = $e->getParam('user');
 
             // @var $user \Benutzer\Model\User
-            $user->setUsername( $form->get('username')->getValue() );
-            $user->setWebsite( $form->get('website')->getValue() );
-        });**/
+            $user->setGeburtsdatum( $form->get('geburtsdatum')->getValue() );
+        });
 
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();

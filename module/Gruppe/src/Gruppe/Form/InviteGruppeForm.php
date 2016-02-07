@@ -25,16 +25,6 @@ class InviteGruppeForm extends Form {
 
         parent::__construct($name, $options);
 
-/**
-        $this->add(array(
-            'name' => 'gruppe-fieldset',
-            'type' => 'Gruppe\Form\GruppeInviteFieldset',
-            'options' => array(
-                'use_as_base_fieldset' => true
-            )
-        ));**/
-
-   
         $this->add(array(
         		'name' => 'username',
         		'attributes'=>array(

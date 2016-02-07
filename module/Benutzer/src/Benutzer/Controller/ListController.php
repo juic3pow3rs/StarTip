@@ -32,6 +32,7 @@ class ListController extends  AbstractActionController {
     }
 
     /**
+     * Funktion für die Rangliste
      * @return ViewModel
      */
     public function listAction()
@@ -45,6 +46,7 @@ class ListController extends  AbstractActionController {
     }
 
     /**
+     * Detail Anzeige des Benutzer Profils
      * @return \Zend\Http\Response|ViewModel
      */
     public function detailAction()

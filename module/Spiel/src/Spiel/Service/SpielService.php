@@ -78,7 +78,10 @@ class SpielService implements SpielServiceInterface {
 
         return $this->spielMapper->findModusSpiele($modus);
     }
-   
+
+    /**
+     * @return mixed
+     */
     public function activateTurnier() {
 
         return $this->spielMapper->activateTurnier();
@@ -87,11 +90,6 @@ class SpielService implements SpielServiceInterface {
     /**
      * @return mixed
      */
-    public function deactivateTurnier() {
-
-        return $this->spielMapper->deactivateTurnier();
-    }
-
     public function turnierStatus() {
 
         return $this->spielMapper->turnierStatus();
@@ -106,6 +104,9 @@ class SpielService implements SpielServiceInterface {
         return $this->spielMapper->setModus($m);
     }
 
+    /**
+     * @return mixed
+     */
     public function getModus() {
 
         return $this->spielMapper->getModus();
@@ -139,6 +140,9 @@ class SpielService implements SpielServiceInterface {
         return $this->spielMapper->count($modus);
     }
 
+    /**
+     * @return mixed
+     */
     public function reset() {
 
         return $this->spielMapper->reset();

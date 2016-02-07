@@ -27,7 +27,6 @@ interface MannschaftServiceInterface {
      *
      * @param $m_id
      * @return \Mannschaft\Model\Mannschaft
-     * @internal param int $id Identifier of the Mannschaft that should be returned
      */
     public function findMannschaft($m_id);
 
@@ -52,10 +51,19 @@ interface MannschaftServiceInterface {
      */
     public function findId($name);
 
+    /**
+     * @return mixed
+     */
     public function crawl();
 
+    /**
+     * @return mixed
+     */
     public function delete();
 
+    /**
+     * @return mixed
+     */
     public function count();
   
 }

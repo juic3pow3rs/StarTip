@@ -19,7 +19,6 @@ interface SpielMapperInterface {
     /**
      * @param $s_id
      * @return SpielInterface
-     * @internal param int|string $id
      */
     public function find($s_id);
 
@@ -46,9 +45,7 @@ interface SpielMapperInterface {
     /**
      * @param $user_id
      * @return bool
-     * @internal param SpielInterface $spielObject
      */
-    
     public function findTippSpiele($user_id);
 
     /**
@@ -57,8 +54,14 @@ interface SpielMapperInterface {
      */
     public function findModusSpiele($modus);
 
+    /**
+     * @return mixed
+     */
     public function activateTurnier();
 
+    /**
+     * @return mixed
+     */
     public function turnierStatus();
 
     /**
@@ -67,6 +70,9 @@ interface SpielMapperInterface {
      */
     public function setModus($m);
 
+    /**
+     * @return mixed
+     */
     public function getModus();
 
     /**
@@ -87,5 +93,8 @@ interface SpielMapperInterface {
      */
     public function count($modus);
 
+    /**
+     * @return mixed
+     */
     public function reset();
 }

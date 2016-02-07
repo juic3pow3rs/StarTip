@@ -41,6 +41,7 @@ class WriteController extends AbstractActionController {
     }
 
     /**
+     * Funktion um eine Mannschaft hinzuzufügen
      * @return array|\Zend\Http\Response
      */
     public function addAction() {
@@ -83,7 +84,6 @@ class WriteController extends AbstractActionController {
 
             if ($this->mannschaftForm->isValid() && $check == 0) {
                 try {
-                    //\Zend\Debug\Debug::dump($this->mannschaftForm->getData());die();
                     $this->mannschaftService->saveMannschaft($this->mannschaftForm->getData());
 
                     $this->flashMessenger()->addSuccessMessage('Mannschaft erfolgreich angelegt!');
@@ -104,6 +104,7 @@ class WriteController extends AbstractActionController {
     }
 
     /**
+     * Funktion um eine Mannschaft zu editieren
      * @return array|\Zend\Http\Response
      */
     public function editAction()
@@ -158,6 +159,7 @@ class WriteController extends AbstractActionController {
     }
 
     /**
+     * Funktion um die Mannschaften crawlen zu lassen
      * @return \Zend\Http\Response
      */
     public function crawlAction()

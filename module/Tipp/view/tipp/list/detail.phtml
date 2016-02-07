@@ -5,39 +5,25 @@
 
 <table class="table table-hover table-bordered ">
     <thead>
-     <tr class="success">
-        
-        <th>Erste Mannschaft</th>
-        <th>Zweite Mannschaft </th>
-        <th>Tipp</th>
-       
-         
-         
-        
-    </tr>
+         <tr class="success">
+
+            <th>Erste Mannschaft</th>
+            <th>Zweite Mannschaft </th>
+            <th>Tipp</th>
+            <th>Punkte</th>
+        </tr>
     </thead>
     <tbody>
-      
-       <tr>
-    
-  	 <td> <?php echo $mannschaft1['name']?> </td>
-
-     <td> <?php echo $mannschaft2['name']?> </td>
-     <td> <?php echo $tipp->getTipp1() ?> : <?php echo $tipp->getTipp2()?> </td>
-  
-             
-           
-           
+        <tr>
+             <td> <?php echo $mannschaft1['name']?> </td>
+             <td> <?php echo $mannschaft2['name']?> </td>
+             <td> <?php echo $tipp->getTipp1() ?> : <?php echo $tipp->getTipp2()?> </td>
+            <td><?php echo $tipp->getPunkte() ?></td>
         </tr>
- 
-    
-
     </tbody>
 </table>
 
-
-
-   <?php if(($spiel->getAnpfiff()) > date("Y-m-d H:i:s")){?>
-      <td><input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('tipp/edit', array('t_id' => $tipp->getT_id())); ?>'"  value="Bearbeiten" /></td>
- 		<?php }?>	
+<?php if(($spiel->getAnpfiff()) > date("Y-m-d H:i:s") && $spiel->getStatus() == 0){?>
+    <td><input type="button" class="btn btn-success" onclick="location.href='<?php echo $this->url('tipp/edit', array('t_id' => $tipp->getT_id())); ?>'"  value="Bearbeiten" /></td>
+<?php }?>
    

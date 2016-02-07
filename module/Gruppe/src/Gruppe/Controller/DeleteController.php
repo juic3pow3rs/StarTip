@@ -19,7 +19,7 @@ use Zend\View\Model\ViewModel;
 class DeleteController extends AbstractActionController
 {
     
-    protected $GruppeService;
+    protected $gruppeService;
 
 	/**
 	 * @param GruppeServiceInterface $gruppeService
@@ -30,6 +30,7 @@ class DeleteController extends AbstractActionController
     }
 
 	/**
+	 * Funktion, um eine Tippgemeinschaft zu verlassen
 	 * @return \Zend\Http\Response|ViewModel
      */
 	public function deleteAction()

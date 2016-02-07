@@ -22,14 +22,18 @@ use Zend\View\Helper\ViewModel;
 class WriteController extends AbstractActionController {
 
     protected $tippService;
+
     protected $tippForm;
+
     protected $updateZusatztippForm;
+
     protected $zusatztippForm;
+
     protected $spielService;
+
     protected $mannschaftService;
 
     /**
-     * 
      * @param TippServiceInterface $tippService
      * @param FormInterface $tippForm
      * @param FormInterface $updateZusatztippForm
@@ -54,8 +58,8 @@ class WriteController extends AbstractActionController {
     }
 
     /**
-     * 
-     * Anlegen eines neuen Tipp
+     * Anlegen eines Tipps
+     * @return array|\Zend\Http\Response
      */
     public function addAction() {
     	
@@ -92,11 +96,11 @@ class WriteController extends AbstractActionController {
 
            return  $this->redirect()->toRoute('tipp');
        }
-        
-    	        
+
         //Prüft ob das Spiel bereits stattgefunden hat
         $status = $spiel->getStatus();
    		 if($status == 1){
+
              $this->flashMessenger()->addErrorMessage('Spiel bereits abgeschlossen!');
 
              return  $this->redirect()->toRoute('spiel');
@@ -108,6 +112,7 @@ class WriteController extends AbstractActionController {
         $getippt = count($abgegeben);
          
         if($getippt != 0){
+
             $this->flashMessenger()->addErrorMessage('Sie haben auf dieses Spiel bereits getippt!');
 
             return  $this->redirect()->toRoute('tipp');
@@ -117,8 +122,7 @@ class WriteController extends AbstractActionController {
         if ($request->isPost() ) {
         	
             $this->tippForm->setData($request->getPost());
-            
-           
+
             if ($this->tippForm->isValid()) {
             	try {
             		
@@ -128,8 +132,6 @@ class WriteController extends AbstractActionController {
             		return  $this->redirect()->toRoute('tipp');
             	} catch (\Exception $e) {
             		$fehler= $e->getMessage();
-            	
-            	
             	}
             }
         }
@@ -141,18 +143,15 @@ class WriteController extends AbstractActionController {
             'spiel' => $spiel,
         	'mannschaft1' => $mannschaft1,
         	'mannschaft2' => $mannschaft2
-        	
-        
         );
     }
 
     /**
-     * 
-     * Bearbeiten eines Tipps
+     * Editiert einen Tipp
+     * @return array|\Zend\Http\Response
      */
     public function editAction()
     {
-
         $turnierstatus = $this->spielService->turnierStatus();
 
         if ($turnierstatus[0]['status'] == 0) {
@@ -186,6 +185,7 @@ class WriteController extends AbstractActionController {
         //Prüft ob das Spiel bereits stattgefunden hat
         $status = $spiel->getStatus();
         if($status == 1){
+
             $this->flashMessenger()->addErrorMessage('Spiel bereits abgeschlossen!');
 
             return  $this->redirect()->toRoute('tipp');
@@ -200,6 +200,7 @@ class WriteController extends AbstractActionController {
 
             if ($this->tippForm->isValid()) {
                 try {
+
                     $this->tippService->saveTipp($tipp, $tipp->getS_id());
                     $this->flashMessenger()->addSuccessMessage('Der Tipp wurde erfolgreich geaendert.');
 
@@ -220,8 +221,8 @@ class WriteController extends AbstractActionController {
         );
     }
 
-    
     /**
+     * Aktualisiert (aktiviert/deaktiviert) die Zusatipps
      * @return array|\Zend\Http\Response
      */
     public function updateZusatztippAction() {
@@ -267,6 +268,7 @@ class WriteController extends AbstractActionController {
     }
 
     /**
+     * Gibt Zusatztipps ab
      * @return array|\Zend\Http\Response
      */
     public function addZusatztippAction() {
@@ -288,8 +290,10 @@ class WriteController extends AbstractActionController {
             $status[++$i] = $s['status'];
         }
 
+        // Falls Zusatztipps schon einmal abgeben, Zusatztipps aus der DB holen und in der Form setzen
         if (!empty($zusatztipp)) {
 
+            // Iterator über die Stati der Zusatztipps, wenn 1 (=aktiv) Wert aus der DB in der Form setzen
             foreach($zusatztipp as $z) {
                 $i = $z['z_id'];
                 if ($status[$i] == 1) {
@@ -327,6 +331,9 @@ class WriteController extends AbstractActionController {
 
         } elseif ($modus[0]['modus'] > 0) {
 
+            // Modus des Turniers ist Vorrunde oder später, Zusatztipps abgeben nicht mehr möglich
+            // => Felder deaktivieren
+            // if-Abfrage zum überprüfen, ob Zusatztipp aktiv
             if ($status[1]) $this->zusatztippForm->get('platz1')->setAttributes(array('disabled' => 'disabled'));
             if ($status[2]) $this->zusatztippForm->get('platz2')->setAttributes(array('disabled' => 'disabled'));
             if ($status[3]) $this->zusatztippForm->get('platz3')->setAttributes(array('disabled' => 'disabled'));
@@ -345,7 +352,7 @@ class WriteController extends AbstractActionController {
             if ($this->zusatztippForm->isValid()) {
 
                 try {
-
+                    // if-Abfrage zum überprüfen, ob Zusatztipp aktiv
                     if ($status[1]) $this->tippService->addZusatztipp('1', $user_id, $this->zusatztippForm->get('platz1')->getValue());
                     if ($status[2]) $this->tippService->addZusatztipp('2', $user_id, $this->zusatztippForm->get('platz2')->getValue());
                     if ($status[3]) $this->tippService->addZusatztipp('3', $user_id, $this->zusatztippForm->get('platz3')->getValue());
@@ -405,6 +412,7 @@ class WriteController extends AbstractActionController {
                         $status[++$i] = $s['status'];
                     }
 
+                    // if-Abfragen zum überprüfen, ob Zusatztipp aktiv
                     if ($status[1]) {
                         $this->tippService->setZusatztipp('1', $this->zusatztippForm->get('platz1')->getValue());
                         $this->tippService->zusatzPunkteBerechnen(1);

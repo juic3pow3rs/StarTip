@@ -23,6 +23,7 @@ $settings = array(
     'validation_group_overrides' => array(
         'zfcuser' => array(
             'display_name',
+            'geburtsdatum',
             'password',
             'passwordVerify',
     ),

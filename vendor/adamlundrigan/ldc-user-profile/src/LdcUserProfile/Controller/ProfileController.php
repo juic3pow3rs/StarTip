@@ -32,6 +32,7 @@ class ProfileController extends AbstractActionController
 
         $form = $this->getService()->constructFormForUser($this->zfcUserAuthentication()->getIdentity());
 
+        // Setzt den Username und die E-Mail auf readonly, da diese nicht verändert werden dürfen
         $form->get('zfcuser')->get('username')->setAttributes(array('readonly' => 'readonly'));
         $form->get('zfcuser')->get('email')->setAttributes(array('readonly' => 'readonly'));
 

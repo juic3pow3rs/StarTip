@@ -26,10 +26,10 @@ class EmailAddress extends AbstractValidator
      * @var array
      */
     protected $messageTemplates = [
-        self::INVALID            => "Invalid type given. String expected",
-        self::INVALID_FORMAT     => "The input is not a valid email address. Use the basic format local-part@hostname",
-        self::INVALID_HOSTNAME   => "'%hostname%' is not a valid hostname for the email address",
-        self::INVALID_MX_RECORD  => "'%hostname%' does not appear to have any valid MX or A records for the email address",
+        self::INVALID            => "Ungueltige Eingabe.",
+        self::INVALID_FORMAT     => "Die Eingabe ist keine gueltige E-Mail Adresse, bitte Format local-part@hostname benutzen.",
+        self::INVALID_HOSTNAME   => "'%hostname%' ist kein gueltiger hostname der E-Mail Addresse.",
+        self::INVALID_MX_RECORD  => "'%hostname%' hat keine gueltigen MX or A records fuer die E-Mail Adresse",
         self::INVALID_SEGMENT    => "'%hostname%' is not in a routable network segment. The email address should not be resolved from public network",
         self::DOT_ATOM           => "'%localPart%' can not be matched against dot-atom format",
         self::QUOTED_STRING      => "'%localPart%' can not be matched against quoted-string format",

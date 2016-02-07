@@ -25,7 +25,6 @@ class WriteController extends AbstractActionController {
     protected $postForm;
 
     /**
-     *
      * @param PostServiceInterface $postService
      * @param GruppeServiceInterface $gruppeService
      * @param FormInterface $postForm
@@ -39,12 +38,13 @@ class WriteController extends AbstractActionController {
         $this->gruppeService = $gruppeService;
         $this->postForm = $postForm;
     }
-    
-   
+
+
     /**
-     * Anlegen eines neuen Posst
+     * Funktion zum Anlegen eines neuen Posts
+     * @return array|\Zend\Http\Response
      */
-      public function addAction() {
+    public function addAction() {
     	
       	//Id des Users holen
       	$user  = $this->zfcUserAuthentication()->getIdentity();
@@ -77,6 +77,7 @@ class WriteController extends AbstractActionController {
                 try {
                     $this->postService->savePost($this->postForm->getData(),$g_id);
                     $this->flashMessenger()->addSuccessMessage('Der Beitrag wurde erfolgreich hinterlassen.');
+
                     return $this->redirect()->toRoute('post/detail', array('g_id' => ($this->params('g_id'))));
                 } catch (\Exception $e) {
                     die($e->getMessage());
@@ -85,7 +86,6 @@ class WriteController extends AbstractActionController {
             }
         }
 
-       
         $form = $this->postForm;
 
         return array(
@@ -94,6 +94,4 @@ class WriteController extends AbstractActionController {
         	        	
         );
     }
-
-   
 }

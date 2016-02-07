@@ -128,7 +128,7 @@ return [
                 //    'controller' => ['search', 'administration'],
                 //    'roles' => ['staffer', 'admin'],
                 //],
-                //@todo: HtUserRegistration, setPassword action für User erlauben!
+                // Hier werden die Zugriffsrechte auf die Controller und deren Actions geregelt
                 ['controller' => 'Album2\Controller\List', 'roles' => ['guest', 'user']],
                 ['controller' => 'Album2\Controller\Write', 'action' => 'add', 'roles' => ['user']],
                 ['controller' => 'Album2\Controller\Write', 'action' => 'edit', 'roles' => ['admin']],

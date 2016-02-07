@@ -49,10 +49,9 @@ class ZendDbSqlMapper implements TippMapperInterface {
     }
 
     /**
-     * Sucht den Tipp mit der übergebenen Id
-     * @param  $t_id
-     * @return object|AlbumInterface
-     * @throws \InvalidArgumentException
+     * Sucht den Tipp zu der übergebenen ID aus der DB und gibt diesen, falls vorhanden, zurück
+     * @param $t_id
+     * @return object
      */
     public function find($t_id)
     {
@@ -100,7 +99,7 @@ class ZendDbSqlMapper implements TippMapperInterface {
     /**
      * Gibt alle Tipps des Benutzers mit der übergebenen user_id zurück
      * @param  $user_id
-     * @return array|AlbumInterface[]
+     * @return array
      */
     public function findAllTipps($user_id)
     {
@@ -127,7 +126,7 @@ class ZendDbSqlMapper implements TippMapperInterface {
      * Legt einen neuen Tipp an/Updatet einen vorhandenen Tipp
      * @param TippInterface $tippObject
      * @param  $s_id
-     * @return AlbumInterface|TippInterface
+     * @return TippInterface
      * @throws \Exception
      */
     public function save(TippInterface $tippObject, $s_id)
@@ -195,8 +194,8 @@ class ZendDbSqlMapper implements TippMapperInterface {
         return (bool)$result->getAffectedRows();
     }
 
-    //Legt einen neuen Zusatztipp an
     /**
+     * Legt einen neuen Zusatztipp an
      * @param $id
      * @param $user_id
      * @param $m_id
@@ -220,6 +219,7 @@ class ZendDbSqlMapper implements TippMapperInterface {
     }
 
     /**
+     * Sucht die abgebenen Zusatipps des User mit der übergebenen ID und gibt diese zurück
      * @param $user_id
      * @return array
      */
@@ -244,6 +244,7 @@ class ZendDbSqlMapper implements TippMapperInterface {
     }
 
     /**
+     * Setzt das Ergebnis des Zusatztipps mit der übergebenen ID auf die Mannschaft mit der übergebenen ID
      * @param $id
      * @param $m_id
      * @return bool
@@ -266,6 +267,7 @@ class ZendDbSqlMapper implements TippMapperInterface {
     }
 
     /**
+     * Gibt den Status der Zusatztipps zurück
      * @return array
      */
     public function isActive() {
@@ -290,10 +292,12 @@ class ZendDbSqlMapper implements TippMapperInterface {
     }
 
     /**
+     * Berechnet die Punkte für die abgebenen Tipps zum Zusatztipp mit der übergebenen ID
      * @param $id
      */
     public function zusatzPunkteBerechnen($id) {
 
+        // Alle Tipps zu dem Zusatztipp holen
         $sql    = new Sql($this->dbAdapter);
         $select = $sql->select('zusatztipp_abgabe');
         $select->where(array('z_id' => $id));
@@ -307,6 +311,7 @@ class ZendDbSqlMapper implements TippMapperInterface {
             $zusatztipp = $resultSet->toArray();
         }
 
+        // Den Zusatztipp selbst inkl. Ergebnis holen
         $sql2    = new Sql($this->dbAdapter);
         $select2 = $sql2->select('zusatztipp');
         $select2->where(array('z_id = ?' => $id));
@@ -321,16 +326,10 @@ class ZendDbSqlMapper implements TippMapperInterface {
             $erg = $resultSet2->toArray();
         }
 
+        // Iterator über jeden abgegeben Tipp und vergleich von diesem mit dem Ergebnis, dementsprechend vergabe der Punkte
         foreach ($zusatztipp as $zst) {
 
             if ($zst['m_id'] == $erg[0]['erg']) {
-                /**
-                echo "<pre>";
-                print_r($id);
-                print_r($zst['m_id']);
-                print_r($erg[0]['erg']);
-                echo "</pre>";
-                **/
 
                 //update Zusatztipp 3 Punkte
                 $action = new Update('zusatztipp_abgabe');
@@ -341,8 +340,6 @@ class ZendDbSqlMapper implements TippMapperInterface {
                 $stmt   = $sql->prepareStatementForSqlObject($action);
                 $result = $stmt->execute();
 
-                //return (bool)$result->getAffectedRows();
-
             }
 
         }
@@ -350,10 +347,12 @@ class ZendDbSqlMapper implements TippMapperInterface {
     }
 
     /**
+     * Berechnet die Punkte der abgebenen Tipps zu dem Spiel mit der übergebenen ID
      * @param $s_id
      */
     public function punkteBerechnen($s_id) {
 
+        // Spiel inkl allen Infos holen
         $sql    = new Sql($this->dbAdapter);
         $select = $sql->select('spiel');
         $select->where(array('s_id = ?' => $s_id));
@@ -371,6 +370,7 @@ class ZendDbSqlMapper implements TippMapperInterface {
             //throw exception oder so
         }
 
+        // Alle Tipps zu dem übergebenen Spiel holen
         $sql2    = new Sql($this->dbAdapter);
         $select2 = $sql2->select('tipp');
         $select2->where(array('s_id = ?' => $s_id));
@@ -387,17 +387,8 @@ class ZendDbSqlMapper implements TippMapperInterface {
             //throw exception oder so
         }
 
+        //Iterator über die abgegebenen Tipps
         foreach($tipps as $tipp) {
-
-
-            echo "<pre>";
-            print_r($tipp['tipp1']);
-            print_r($tipp['tipp2']);
-            echo "</pre>";
-            echo "<pre>";
-            print_r($spiel['tore1']);
-            print_r($spiel['tore2']);
-            echo "</pre>";
 
             if ($spiel['tore1'] == $tipp['tipp1'] && $spiel['tore2'] == $tipp['tipp2']) {
                 //update Tipp 3 Punkte
@@ -461,6 +452,7 @@ class ZendDbSqlMapper implements TippMapperInterface {
     }
 
     /**
+     * Setzt alle Zusatztipps zurück auf aktiviert
      * @return bool
      */
     public function resetZusatztipp() {

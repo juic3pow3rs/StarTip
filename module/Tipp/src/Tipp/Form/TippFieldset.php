@@ -52,12 +52,7 @@ class TippFieldset extends Fieldset {
         				'min'=> '0',
         				'max'=> '20',
         				'step' => '1',
-        				
-        
-        
         		),
-        
-        		
         ));
         
         $this->add(array(
@@ -72,14 +67,9 @@ class TippFieldset extends Fieldset {
         				'min'=> '0',
         				'max'=> '20',
         				'step' => '1',
-        				
-        
-        
         		),
-        
-        		
+
         ));
-        
-      
+
     }
 }

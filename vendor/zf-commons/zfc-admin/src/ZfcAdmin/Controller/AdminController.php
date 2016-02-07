@@ -47,12 +47,23 @@ use Tipp\Service\TippServiceInterface;
 use Mannschaft\Service\MannschaftServiceInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 
+/**
+ * Class AdminController
+ * @package ZfcAdmin\Controller
+ */
 class AdminController extends AbstractActionController
 {
     protected $spielService;
+
     protected $tippService;
+
     protected $mannschaftService;
 
+    /**
+     * @param SpielServiceInterface $spielService
+     * @param TippServiceInterface $tippService
+     * @param MannschaftServiceInterface $mannschaftService
+     */
     public function __construct(
         SpielServiceInterface $spielService,
         TippServiceInterface $tippService,
@@ -64,6 +75,7 @@ class AdminController extends AbstractActionController
     }
 
     /**
+     * Sammelt alle Informationen, die im Admin Dashboard (=index.phtml) verwendet werden
      * @return array
      */
     public function indexAction() {
@@ -106,6 +118,7 @@ class AdminController extends AbstractActionController
     }
 
     /**
+     * Aktiviert das Turnier
      * @return array|\Zend\Http\Response
      */
     public function activateAction()
@@ -141,7 +154,7 @@ class AdminController extends AbstractActionController
     }
 
     /**
-
+     * Setzt das Turnier zurück
      * @return array|\Zend\Http\Response
      */
     public function resetAction()
@@ -165,9 +178,14 @@ class AdminController extends AbstractActionController
 
     }
 
+    /**
+     * Aktiviert den nächsten Modus
+     * @return array|\Zend\Http\Response
+     */
     public function modusAction() {
 
         $request = $this->getRequest();
+        // Holt aktuellen Modus
         $modus = $this->spielService->getModus();
 
         switch ($modus[0]['modus']) {
@@ -185,6 +203,8 @@ class AdminController extends AbstractActionController
 
         $anzahl = $this->spielService->count($modus[0]['modus']+1);
 
+        // Überprüft, ob alle Spiele für den zu aktivierenden Modus schon eingetragen sind
+        // Und, ob alle Spiele des aktuellen Modus abgeschlossen (= status = 1) sind
         switch ($modus[0]['modus']) {
             case 0;
                 if ($anzahl[0]['num'] != 36) {

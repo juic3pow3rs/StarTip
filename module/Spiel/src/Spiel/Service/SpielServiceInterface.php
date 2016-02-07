@@ -43,10 +43,8 @@ interface SpielServiceInterface {
      *
      * @param SpielInterface $spiel
      * @return SpielInterface
-     * @internal param SpielInterface $Spiel
      */
     public function saveSpiel(SpielInterface $spiel);
-
 
     /**
      * @param $user_id
@@ -60,10 +58,14 @@ interface SpielServiceInterface {
      */
     public function findModusSpiele($modus);
 
-    public function deactivateTurnier();
-
+    /**
+     * @return mixed
+     */
     public function activateTurnier();
 
+    /**
+     * @return mixed
+     */
     public function turnierStatus();
 
     /**
@@ -72,6 +74,9 @@ interface SpielServiceInterface {
      */
     public function setModus($m);
 
+    /**
+     * @return mixed
+     */
     public function getModus();
 
     /**
@@ -92,6 +97,9 @@ interface SpielServiceInterface {
      */
     public function count($modus);
 
+    /**
+     * @return mixed
+     */
     public function reset();
   
 }

@@ -48,8 +48,6 @@ class SpielFieldset extends Fieldset {
             $data[$m->getM_id()] = $m->getName();
         }
 
-        //print_r($data);
-
         $this->add(array(
             'type' => 'hidden',
             'name' => 's_id'
@@ -78,8 +76,7 @@ class SpielFieldset extends Fieldset {
                 )
             )
         );
-        
-        
+
         $this->add(array(
         		'type' => 'hidden',
         		'name' => 'modus',
@@ -125,6 +122,7 @@ class SpielFieldset extends Fieldset {
         				'label' => 'Punkte2'
         		)
         ));
+
         $this->add(array(
         		'type' => 'text',
         		'name' => 'gelb1',
@@ -171,7 +169,5 @@ class SpielFieldset extends Fieldset {
                 )
             )
         );
-
     }
-
 }

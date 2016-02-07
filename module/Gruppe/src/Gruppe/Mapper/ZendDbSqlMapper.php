@@ -4,7 +4,6 @@
  * User: Meli
  * Date: 10.12.2015
  * Time: 11:15
- * @todo: Funktion isAdmin() programmieren
  */
 
 namespace Gruppe\Mapper;
@@ -52,9 +51,9 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
     }
 
     /**
+     * Tippgemeinschaft mit der übergebenen ID in der DB suchen und wenn vorhanden als Objekt zurückgeben
      * @param int|string $g_id
      * @return GruppeInterface
-     * @internal param int|string $id
      */
     public function find($g_id)
     {
@@ -66,15 +65,16 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
         $result = $stmt->execute();
 
         if ($result instanceof ResultInterface && $result->isQueryResult() && $result->getAffectedRows()) {
+
             return $this->hydrator->hydrate($result->current(), $this->gruppePrototype);
         }else {
+
         	return 0;
         }
-
-     
     }
 
     /**
+     * Prüfen, ob eine Tippgemeinschaft mit übergebenem Namen in der DB existiert, wenn ja True zurückgeben, wenn nicht False
      * @param $name
      * @return int
      */
@@ -88,13 +88,16 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
     	$result = $stmt->execute();
     
     	if ($result instanceof ResultInterface && $result->isQueryResult() && $result->getAffectedRows()) {
+
     		return 1;
     	}else return 0;
     
     	
     }
 
+
     /**
+     * @deprecated Bei nächstem Code-Audit entfernen
      * @param $username
      * @param $g_id
      */
@@ -108,20 +111,20 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
     	$result = $stmt->execute();
     
     	if ($result instanceof ResultInterface && $result->isQueryResult() && $result->getAffectedRows()) {
-    		$action = new Insert('mitglied');
+
+            $action = new Insert('mitglied');
             $action->values($g_id, $g_id);
-    		
-    		
+
     		$stmt   = $sql->prepareStatementForSqlObject($select);
     		$result = $stmt->execute();
-    		
-    		
+
     	}
     
     	throw new \InvalidArgumentException("Der Benutzername :{$username} existiert nicht.");
     }
 
     /**
+     * Sucht alle Mitglieder einer Tippgemeinschaft, status = 1 User ist Mitglied, status = 0 User ist nur eingeladen
      * @param $user_id
      * @return array|\Gruppe\Model\GruppeInterface[]
      */
@@ -147,8 +150,8 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
     }
 
     /**
+     * Speichert das übergebene Objekt einer Tippgemeinschaft in der DB ab
      * @param GruppeInterface $gruppeObject
-     *
      * @return GruppeInterface
      * @throws \Exception
      */
@@ -193,6 +196,7 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
     }
 
     /**
+     * Funktion für die Rangliste innerhalb einer Tippgemeinschaft
      * @param $g_id
      * @return array
      */
@@ -201,6 +205,8 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
         $sql    = new Sql($this->dbAdapter);
         $select = $sql->select('rang_overall');
 
+        //Join der Mitgliedertabelle mit der View rang_overall, Selektion nach Status 1 (=Mitglied) und ID der Tippgemeinschaft,
+        //Zusammengefasst nach User-ID und sortiert Absteigend nach den Gesamtpunkten
         $select->join(array("m" => "mitglied"), "m.b_id = rang_overall.b_id")
             ->where(array('m.g_id = ?' => $g_id))
             ->where(array('m.status = ?' => 1), PredicateSet::OP_AND)
@@ -222,6 +228,7 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
     }
 
     /**
+     * Sucht alle offenen Einladungen des Benutzers mit der übergebenen ID aus der DB un gibt diese zurück
      * @param $user_id
      * @return array|\Zend\Db\ResultSet\ResultSet
      */
@@ -245,6 +252,7 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
     }
 
     /**
+     * Funktion zum Annehmen einer Einladung => status = 1 setzen
      * @param $user_id
      * @param $g_id
      * @return array
@@ -252,7 +260,7 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
      */
     public function annehmen($user_id, $g_id)
     {
-    	$a=array('status' => 1);
+    	$a = array('status' => 1);
     	$action = new Update('mitglied');
     	$action->set($a);
     	$action->where(array('b_id = ?' => $user_id, 'g_id = ?' => $g_id,));
@@ -263,21 +271,10 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
 
 
         return (bool)$result->getAffectedRows();
-
-        // @todo: Wozu die Abfrage? $a ist ein array ohne Funktionen.
-  	    /**if ($result instanceof ResultInterface) {
-            if ($newId = $result->getGeneratedValue()) {
-                // When a value has been generated, set it on the object
-                $a->setG_id($newId);
-            }
-
-            return $a;
-        }
-    
-    	throw new \Exception("Database error");**/
     }
 
     /**
+     * Funktion zum ablehnen einer Einladung => Eintrag aus der mitglied-Tabelle löschen
      * @param $user_id
      * @param $g_id
      * @return bool
@@ -295,6 +292,7 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
     }
 
     /**
+     * Prüft, ob der Benutzer mit der übergebenen ID Admin der Tippgemeinschaft mit der übergebenen ID ist
      * @param $user_id
      * @param $g_id
      * @return bool|int
@@ -316,6 +314,7 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
     }
 
     /**
+     * Prüft, ob der Benutzer mit der übergebenen ID Mitglied der Tippgemeinschaft mit übergebenen ID ist
      * @param $user_id
      * @param $g_id
      * @return bool|int
@@ -337,6 +336,8 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
     }
 
     /**
+     * Fügt den Benutzer mit der übergebenen ID als Mitglied der Tippgemeinschaft mit der übergebenen ID hinzu.
+     * Wird bei dem Erstellen einer Tippgemeinschaft verwendet.
      * @param $user_id
      * @param $g_id
      * @return bool|int
@@ -363,6 +364,7 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
     }
 
     /**
+     * Überprüft, ob der Benutzer mit der übergebenen ID schon in die Tippgemeinschaft mit der übergebenen ID eingeladen wurde
      * @param $user_id
      * @param $g_id
      * @return bool|int
@@ -384,6 +386,8 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
     }
 
     /**
+     * Funktion zum verlassen einer Tippgemeinschaft. Benutzer mit der übergebenen ID wird aus der Mitglied Tabelle an der Stelle
+     * der übergebenen Tippgemeinschaft ID gelöscht.
      * @param $g_id
      * @param $user_id
      * @return bool
@@ -401,6 +405,7 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
     }
 
     /**
+     * Funktion zum setzen des Avatars einer Gruppe
      * @param $id
      * @param $url
      * @return bool
@@ -423,6 +428,7 @@ class ZendDbSqlMapper implements GruppeMapperInterface {
     }
 
     /**
+     * Funktion gibt die URL des gesetzten Avatars zurück, falls vorhanden
      * @param $id
      * @return array|bool
      */

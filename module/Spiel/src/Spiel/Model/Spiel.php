@@ -34,7 +34,7 @@ class Spiel implements SpielInterface {
     protected $modus;
     
     /**
-     * @var datetime
+     * @var int
      */
     protected $anpfiff;
     

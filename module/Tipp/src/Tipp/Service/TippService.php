@@ -118,6 +118,9 @@ class TippService implements TippServiceInterface {
     	return $this->tippMapper->tippAbgegeben($s_id, $user_id);
     }
 
+    /**
+     * @return mixed
+     */
     public function resetZusatztipp() {
 
         return $this->tippMapper->resetZusatztipp();

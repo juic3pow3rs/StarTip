@@ -19,7 +19,6 @@ interface PostMapperInterface {
     /**
      * @param $g_id
      * @return PostInterface
-     * @internal param int|string $id
      */
     public function find($g_id);
 
@@ -35,11 +34,4 @@ interface PostMapperInterface {
      */
     public function save(PostInterface $postObject, $g_id);
 
-    /**
-     * @param PostInterface $postObject
-     *
-     * @return bool
-     * @throws \Exception
-     */
-    
 }

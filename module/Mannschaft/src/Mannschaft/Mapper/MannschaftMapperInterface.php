@@ -19,7 +19,6 @@ interface MannschaftMapperInterface {
     /**
      * @param $m_id
      * @return MannschaftInterface
-     * @internal param int|string $id
      */
     public function find($m_id);
 
@@ -31,7 +30,6 @@ interface MannschaftMapperInterface {
     /**
      * @param MannschaftInterface $mannschaftObject
      * @return MannschaftInterface
-     * @internal param MannschaftInterface $mannschaftobject
      */
     public function save(MannschaftInterface $mannschaftObject);
 
@@ -47,9 +45,18 @@ interface MannschaftMapperInterface {
      */
     public function findId($name);
 
+    /**
+     * @return mixed
+     */
     public function crawl();
 
+    /**
+     * @return mixed
+     */
     public function delete();
 
+    /**
+     * @return mixed
+     */
     public function count();
 }

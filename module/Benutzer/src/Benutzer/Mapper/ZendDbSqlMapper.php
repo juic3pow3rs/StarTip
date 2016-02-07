@@ -48,10 +48,9 @@ class ZendDbSqlMapper implements BenutzerMapperInterface {
         $this->benutzerPrototype = $benutzerPrototype;
     }
 
-
     /**
+     * Alle Benutzer aus der View 'rang_overall' selektieren und zurückgeben.
      * @return array|UserInterface[]
-     * @todo: Error handling
      */
     public function findAll()
     {
@@ -61,7 +60,9 @@ class ZendDbSqlMapper implements BenutzerMapperInterface {
         $stmt   = $sql->prepareStatementForSqlObject($select);
         $result = $stmt->execute();
 
-
+        /**
+         * Prüft, ob das Ergebnis eine Instanz des ResultInterfaces ist und ob es ein QueryResult ist
+         */
         if ($result instanceof ResultInterface && $result->isQueryResult()) {
             $resultSet = new ResultSet;
             $resultSet->initialize($result);
@@ -73,9 +74,9 @@ class ZendDbSqlMapper implements BenutzerMapperInterface {
     }
 
     /**
+     * Prüft, ob der Benutzername in der DB existiert, wenn ja wird er zurückgegeben.
      * @param $name
      * @return mixed
-     * @todo: Error handling
      */
     public function find($name)
     {
@@ -86,24 +87,11 @@ class ZendDbSqlMapper implements BenutzerMapperInterface {
         $stmt   = $sql->prepareStatementForSqlObject($select);
         $result = $stmt->execute();
 
-        /**
-        if ($result instanceof ResultInterface && $result->isQueryResult()) {
-            $resultSet = new HydratingResultSet(new \Zend\Stdlib\Hydrator\ClassMethods(false), new \Benutzer\Model\User());
-
-            return $resultSet->initialize($result);
-        }**/
-
         return $result->current();
-
-        /**
-        if ($result instanceof ResultInterface && $result->isQueryResult() && $result->getAffectedRows()) {
-            return $this->hydrator->hydrate($result->current(), new \Benutzer\Model\User() );
-        }**/
-
-        //throw new \InvalidArgumentException("User with given Name:{$name} not found.");
     }
 
     /**
+     * Prüft, ob der Benutzer mit der übergebenen ID in der Datenbank existiert, wenn ja wird er zurückgegeben
      * @param $id
      * @return object
      */
@@ -126,6 +114,7 @@ class ZendDbSqlMapper implements BenutzerMapperInterface {
 
 
     /**
+     * Funktion zum Einladen eines Benutzers in eine Tippgemeinschaft
      * @param $g_id
      * @param $id
      * @param $leiter
@@ -134,19 +123,19 @@ class ZendDbSqlMapper implements BenutzerMapperInterface {
      */
     public function invite($g_id, $id, $leiter) {
 	
-    	$fehler=0;
+    	$fehler = 0;
     	
     	//Fehler falls der Benutzername nicht existiert
     	if($id == NULL){
-    		$fehler=1;
+    		$fehler = 1;
     	}
     	
     	//Prüft sich der leiter der Gruppe selbst einladen will
     	if($leiter == $id){
-    		$fehler=2;
+    		$fehler = 2;
     	}
     		
-    	//Wenn kein Fehler aufgetreten ist
+    	//Wenn kein Fehler aufgetreten ist, Benutzer einladen
     	if($fehler == 0)   	{
             $action = new Insert('mitglied');
             $action->values(
@@ -172,21 +161,13 @@ class ZendDbSqlMapper implements BenutzerMapperInterface {
     }
 
     /**
+     * Funktion für die Suche nach einem Benutzer.
+     * Sucht in der Datenbank nach Benutzernamen, die die Eingabe enthalten
      * @param $benutzername
      * @return array
      */
     public function such($benutzername)
     {
-    	    	    	    
-    	
-      /** $sql    = new Sql($this->dbAdapter);
-       $select = $sql->select('user');
-       $spec = function (Where $where) {
-       	$where->like('username', '%'.$benutzername.'%');
-       };
-       $select->where(($spec));
-       */
-    	
        $sql    = new Sql($this->dbAdapter);
        $select = $sql->select('user');
        $select->where->like('username', '%'.$benutzername.'%');
@@ -228,6 +209,7 @@ class ZendDbSqlMapper implements BenutzerMapperInterface {
         }
 
     /**
+     * Gibt die URL des BenutzerAvatars zurück, falls vorhanden.
      * @param $id
      * @return array|bool
      */

@@ -20,34 +20,29 @@ use Zend\View\Model\ViewModel;
  */
 class ListController extends  AbstractActionController {
 
-    
     protected $spielService;
+
     protected $mannschaftService;
+
     protected $tippService;
-    
-/**
- * 
- * @param SpielServiceInterface $spielService
- * @param MannschaftServiceInterface $mannschaftService
- * @param TippServiceInterface $tippService
- */
+
+    /**
+     * @param SpielServiceInterface $spielService
+     * @param MannschaftServiceInterface $mannschaftService
+     * @param TippServiceInterface $tippService
+     */
     public function __construct(SpielServiceInterface $spielService, MannschaftServiceInterface $mannschaftService,
     		TippServiceInterface $tippService)
     {
         $this->spielService = $spielService;
         $this->mannschaftService = $mannschaftService;
         $this->tippService = $tippService;
-
-     
     }
 
+
     /**
+     * Zeigt alle Spiele an, zusammengefasst nach Modus
      * @return ViewModel
-     
-     * @todo: Nur Spiele vom aktuellen + vergangenen Modus anzeigen!
-     * Idee: zusätzlich zum Spiele Array ein Array mit allen Mannschaften (ID => Name) an das ViewModel übergeben,
-     * das MannschaftServiceInterface muss halt wie das SpielServiceInterface noch Injected werden (einmal hier im Controller
-     * angeben und einmal in der Factory)
      */
     public function indexAction()
     {
@@ -55,6 +50,7 @@ class ListController extends  AbstractActionController {
 
         $modus = $this->spielService->getModus();
 
+        //Iterator über alle Modi (1-6) und suchen der Spiele zu den Modi
         for ($i = 1; $i < 6; $i++){
 
             $spiele = $this->spielService->findModusSpiele($i);
@@ -95,8 +91,10 @@ class ListController extends  AbstractActionController {
             ));
     }
 
+
     /**
-     * Detailansicht für Spiel
+     * Detail-Ansicht eines Spiels
+     * @return \Zend\Http\Response|ViewModel
      */
     public function detailAction()
     {

@@ -26,6 +26,9 @@ class PictureInputFilter extends ProvidesEventsInputFilter
 
     }
 
+    /**
+     * Validieren der imgur-URL via RegEx
+     */
     public function init()
     {
         $this->add([

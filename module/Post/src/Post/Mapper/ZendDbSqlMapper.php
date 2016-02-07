@@ -34,7 +34,6 @@ class ZendDbSqlMapper implements PostMapperInterface {
     protected $postPrototype;
 
    /**
-    * 
     * @param AdapterInterface $dbAdapter
     * @param HydratorInterface $hydrator
     * @param PostInterface $postPrototype
@@ -62,7 +61,6 @@ class ZendDbSqlMapper implements PostMapperInterface {
         $select->join(array("u" => "user"), "u.user_id = post.b_id")
         ->order(array("post.datum_zeit DESC"));
 
-        
         $stmt   = $sql->prepareStatementForSqlObject($select);
         $result = $stmt->execute();
          
@@ -74,10 +72,7 @@ class ZendDbSqlMapper implements PostMapperInterface {
         }
         
         return array();
-        
-        
-        
-      
+
     }
 
     /**

@@ -43,9 +43,6 @@ class Post implements PostInterface {
      * @var int
      */
     protected $datum_zeit;
-    
-   
-    
 
     /**
      * @inheritDoc
@@ -144,6 +141,5 @@ class Post implements PostInterface {
     {
     	$this->datum_zeit = $datum_zeit;
     }
-    
-  
+
 }

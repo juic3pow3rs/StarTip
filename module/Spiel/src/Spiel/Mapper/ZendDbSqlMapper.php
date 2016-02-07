@@ -52,6 +52,7 @@ class ZendDbSqlMapper implements SpielMapperInterface {
     }
 
     /**
+     * Sucht das Spiel mit der übergebenen ID aus der DB und gibt dieses, falls vorhanden, zurück
      * @param $s_id
      * @return SpielInterface
      * @internal param int|string $id
@@ -75,6 +76,7 @@ class ZendDbSqlMapper implements SpielMapperInterface {
     }
 
     /**
+     * Sucht den Status des Spiels mit der übergebenen ID aus der DB und gibt diesen zurück
      * @param $s_id
      * @return array
      */
@@ -99,6 +101,7 @@ class ZendDbSqlMapper implements SpielMapperInterface {
     }
 
     /**
+     * Sucht alle in der DB vorhandenen Spiele raus und gibt sie zurück
      * @return array|SpielInterface[]
      */
     public function findAll()
@@ -121,6 +124,7 @@ class ZendDbSqlMapper implements SpielMapperInterface {
     }
 
     /**
+     * Speicher das übergebenen Spiel-Objekt in der DB
      * @param SpielInterface $spielObject
      *
      * @return SpielInterface
@@ -158,8 +162,8 @@ class ZendDbSqlMapper implements SpielMapperInterface {
         throw new \Exception("Database error");
     }
 
-    //@todo: Hydrating funktioniert nicht
     /**
+     * Sucht alle Spiele, zu denen der Benutzer mit der übergebenen ID schon einen Tipp abgeben hat, heraus und gibt diese zurück
      * @param $user_id
      * @return array|ResultSet
      */
@@ -169,8 +173,7 @@ class ZendDbSqlMapper implements SpielMapperInterface {
     	$select = $sql->select('spiel');
     	$select->join(array("t" => "tipp"), "t.s_id = spiel.s_id")
     	->where(array('t.b_id = ?' => $user_id));
-    
-    
+
     	$stmt   = $sql->prepareStatementForSqlObject($select);
     	$result = $stmt->execute();
     
@@ -184,6 +187,7 @@ class ZendDbSqlMapper implements SpielMapperInterface {
     }
 
     /**
+     * Sucht alle Spiele, des übergebenen Modus heraus und gibt diese zurück
      * @param $modus
      * @return array
      */
@@ -207,6 +211,7 @@ class ZendDbSqlMapper implements SpielMapperInterface {
     }
 
     /**
+     * Aktiviert das Turnier
      * @return bool
      */
     public function activateTurnier() {
@@ -223,6 +228,7 @@ class ZendDbSqlMapper implements SpielMapperInterface {
     }
 
     /**
+     * Gibt den aktuellen Turnierstatus zurück
      * @return array
      */
     public function turnierStatus() {
@@ -246,6 +252,7 @@ class ZendDbSqlMapper implements SpielMapperInterface {
     }
 
     /**
+     * Setzt den Modus des Turnier auf die übergebene Variable
      * @param $m
      * @return bool
      */
@@ -263,6 +270,7 @@ class ZendDbSqlMapper implements SpielMapperInterface {
     }
 
     /**
+     * Gibt den aktuellen Turnierstatus zurück
      * @return array
      */
     public function getModus() {
@@ -286,6 +294,7 @@ class ZendDbSqlMapper implements SpielMapperInterface {
     }
 
     /**
+     * Löscht alle Spiele, des übergebenen Modus
      * @param $modus
      * @return bool
      */
@@ -303,14 +312,18 @@ class ZendDbSqlMapper implements SpielMapperInterface {
     }
 
     /**
+     * Crawlt alle Spiele des übergebenen Modus und gibt diese zurück
      * @param $modus
      * @return array
      */
     public function crawl($modus) {
 
+        // Einen neuen Client instanziieren
         $client = new HttpClient();
+        // Den Adapter des Clients auf Curl setzen
         $client->setAdapter('Zend\Http\Client\Adapter\Curl');
 
+        // Je nachdem welcher Modus übergeben wurde, den entsprechenden Link crawlen
         switch ($modus) {
             case 1:
                 $client->setUri('http://84.200.248.53/em2016/vorrunde.html');
@@ -328,12 +341,15 @@ class ZendDbSqlMapper implements SpielMapperInterface {
                 $client->setUri('http://84.200.248.53/em2016/finale.html');
         }
 
-        $result                 = $client->send();
-        //content of the web
-        $body                   = $result->getBody();
+        // Request senden
+        $result = $client->send();
+        // Inhalt der Antwort (= HTML Quelltext) abspeichern
+        $body = $result->getBody();
 
+        // Ein neues DOM-Query instanziiern und den Quelltext als Argument übergeben
         $dom = new Query($body);
-        //get div with id="content" and td'S NodeList
+        // Den Inhalt der 'td'-Tags, welche innerhalb von 'tr'-Tags stehen, welche wiederrum innerhalb von einem Elemtn mit
+        // der ID 'content' stehen, aus dem Quelltext raussuchen und abspeichern
         $title = $dom->execute('#content tr > td');
 
         $i = 0;
@@ -341,8 +357,12 @@ class ZendDbSqlMapper implements SpielMapperInterface {
         $spiel = array();
         $spiele = array();
 
+        // Iterator über die herausgesuchten Inhalte
+        // Die Inhalte so in ein array abspeicher, damit man damit arbeiten kann
         foreach ($title as $t) {
 
+            // Da auch die Gruppe mit gecrawlt wurde (zumindest bei der Vorrunde), diese nicht gebraucht wird
+            // diesen Wert (= nodeValue) ignorieren
             if ($t->nodeValue != 'A' && $t->nodeValue != 'B' && $t->nodeValue != 'C' && $t->nodeValue != 'D' && $t->nodeValue != 'E' && $t->nodeValue != 'F') {
 
                 $spiel[$j] = $t->nodeValue;
@@ -366,6 +386,7 @@ class ZendDbSqlMapper implements SpielMapperInterface {
     }
 
     /**
+     * Zählt die Spiele, die in dem Modus eingetragen sind und gibt die Anzahl zurück
      * @param $modus
      * @return array
      */
@@ -389,11 +410,12 @@ class ZendDbSqlMapper implements SpielMapperInterface {
 
     }
 
+
     /**
-     * Flushen von folgenden Tabellen:
-     * - Mannschaft
-     * - Alle Zusatztipps auf aktiviert setzen
-     * - Turnier Status = 0 und modus = 0 setzen
+     * Setzt das Turnier zurück:
+     * - Status wird 0 (= inaktiv) gesetzt
+     * - Modus wird 0 (= Vor Turnier) gesetzt
+     * @return bool
      */
     public function reset() {
 

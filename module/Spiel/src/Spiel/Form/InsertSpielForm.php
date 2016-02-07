@@ -40,8 +40,6 @@ class InsertSpielForm extends Form {
                 'value' => 'Neues Spiel'
             )
         ));
-        
-        
-       
+
     }
 }

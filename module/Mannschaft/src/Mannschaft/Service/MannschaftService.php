@@ -70,16 +70,25 @@ class MannschaftService implements MannschaftServiceInterface {
         return $this->mannschaftMapper->findId($name);
     }
 
+    /**
+     * @return mixed
+     */
     public function crawl() {
 
         return $this->mannschaftMapper->crawl();
     }
 
+    /**
+     * @return mixed
+     */
     public function delete() {
 
         return $this->mannschaftMapper->delete();
     }
 
+    /**
+     * @return mixed
+     */
     public function count() {
 
         return $this->mannschaftMapper->count();

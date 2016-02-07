@@ -8,8 +8,6 @@
 
 namespace Benutzer\Controller;
 
-use Benutzer\Form\AvatarForm;
-use Benutzer\Form\AvatarInputFilter;
 use Benutzer\Form\PictureInputFilter;
 use Benutzer\Service\BenutzerServiceInterface;
 use ZfcUser\Entity\UserInterface;
@@ -46,6 +44,7 @@ class WriteController extends AbstractActionController {
 
 
     /**
+     * Benutzersuche
      * @return array|ViewM
      */
     public function sucheAction()
@@ -58,15 +57,17 @@ class WriteController extends AbstractActionController {
 
             if ($this->suchBenutzerForm->isValid()) {
                 try {
-					$benutzer =array();
+					$benutzer = array();
                     $benutzer  = $this->benutzerService->suchBenutzer($this->suchBenutzerForm->get('username')->getValue());
 
-					$anzahl=count($benutzer);
-					
+					$anzahl = count($benutzer);
+
+                    // Gefundene Benutzer und die Anzahl an das ViewModel übergeben
          		    $viewM =  new ViewM(array(
                         'benutzer' => $benutzer,
          		    	'anzahl' => $anzahl
                     ));
+                    //Das Template des ViewModels setzen und zurückgeben
                     $viewM->setTemplate('benutzer/write/ergebnis.phtml');
                     return $viewM;
                    
@@ -85,6 +86,7 @@ class WriteController extends AbstractActionController {
     }
 
     /**
+     * Benutzer Avatar setzen
      * @return array
      */
     public function profilePictureAction() {
@@ -96,6 +98,9 @@ class WriteController extends AbstractActionController {
 
         if ($request->isPost()) {
 
+            /**
+             * Filter zum Validieren der URL, die Eingegeben wurde
+             */
             $inputFilter = new PictureInputFilter();
             $inputFilter->init();
             $this->pictureForm->setInputFilter($inputFilter);

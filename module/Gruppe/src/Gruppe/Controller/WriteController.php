@@ -51,6 +51,7 @@ class WriteController extends AbstractActionController {
     }
 
     /**
+     * Eine neue Tippgemeinschaft erstellen
      * @return array|\Zend\Http\Response
      */
     public function addAction() {
@@ -63,6 +64,7 @@ class WriteController extends AbstractActionController {
             //Prüft ob der Name der Tippgemeinschaft bereits existiert
             $name = $this->gruppeForm->get('gruppe-fieldset')->get('name')->getValue();
           	$pruef = $this->gruppeService->pruefGruppe($name);
+
           	if($pruef == 1){
           		$this->gruppeForm->get('gruppe-fieldset')->get('name')->setMessages(array('Name existiert bereits!'));
           	}
@@ -92,6 +94,7 @@ class WriteController extends AbstractActionController {
     }
 
     /**
+     * Eine Tippgemeinschaft editieren
      * @return array|\Zend\Http\Response
      */
     public function editAction()
@@ -138,8 +141,10 @@ class WriteController extends AbstractActionController {
 
             if ($this->gruppeForm->isValid() && $pruef == 0) {
                 try {
+
                     $this->gruppeService->saveGruppe($gruppe);
                     $this->flashMessenger()->addSuccessMessage('Die Tippgemeinschaft wurde erfolgreich bearbeitet.');
+
                     return $this->redirect()->toRoute('gruppe/detail', array('g_id' => ($this->params('g_id'))));
                 } catch (\Exception $e) {
                     die($e->getMessage());
@@ -155,9 +160,8 @@ class WriteController extends AbstractActionController {
     }
 
     /**
+     * Einen Benutzer in eine Tippgemeinschaft einladen
      * @return array|\Zend\Http\Response
-    
-     * @todo: Evtl. Absender (der Inviter) noch hinzufügen, sodass ersichtlich ist wer eingeladen hat
      */
     public function inviteAction()
     {
@@ -189,7 +193,7 @@ class WriteController extends AbstractActionController {
                 try {
 
                     $benutzer  = $this->benutzerService->findBenutzer($this->inviteGruppeForm->get('username')->getValue());
-                   	$fehler=0;
+                   	$fehler = 0;
 
                     if(($this->gruppeService->bereitsEingeladen($benutzer['user_id'], $g_id)) == true)
                     {
@@ -228,6 +232,7 @@ class WriteController extends AbstractActionController {
     }
 
     /**
+     * Einen Avatar für die Gruppe setzen
      * @return array|\Zend\Http\Response
      */
     public function profilePictureAction() {
@@ -259,6 +264,7 @@ class WriteController extends AbstractActionController {
 
         if ($request->isPost()) {
 
+            //Den InputFilter vom Benutzer Avatar verwenden
             $inputFilter = new PictureInputFilter();
             $inputFilter->init();
             $this->pictureForm->setInputFilter($inputFilter);

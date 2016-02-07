@@ -31,7 +31,6 @@ class SuchBenutzerForm extends Form {
         		'attributes'=>array(
         				'type' => 'text',
         				'required' => true,
-        				
         				'maxlength' => '25',
         		),
         

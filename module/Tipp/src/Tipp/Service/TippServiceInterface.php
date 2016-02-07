@@ -70,6 +70,9 @@ interface TippServiceInterface {
      */
     public function zusatzPunkteBerechnen($id);
 
+    /**
+     * @return mixed
+     */
     public function isActive();
 
     /**
@@ -85,7 +88,9 @@ interface TippServiceInterface {
      */
     public function tippAbgegeben($s_id, $user_id);
 
+    /**
+     * @return mixed
+     */
     public function resetZusatztipp();
-    	
-    
+
 }

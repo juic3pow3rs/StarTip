@@ -65,7 +65,7 @@ class NotEmpty extends AbstractValidator
      * @var array
      */
     protected $messageTemplates = [
-        self::IS_EMPTY => "Value is required and can't be empty",
+        self::IS_EMPTY => "Dieses Feld darf nicht leer sein.",
         self::INVALID  => "Invalid type given. String, integer, float, boolean or array expected",
     ];
 

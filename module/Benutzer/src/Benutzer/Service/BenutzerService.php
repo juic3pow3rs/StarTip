@@ -22,7 +22,6 @@ class BenutzerService implements BenutzerServiceInterface {
 
     /**
      * @param BenutzerMapperInterface $benutzerMapper
-     * @internal param BenutzerMapperInterface $albumMapper
      */
     public function __construct(BenutzerMapperInterface $benutzerMapper)
     {
@@ -30,7 +29,7 @@ class BenutzerService implements BenutzerServiceInterface {
     }
 
     /**
-     * @inheritDoc
+     * @return array|\ZfcUser\Entity\UserInterface[]
      */
     public function findAllBenutzer()
     {

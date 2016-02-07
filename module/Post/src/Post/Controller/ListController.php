@@ -23,8 +23,8 @@ class ListController extends  AbstractActionController {
      * @var \Post\Service\PostServiceInterface
      */
     protected $postService;
-    protected $gruppeService;
 
+    protected $gruppeService;
 
 	/**
 	 * @param PostServiceInterface $postService
@@ -34,20 +34,14 @@ class ListController extends  AbstractActionController {
     {
         $this->postService = $postService;
         $this->gruppeService = $gruppeService;
-        
-     
     }
 
-
-
     /**
+	 * Funktion zum anzeigen der Liste an Posts einer Tippgemeinschaft
      * @return \Zend\Http\Response|ViewModel
-
-	 
      */
     public function detailAction()
     {
-    	
     	//Id des Users holen
     	$user  = $this->zfcUserAuthentication()->getIdentity();
     	$user_id = $user->getId();
@@ -79,10 +73,7 @@ class ListController extends  AbstractActionController {
     	if ($flashMessenger->hasMessages()) {
     		$return['messages'] = $flashMessenger->getMessages();
     	}
-    	
-    	
-    	  
-    
+
     	return new ViewModel(array(
     			'liste' => $post,
     			'gruppe' => $g_id,

@@ -49,7 +49,6 @@ class PostFieldset extends Fieldset {
                 'label' => 'g_id'
             )
         ));
-     
         
         $this->add(array(
         		'name' => 'betreff',
@@ -58,10 +57,7 @@ class PostFieldset extends Fieldset {
         				'required' => true,
         				'size' => '123',
         				'maxlength' => '60',
-        
-        
         		),
-        
         		'options' => array(
         				'label' => 'Geben Sie hier den Betreff ein.'
         		)
@@ -75,8 +71,6 @@ class PostFieldset extends Fieldset {
         				'cols' => '120',
         				'rows' => '15',
         				'maxlength' => '2500',
-        				
-        				
         		),
         		
         		'options' => array(

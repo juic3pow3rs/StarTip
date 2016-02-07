@@ -65,6 +65,9 @@ return array(
             //'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
         ),
     ),
+    /**
+     * Inhalt der Navigationsleiste
+     */
     'navigation' => array(
         'default' => array(
             array(

@@ -32,6 +32,7 @@ class ListController extends  AbstractActionController {
     }
 
     /**
+     * Liste aller Mannschaften
      * @return ViewModel
      */
     public function indexAction()

@@ -18,24 +18,20 @@ interface TippMapperInterface {
 
     /**
      * @param $t_id
-     * @return AlbumInterface
-     * @internal param int|string $id
+     * @return mixed
      */
     public function find($t_id);
 
     /**
      * @param $user_id
-     * @return array|AlbumInterface[]
+     * @return mixed
      */
     public function findAllTipps($user_id);
 
     /**
      * @param TippInterface $tippObject
      * @param $s_id
-     * @return AlbumInterface
-     * @internal param AlbumInterface $albumObject
-     *
-     * @internal param AlbumInterface $albumObject
+     * @return mixed
      */
     public function save(TippInterface $tippObject, $s_id);
 
@@ -73,6 +69,9 @@ interface TippMapperInterface {
      */
     public function zusatzPunkteBerechnen($id);
 
+    /**
+     * @return mixed
+     */
     public function isActive();
 
     /**
@@ -88,5 +87,8 @@ interface TippMapperInterface {
      */
     public function tippAbgegeben($s_id, $user_id);
 
+    /**
+     * @return mixed
+     */
     public function resetZusatztipp();
 }

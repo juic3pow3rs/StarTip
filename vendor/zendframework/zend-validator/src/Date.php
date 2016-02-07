@@ -39,9 +39,9 @@ class Date extends AbstractValidator
      * @var array
      */
     protected $messageTemplates = [
-        self::INVALID      => "Invalid type given. String, integer, array or DateTime expected",
-        self::INVALID_DATE => "The input does not appear to be a valid date",
-        self::FALSEFORMAT  => "The input does not fit the date format '%format%'",
+        self::INVALID      => "Ungueltige Eingabe.",
+        self::INVALID_DATE => "Kein gueltiges Datum. Bitte Format '%format%' verwenden.",
+        self::FALSEFORMAT  => "Die Eingabe muss in dem Format '%format%' sein.",
     ];
 
     /**

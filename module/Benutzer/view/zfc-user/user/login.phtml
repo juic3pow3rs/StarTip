@@ -1,4 +1,8 @@
+<!-- Überschreibt das Template des ZfcUser Moduls -->
 <?php
+/**
+ * Flashmessenger = speichert bis zum ersten aufruf, die Fehler/Warn/Erfolgs-Meldungen
+ */
 $flash = $this->flashMessenger();
 $flash->setMessageOpenFormat('<div%s>
      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">

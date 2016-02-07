@@ -36,6 +36,7 @@ class UpdateZusatztippForm extends Form {
 
         $i = 0;
 
+        // Stati der Zusatztipps aus der DB holen
         $stati = $tippServiceInterface->isActive();
         $status = array();
 
@@ -43,6 +44,7 @@ class UpdateZusatztippForm extends Form {
             $status[++$i] = $s['status'];
         }
 
+        // Status in der Form setzen
         $this->add(
             array(
                 'type' => 'Zend\Form\Element\Radio',

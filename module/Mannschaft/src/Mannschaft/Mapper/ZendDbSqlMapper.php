@@ -52,6 +52,7 @@ class ZendDbSqlMapper implements MannschaftMapperInterface {
     }
 
     /**
+     * Sucht eine Mannschaft anhand der übergebenen ID in der DB und gibt diese, falls vorhanden, zurück
      * @param $m_id
      * @return MannschaftInterface
      * @internal param int|string $id
@@ -69,10 +70,11 @@ class ZendDbSqlMapper implements MannschaftMapperInterface {
             return $this->hydrator->hydrate($result->current(), $this->mannschaftPrototype);
         }
 
-        throw new \InvalidArgumentException("Mannschaft with given ID:{$id} not found.");
+        throw new \InvalidArgumentException("Mannschaft with given ID:{$m_id} not found.");
     }
 
     /**
+     * Sucht alle Mannschaften in der DB und gibt diese zurück
      * @return array|MannschaftInterface[]
      */
     public function findAll()
@@ -93,6 +95,7 @@ class ZendDbSqlMapper implements MannschaftMapperInterface {
     }
 
     /**
+     * Speichert das übergebene Mannschaft-Objekt in der DB
      * @param MannschaftInterface $mannschaftObject
      *
      * @return MannschaftInterface
@@ -131,6 +134,7 @@ class ZendDbSqlMapper implements MannschaftMapperInterface {
     }
 
     /**
+     * Sucht den Namen der Mannschaft zu der übergebenen ID aus der DB und gibt ihn zurück
      * @param $m_id
      * @return mixed
      */
@@ -147,6 +151,7 @@ class ZendDbSqlMapper implements MannschaftMapperInterface {
     }
 
     /**
+     * Sucht die ID der Mannschaft zu dem übergebenen Namen aus der DB und gibt sie zurück
      * @param $name
      * @return array
      */
@@ -172,21 +177,27 @@ class ZendDbSqlMapper implements MannschaftMapperInterface {
     }
 
     /**
+     * Crawlt die Mannschaften von 'http://84.200.248.53/em2016/mannschaften.html' und speichert sie in der DB
      * @return array
      */
     public function crawl() {
 
+        //Einen Client instanziieren
         $client = new HttpClient();
+        //Dem Client sagen, dass er Curl verwenden soll
         $client->setAdapter('Zend\Http\Client\Adapter\Curl');
+        //Dem Client sagen, welche URL er crawlen soll
         $client->setUri('http://84.200.248.53/em2016/mannschaften.html');
 
+        //Request senden
+        $result = $client->send();
+        //Antwort abspeichern (= der HTML Quelltext)
+        $body = $result->getBody();
 
-        $result                 = $client->send();
-        //content of the web
-        $body                   = $result->getBody();
-
+        //Neues DOM-Query instanziieren und den gecrawlten Quelltext als Argument übergeben
         $dom = new Query($body);
-        //get div with id="content" and td'S NodeList
+        //Den Inhalt des Elements 'td', welches innerhalb der Tags 'tr' steht, welche wiederrum innerhalb eines Elements
+        //mit der ID '#content' stehen, abspeichern
         $title = $dom->execute('#content tr > td');
 
         $i = 0;
@@ -194,6 +205,7 @@ class ZendDbSqlMapper implements MannschaftMapperInterface {
         $mannschaft = array();
         $mannschaften = array();
 
+        //Eine Iteration über die abgespeicherten Inhalte und abspeichern als array
         foreach ($title as $t) {
 
             $mannschaft[$j] = $t->nodeValue;
@@ -216,6 +228,7 @@ class ZendDbSqlMapper implements MannschaftMapperInterface {
     }
 
     /**
+     * Funktion zum löschen aller Mannschaften in der DB
      * @return bool
      */
     public function delete() {
@@ -231,6 +244,7 @@ class ZendDbSqlMapper implements MannschaftMapperInterface {
     }
 
     /**
+     * Funktion zum zählen, der vorhandenen Mannschaften in der DB
      * @return array
      */
     public function count() {
